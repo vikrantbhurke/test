@@ -1,7 +1,6 @@
 export const homeRoute = "/";
 export const signUpRoute = "/sign-up"; // Tab
 export const signInRoute = "/sign-in"; // After Auth.js
-export const profileRoute = "/profile"; // After Auth.js
 export const userRoute = (id: string) => `/users/${id}`;
 
 export const userBooksRoute = (id: string) =>

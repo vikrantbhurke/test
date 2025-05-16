@@ -11,7 +11,7 @@ import { useNotification } from "@/global/hooks";
 import { useToast } from "@/global/hooks/use-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "@/global/states/store";
-import { profileRoute } from "@/global/constants/routes";
+import { userRoute } from "@/global/constants/routes";
 
 type EditProfileFormProps = {
   user: any;
@@ -47,7 +47,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
         const alert = { message: response.message, status: "success" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
-        router.push(profileRoute);
+        router.push(userRoute(user.id));
       } else {
         const alert = { message: response.error, status: "error" as const };
         if (isMobile) showToast(alert);

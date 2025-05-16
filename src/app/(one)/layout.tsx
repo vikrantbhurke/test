@@ -1,15 +1,14 @@
 import { AppOne } from "@/global/components/layouts";
+import { Suspense } from "react";
 
 type LayoutProps = {
   children: React.ReactNode;
-  modal: React.ReactNode;
 };
 
-export default function Layout({ children, modal }: LayoutProps) {
+export default function Layout({ children }: LayoutProps) {
   return (
-    <AppOne>
-      {children}
-      {modal}
-    </AppOne>
+    <Suspense fallback={<div>AppOne Loading...</div>}>
+      <AppOne>{children}</AppOne>
+    </Suspense>
   );
 }

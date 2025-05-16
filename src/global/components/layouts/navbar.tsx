@@ -4,7 +4,6 @@ import {
   booksRoute,
   saveBookRoute,
   homeRoute,
-  profileRoute,
   purchaseRoute,
   signInRoute,
   signUpRoute,
@@ -12,7 +11,6 @@ import {
   booksStartsWith,
 } from "@/global/constants/routes";
 import {
-  IconMan,
   IconBook,
   IconCoin,
   IconHome,
@@ -110,20 +108,6 @@ export default function Navbar({ pathname }: NavbarProps) {
         className={pathname.startsWith(saveBookRoute) && classes.themeThree}
         Icon={<IconPencil size={16} />}
         label="Create Book"
-      />
-
-      <DesktopButton
-        href={profileRoute}
-        className={pathname.startsWith(profileRoute) && classes.themeThree}
-        Icon={<IconMan size={16} />}
-        label="Profile"
-      />
-
-      <MobileButton
-        href={profileRoute}
-        className={pathname.startsWith(profileRoute) && classes.themeThree}
-        Icon={<IconMan size={16} />}
-        label="Profile"
       />
 
       <DesktopButton

@@ -1,6 +1,5 @@
 import {
   homeRoute,
-  profileRoute,
   purchaseRoute,
   subscribeRoute,
 } from "@/global/constants/routes";
@@ -35,18 +34,6 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
             pathname === homeRoute && classes.themeThree
           }`}>
           <Text size="sm">Home</Text>
-        </Button>
-
-        <Button
-          href={profileRoute}
-          component={Link}
-          style={stillButtonProps.style}
-          onFocus={stillButtonProps.onFocus}
-          onMouseDown={stillButtonProps.onMouseDown}
-          className={`${classes.themeOneWithHover} ${
-            pathname === profileRoute && classes.themeThree
-          }`}>
-          <Text size="sm">Profile</Text>
         </Button>
 
         <Button
