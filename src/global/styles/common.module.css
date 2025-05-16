@@ -1,0 +1,35 @@
+/* FloatingInput, FormSelect, UrlSelect */
+.root {
+  position: relative;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.label {
+  z-index: 1;
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  padding: 0 4px;
+  background-color: var(--bg-one);
+  color: var(--tx-five);
+  font-size: var(--mantine-font-size-sm);
+  transition: transform 150ms ease, font-size 150ms ease, top 150ms ease,
+    color 150ms ease;
+  pointer-events: none;
+
+  @mixin dark {
+    color: var(--tx-five);
+    background-color: var(--bg-one);
+  }
+}
+
+.labelFloating {
+  top: -8px;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--tx-five);
+}
+
+/* Other Components */

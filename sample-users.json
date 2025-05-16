@@ -1,0 +1,227 @@
+[
+  {
+    "_id": "6801671fe63ce6ae26ae2f21",
+    "firstname": "Isaac",
+    "lastname": "Asimov",
+    "username": "isaacasimov",
+    "email": "isaacasimov@gmail.com",
+    "password": "Isaacasimov0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f22",
+    "firstname": "Brandon",
+    "lastname": "Sanderson",
+    "username": "brandonsanderson",
+    "email": "brandonsanderson@gmail.com",
+    "password": "Brandonsanderson0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f23",
+    "firstname": "Richard",
+    "lastname": "Matheson",
+    "username": "richardmatheson",
+    "email": "richardmatheson@gmail.com",
+    "password": "Richardmatheson0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f24",
+    "firstname": "Dan",
+    "lastname": "Brown",
+    "username": "danbrown",
+    "email": "danbrown@gmail.com",
+    "password": "Danbrown0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f25",
+    "firstname": "Ray",
+    "lastname": "Bradbury",
+    "username": "raybradbury",
+    "email": "raybradbury@gmail.com",
+    "password": "Raybradbury0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f26",
+    "firstname": "George",
+    "lastname": "Martin",
+    "username": "georgemartin",
+    "email": "georgemartin@gmail.com",
+    "password": "George0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f27",
+    "firstname": "Roald",
+    "lastname": "Dahl",
+    "username": "roalddahl",
+    "email": "roalddahl@gmail.com",
+    "password": "Roalddahl0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f28",
+    "firstname": "Robert",
+    "lastname": "Stine",
+    "username": "robertstine",
+    "email": "robertstine@gmail.com",
+    "password": "Robertstine0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f29",
+    "firstname": "Mary",
+    "lastname": "Shelley",
+    "username": "maryshelley",
+    "email": "maryshelley@gmail.com",
+    "password": "Maryshelley0!",
+    "gender": "Female"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f2a",
+    "firstname": "Colleen",
+    "lastname": "Hoover",
+    "username": "colleenhoover",
+    "email": "colleenhoover@gmail.com",
+    "password": "Colleenhoover0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f2b",
+    "firstname": "Agatha",
+    "lastname": "Christie",
+    "username": "agathachristie",
+    "email": "agathachristie@gmail.com",
+    "password": "Agathachristie0!",
+    "gender": "Female"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f2c",
+    "firstname": "Joanne",
+    "lastname": "Rowling",
+    "username": "joannerowling",
+    "email": "joannerowling@gmail.com",
+    "password": "Joanne0!",
+    "gender": "Female"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f2d",
+    "firstname": "Erika",
+    "lastname": "Mitchell",
+    "username": "erikamitchell",
+    "email": "erikamitchell@gmail.com",
+    "password": "Erika0!",
+    "gender": "Female"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f2e",
+    "firstname": "Stephenie",
+    "lastname": "Meyer",
+    "username": "stepheniemeyer",
+    "email": "stepheniemeyer",
+    "password": "Stepheniemeyer",
+    "gender": "Female"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f2f",
+    "firstname": "Ian",
+    "lastname": "Fleming",
+    "username": "ianfleming",
+    "email": "ianfleming",
+    "password": "Ian0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f30",
+    "firstname": "Arthur",
+    "lastname": "Doyle",
+    "username": "arthurdoyle",
+    "email": "arthurdoyle@gmail.com",
+    "password": "Arthur0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f31",
+    "firstname": "Neal",
+    "lastname": "Stephenson",
+    "username": "nealstephenson",
+    "email": "nealstephenson@gmail.com",
+    "password": "Nealstephenson0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f32",
+    "firstname": "John",
+    "lastname": "Tolkien",
+    "username": "johntolkien",
+    "email": "johntolkien@gmail.com",
+    "password": "Johntolkien0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f33",
+    "firstname": "Bram",
+    "lastname": "Stoker",
+    "username": "bramstoker",
+    "email": "bramstoker@gmail.com",
+    "password": "Bramstoker0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f34",
+    "firstname": "Stephen",
+    "lastname": "King",
+    "username": "stephenking",
+    "email": "stephenking@gmail.com",
+    "password": "Stephenking0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f35",
+    "firstname": "Nicholas",
+    "lastname": "Sparks",
+    "username": "nicholassparks",
+    "email": "nicholassparks@gmail.com",
+    "password": "Nicholassparks0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f36",
+    "firstname": "Gillian",
+    "lastname": "Flynn",
+    "username": "gillianflynn",
+    "email": "gillianflynn@gmail.com",
+    "password": "Gillianflynn0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f37",
+    "firstname": "Frank",
+    "lastname": "Herbert",
+    "username": "frankherbert",
+    "email": "frankherbert@gmail.com",
+    "password": "Frankherbert0!",
+    "gender": "Male"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f38",
+    "firstname": "Jane",
+    "lastname": "Austen",
+    "username": "janeaustin",
+    "email": "janeaustin@gmail.com",
+    "password": "Janeaustin0!",
+    "gender": "Female"
+  },
+  {
+    "_id": "6801671fe63ce6ae26ae2f39",
+    "firstname": "Michael",
+    "lastname": "Crichton",
+    "username": "michaelcrichton",
+    "email": "michaelcrichton@gmail.com",
+    "password": "Michaelcrichton0!",
+    "gender": "Male"
+  }
+]

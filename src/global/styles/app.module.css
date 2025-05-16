@@ -1,0 +1,60 @@
+.blurBg {
+  backdrop-filter: blur(10px);
+  background-color: rgba(var(--bg-one), 0.5);
+
+  @mixin dark {
+    background-color: rgba(var(--bg-one), 0.5);
+  }
+}
+
+.themeOneWithHover {
+  color: black;
+  background-color: white;
+
+  @mixin dark {
+    color: white;
+    background-color: var(--bg-one);
+  }
+
+  &:hover {
+    background-color: var(--bg-two);
+    color: black;
+
+    @mixin dark {
+      background-color: var(--bg-two);
+      color: white;
+    }
+  }
+
+  &:active,
+  &:focus {
+    background-color: var(--bg-three);
+    color: black;
+
+    @mixin dark {
+      background-color: var(--bg-three);
+      color: white;
+    }
+  }
+}
+
+.themeThree {
+  color: black;
+  background-color: var(--bg-three);
+
+  @mixin dark {
+    color: white;
+    background-color: var(--bg-three);
+  }
+}
+
+.shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
+    /* bottom-heavy shadow */ 0 2px 4px rgba(0, 0, 0, 0.05); /* subtle all-around shadow */
+
+  @mixin dark {
+    background-color: var(--bg-two);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+      /* bottom-heavy shadow */ 0 2px 4px rgba(0, 0, 0, 0.4); /* subtle all-around shadow */
+  }
+}
