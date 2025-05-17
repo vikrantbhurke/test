@@ -39,9 +39,7 @@ export const coreTheme = createTheme({
     }),
 
     Button: Button.extend({
-      defaultProps: {
-        size: "xs",
-      },
+      defaultProps: {},
     }),
 
     Textarea: Textarea.extend({

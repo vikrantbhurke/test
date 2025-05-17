@@ -65,7 +65,12 @@ export default async function BookItem({ book }: any) {
           <LikeButton bookId={id} likes={book.likes} exists={response.exists} />
         )}
 
-        <Button color="blue" component={Link} href={editBookRoute(id)}>
+        <Button
+          color="blue"
+          component={Link}
+          href={editBookRoute(id)}
+          size="xs"
+          fz="xs">
           Edit
         </Button>
 

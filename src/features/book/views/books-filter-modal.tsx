@@ -2,10 +2,10 @@
 import { Genre } from "../enums";
 import { Suspense } from "react";
 import { Sort } from "../enums/sort";
-import { Modal, Stack, Title } from "@mantine/core";
+import { Modal, Stack, Text } from "@mantine/core";
 import { Order } from "@/global/enums";
 import { modalProps } from "@/global/constants";
-import { UrlSelect, SelectSkeleton } from "@/global/components/common";
+import { UrlSelect } from "@/global/components/common";
 
 type BooksFilterModalProps = {
   title: string;
@@ -25,20 +25,24 @@ export default function BooksFilterModal({
   return (
     <Modal
       centered
-      title={<Title order={6}>{title}</Title>}
+      title={
+        <Text size="sm" fw={700}>
+          {title}
+        </Text>
+      }
       onClose={close}
       opened={opened}
       overlayProps={modalProps.overlayProps}>
       <Stack gap="md" p="sm">
-        <Suspense fallback={<SelectSkeleton />}>
+        <Suspense fallback={<></>}>
           <UrlSelect paramKey="sort" options={sortMap} label="Sort" />
         </Suspense>
 
-        <Suspense fallback={<SelectSkeleton />}>
+        <Suspense fallback={<></>}>
           <UrlSelect paramKey="order" options={orderMap} label="Order" />
         </Suspense>
 
-        <Suspense fallback={<SelectSkeleton />}>
+        <Suspense fallback={<></>}>
           <UrlSelect paramKey="genre" options={genreMap} label="Genre" />
         </Suspense>
       </Stack>

@@ -18,7 +18,7 @@ export default function BooksFilterButton() {
         <IconFilter size={16} stroke={1.5} />
       </ActionIcon>
 
-      <ActionIcon visibleFrom="sm" onClick={modalOpen}>
+      <ActionIcon visibleFrom="sm" onClick={modalOpen} size="input-sm">
         <IconFilter size={16} stroke={1.5} />
       </ActionIcon>
 

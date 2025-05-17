@@ -8,14 +8,8 @@ import { useSelector } from "react-redux";
 import { dimensions } from "@/global/constants";
 
 export default function ScrollButtons({ scrollButtonsProps }: any) {
-  const {
-    scrollRef,
-    scrollbar,
-    scrollProps,
-    scrollbuttons,
-    topPosition,
-    bottomPosition,
-  } = scrollButtonsProps;
+  const { scrollRef, scrollbar, scrollProps, scrollbuttons, positions } =
+    scrollButtonsProps;
 
   const mounted = useMounted();
   const [scroll, scrollTo] = useWindowScroll();
@@ -51,26 +45,18 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
 
   if (!mounted) return null;
 
-  const tp = topPosition
-    ? {
-        ...topPosition,
-        bottom: isMobile
-          ? dimensions.footerHeight + topPosition.bottom
-          : topPosition.bottom,
-      }
-    : {
-        right: 55,
-        bottom: isMobile ? dimensions.footerHeight + 20 : 20,
-      };
+  const { inner, outer } = positions;
+  const { footerHeight } = dimensions;
 
-  const bp = bottomPosition
-    ? {
-        ...bottomPosition,
-        bottom: isMobile
-          ? dimensions.footerHeight + bottomPosition.bottom
-          : bottomPosition.bottom,
-      }
-    : { bottom: isMobile ? dimensions.footerHeight + 20 : 20, right: 20 };
+  const tp = {
+    right: isMobile ? inner : outer,
+    bottom: isMobile ? footerHeight + outer : inner,
+  };
+
+  const bp = {
+    right: inner,
+    bottom: isMobile ? footerHeight + inner : inner,
+  };
 
   const topMounted =
     scrollbar === "window" ? scroll.y > 0 : scrollTopPosition > 0;

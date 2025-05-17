@@ -8,10 +8,10 @@ export default async function CommentsDetailsServer({ dataPage }: any) {
   return (
     <Group h={dimensions.detailsHeight} justify="start" align="center">
       <Text>
-        Page - {uiPage}/{totalPages}
+        Page: {uiPage}/{totalPages}
       </Text>
 
-      <Text>Total - {totalElements}</Text>
+      <Text>Total: {totalElements}</Text>
     </Group>
   );
 }

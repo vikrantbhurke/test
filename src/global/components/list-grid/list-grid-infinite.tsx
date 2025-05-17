@@ -12,8 +12,7 @@ type ScrollButtonsProps = {
   scrollProps?: object;
   scrollbar?: "window" | "container";
   scrollbuttons?: "top" | "bottom" | "both" | "none";
-  topPosition?: object;
-  bottomPosition?: object;
+  positions?: object;
 };
 
 type ScrollWrapperProps = {

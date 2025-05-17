@@ -23,7 +23,7 @@ export default function DropCommentButton({ id }: DropCommentButtonProps) {
         message="Are you sure you want to delete this comment?"
       />
 
-      <Button color="red" onClick={open}>
+      <Button color="red" onClick={open} size="xs" fz="xs">
         Delete
       </Button>
     </>

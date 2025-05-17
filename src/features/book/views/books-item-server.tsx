@@ -74,7 +74,12 @@ export default async function BooksItemServer({ item }: any) {
             />
           )}
 
-          <Button color="blue" component={Link} href={editBookRoute(id)}>
+          <Button
+            color="blue"
+            component={Link}
+            href={editBookRoute(id)}
+            size="xs"
+            fz="xs">
             Edit Book
           </Button>
 

@@ -20,8 +20,18 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
   return (
     <Group justify="space-between" h="100%" px="md" align="center">
       <Group gap="xs">
-        <IconAppsFilled size={32} color="var(--tx-one)" />
-        <Title order={5}>Test App</Title>
+        <Button
+          p={0}
+          c="var(--tx-one)"
+          bg="transparent"
+          leftSection={<IconAppsFilled size={32} color="var(--tx-one)" />}
+          href={homeRoute}
+          component={Link}
+          style={stillButtonProps.style}
+          onFocus={stillButtonProps.onFocus}
+          onMouseDown={stillButtonProps.onMouseDown}>
+          <Title order={5}>Test App</Title>
+        </Button>
       </Group>
 
       <Group>

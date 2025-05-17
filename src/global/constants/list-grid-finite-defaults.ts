@@ -17,13 +17,9 @@ export const listGridFiniteDefaults = {
     },
     scrollbar: "window" as const,
     scrollbuttons: "both" as const,
-    topPosition: {
-      right: 40,
-      bottom: 20,
-    },
-    bottomPosition: {
-      right: 10,
-      bottom: 20,
+    positions: {
+      inner: 10,
+      outer: 40,
     },
   },
   scrollWrapperProps: {

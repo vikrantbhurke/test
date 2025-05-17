@@ -11,10 +11,10 @@ export default function BooksDetailsClient({ dataPage }: any) {
     <Group h={dimensions.detailsHeight} justify="center" align="center">
       <Group>
         <Text>
-          Page - {uiPage}/{totalPages}
+          Page: {uiPage}/{totalPages}
         </Text>
 
-        <Text>Total - {totalElements}</Text>
+        <Text>Total: {totalElements}</Text>
       </Group>
 
       {search && <Text>Search Term - {search}</Text>}

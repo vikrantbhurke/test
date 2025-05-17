@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import { Genre } from "../enums";
 import { Sort } from "../enums/sort";
 import { Order } from "@/global/enums";
-import { Drawer, Stack, Title } from "@mantine/core";
+import { Drawer, Stack, Text } from "@mantine/core";
 import { drawerProps } from "@/global/constants";
-import { UrlSelect, SelectSkeleton } from "@/global/components/common";
+import { UrlSelect } from "@/global/components/common";
 
 type BooksFilterDrawerProps = {
   size?: "xs" | "sm" | "md" | "lg" | "xl";
@@ -30,22 +30,26 @@ export default function BooksFilterDrawer({
     <Drawer
       size={size}
       zIndex={201}
-      title={<Title order={6}>{title}</Title>}
+      title={
+        <Text size="sm" fw={700}>
+          {title}
+        </Text>
+      }
       opened={opened}
       radius={radius}
       onClose={close}
       position="bottom"
       styles={drawerProps.styles}>
       <Stack gap="md" p="sm">
-        <Suspense fallback={<SelectSkeleton />}>
+        <Suspense fallback={<></>}>
           <UrlSelect paramKey="sort" options={sortMap} />
         </Suspense>
 
-        <Suspense fallback={<SelectSkeleton />}>
+        <Suspense fallback={<></>}>
           <UrlSelect paramKey="order" options={orderMap} />
         </Suspense>
 
-        <Suspense fallback={<SelectSkeleton />}>
+        <Suspense fallback={<></>}>
           <UrlSelect paramKey="genre" options={genreMap} />
         </Suspense>
       </Stack>

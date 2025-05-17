@@ -11,11 +11,14 @@ import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "@/global/styles/app.module.css";
 import { appShellProps } from "@/global/constants";
+import { RootState } from "@/global/states/store";
+import { useSelector } from "react-redux";
 
 export default function AppMany({ children }: any) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();
+  const { isMobile } = useSelector((state: RootState) => state.global);
   useEffect(() => close(), [pathname, close]);
 
   return (
@@ -25,7 +28,7 @@ export default function AppMany({ children }: any) {
       footer={appShellProps.footer}
       header={appShellProps.header}
       navbar={appShellProps.navbar(opened)}>
-      <AppShell.Header className={`${classes.blurBg}`}>
+      <AppShell.Header className={`${!isMobile && classes.blurBg}`}>
         <Header opened={opened} toggle={toggle} pathname={pathname} />
       </AppShell.Header>
 

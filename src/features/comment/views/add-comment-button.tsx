@@ -2,41 +2,20 @@
 import { Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import AddCommentModal from "./add-comment-modal";
-import AddCommentDrawer from "./add-comment-drawer";
 
 type AddCommentButtonProps = {
   bookId: string;
 };
 
 export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
-  const [drawerOpened, { open: drawerOpen, close: drawerClose }] =
-    useDisclosure(false);
-
-  const [modalOpened, { open: modalOpen, close: modalClose }] =
-    useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <Button hiddenFrom="sm" onClick={drawerOpen}>
+      <Button onClick={open} size="xs" fz="xs">
         Add Comment
       </Button>
-
-      <Button visibleFrom="sm" onClick={modalOpen}>
-        Add Comment
-      </Button>
-
-      <AddCommentModal
-        bookId={bookId}
-        opened={modalOpened}
-        close={modalClose}
-      />
-
-      <AddCommentDrawer
-        size={250}
-        bookId={bookId}
-        opened={drawerOpened}
-        close={drawerClose}
-      />
+      <AddCommentModal bookId={bookId} opened={opened} close={close} />
     </>
   );
 }

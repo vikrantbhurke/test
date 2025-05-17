@@ -11,7 +11,6 @@ import SearchButton from "./search-button";
 import BurgerButton from "./burger-button";
 import FloatingInput from "./floating-input";
 import CustomSkeleton from "./custom-skeleton";
-import SelectSkeleton from "./select-skeleton";
 import ToastProvider, { ToastContext } from "./toast-provider";
 
 export {
@@ -30,5 +29,4 @@ export {
   ToastProvider,
   FloatingInput,
   CustomSkeleton,
-  SelectSkeleton,
 };
