@@ -22,7 +22,7 @@ export default function UserItem({ user, radius = "md" }: UserItemProps) {
         <Text>{username}</Text>
 
         <Group justify="center">
-          <Button component={Link} href={editUserRoute(id)}>
+          <Button component={Link} href={editUserRoute(id)} size="xs" fz="xs">
             Edit
           </Button>
 

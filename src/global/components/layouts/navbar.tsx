@@ -86,14 +86,68 @@ export default function Navbar({ pathname }: NavbarProps) {
         href={booksRoute}
         className={pathname.startsWith(booksStartsWith) && classes.themeThree}
         Icon={<IconBook size={16} />}
-        label="Books"
+        label="Books Server Window"
       />
 
       <MobileButton
         href={booksRoute}
         className={pathname.startsWith(booksStartsWith) && classes.themeThree}
         Icon={<IconBook size={16} />}
-        label="Books"
+        label="Books Server Window"
+      />
+
+      <DesktopButton
+        href={"/books/server/container/page/1?sort=title&order=Asc&genre=All"}
+        className={
+          pathname.startsWith("/books/server/container") && classes.themeThree
+        }
+        Icon={<IconBook size={16} />}
+        label="Books Server Container"
+      />
+
+      <MobileButton
+        href={"/books/server/container/page/1?sort=title&order=Asc&genre=All"}
+        className={
+          pathname.startsWith("/books/server/container") && classes.themeThree
+        }
+        Icon={<IconBook size={16} />}
+        label="Books Server Container"
+      />
+
+      <DesktopButton
+        href={"/books/client/container/page/1?sort=title&order=Asc&genre=All"}
+        className={
+          pathname.startsWith("/books/client/container") && classes.themeThree
+        }
+        Icon={<IconBook size={16} />}
+        label="Books Client Container"
+      />
+
+      <MobileButton
+        href={"/books/client/container/page/1?sort=title&order=Asc&genre=All"}
+        className={
+          pathname.startsWith("/books/client/container") && classes.themeThree
+        }
+        Icon={<IconBook size={16} />}
+        label="Books Client Container"
+      />
+
+      <DesktopButton
+        href={"/books/client/window/page/1?sort=title&order=Asc&genre=All"}
+        className={
+          pathname.startsWith("/books/client/window") && classes.themeThree
+        }
+        Icon={<IconBook size={16} />}
+        label="Books Client Window"
+      />
+
+      <MobileButton
+        href={"/books/client/window/page/1?sort=title&order=Asc&genre=All"}
+        className={
+          pathname.startsWith("/books/client/window") && classes.themeThree
+        }
+        Icon={<IconBook size={16} />}
+        label="Books Client Window"
       />
 
       <DesktopButton

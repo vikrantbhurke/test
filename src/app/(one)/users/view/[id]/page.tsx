@@ -8,6 +8,10 @@ type PageProps = {
 };
 
 export default async function Page({ params }: PageProps) {
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+  await delay(3000);
+
   return (
     <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
       <GetUserById params={params}>

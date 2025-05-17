@@ -51,7 +51,10 @@ export default async function Page({ params, searchParams }: PageProps) {
               value: booksPage.page + 1,
               total: booksPage.totalPages,
             }}
-            scrollButtonsProps={scrollButtonsProps}
+            scrollButtonsProps={{
+              ...scrollButtonsProps,
+              scrollbar: "container",
+            }}
             scrollWrapperProps={scrollWrapperProps}
             listGridServerProps={{
               ...listGridServerProps,

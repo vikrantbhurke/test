@@ -7,6 +7,9 @@ import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 import { dimensions } from "@/global/constants";
 
+// Currently ScrollButtons are not visible for ListGridFinite (Container) since useRef can't be used in RSC
+// ScrollButtons are visible in ListGridFinite (Window) & ListGridInfinite (Window & Container)
+
 export default function ScrollButtons({ scrollButtonsProps }: any) {
   const { scrollRef, scrollbar, scrollProps, scrollbuttons, positions } =
     scrollButtonsProps;
@@ -48,12 +51,12 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
   const { inner, outer } = positions;
   const { footerHeight } = dimensions;
 
-  const tp = {
+  const adjacent = {
     right: isMobile ? inner : outer,
     bottom: isMobile ? footerHeight + outer : inner,
   };
 
-  const bp = {
+  const corner = {
     right: inner,
     bottom: isMobile ? footerHeight + inner : inner,
   };
@@ -67,7 +70,8 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
   };
 
   const scrollToTopButton = (
-    <Affix position={tp}>
+    // If only top is visible, shift its position to corner
+    <Affix position={scrollbuttons === "top" ? corner : adjacent}>
       <Transition transition="slide-up" mounted={topMounted}>
         {(transitionStyles: any) => (
           <ActionIcon
@@ -93,7 +97,7 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
   };
 
   const scrollToBottomButton = (
-    <Affix position={bp}>
+    <Affix position={corner}>
       <Transition transition="slide-up" mounted={bottomMounted}>
         {(transitionStyles: any) => (
           <ActionIcon

@@ -9,6 +9,12 @@ export const userBooksRoute = (id: string) =>
 
 export const saveBookRoute = "/books/save";
 export const booksRoute = "/books/page/1?sort=title&order=Asc&genre=All";
+export const booksServerContainerRoute =
+  "/books/server/container/page/1?sort=title&order=Asc&genre=All";
+export const booksClientContainerRoute =
+  "/books/client/container/page/1?sort=title&order=Asc&genre=All";
+export const booksClientContainerInfiniteRoute =
+  "/books/client/window/page/1?sort=title&order=Asc&genre=All";
 export const booksStartsWith = "/books/page";
 export const viewBookRoute = (id: string) => `/books/view/${id}`;
 export const editBookRoute = (id: string) => `/books/edit/${id}`;

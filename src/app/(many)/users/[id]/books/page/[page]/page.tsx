@@ -14,6 +14,10 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+  await delay(3000);
+
   const {
     buttonProps,
     scrollButtonsProps,
@@ -22,14 +26,8 @@ export default async function Page({ params, searchParams }: PageProps) {
   } = listGridInfiniteDefaults;
 
   return (
-    <Stack
-      p="xs"
-      py={0}
-      h="100%"
-      w="100%"
-      justify="center"
-      maw={dimensions.mawLg}>
-      <Stack pt="xs">
+    <Stack h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
+      <Stack p="xs">
         <GetUserById params={params}>
           {(user) => (
             <>

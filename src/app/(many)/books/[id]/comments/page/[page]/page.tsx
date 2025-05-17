@@ -2,7 +2,7 @@ import {
   CommentsItemServer,
   CommentsDetailsServer,
 } from "@/features/comment/views";
-import { Stack } from "@mantine/core";
+import { Paper, Stack } from "@mantine/core";
 import { BookItem } from "@/features/book/views";
 import { GetBookById } from "@/features/book/queries";
 import { dimensions, listGridFiniteDefaults } from "@/global/constants";
@@ -16,6 +16,10 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
+  // artificial delay of 30 seconds with promise timeout
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+  await delay(3000);
   const { id } = await params;
   const {
     paginationProps,
@@ -25,11 +29,13 @@ export default async function Page({ params, searchParams }: PageProps) {
   } = listGridFiniteDefaults;
 
   return (
-    <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawSm}>
-      <Stack>
-        <GetBookById params={params}>
-          {(book) => <BookItem book={book} />}
-        </GetBookById>
+    <Stack h="100%" w="100%" justify="center" maw={dimensions.mawSm}>
+      <Stack p="xs">
+        <Paper radius="md" p="xl">
+          <GetBookById params={params}>
+            {(book) => <BookItem book={book} />}
+          </GetBookById>
+        </Paper>
 
         <AddCommentButton bookId={id} />
       </Stack>

@@ -7,7 +7,11 @@ export default async function BooksDetailsServer({ dataPage }: any) {
   const uiPage = page + 1;
 
   return (
-    <Group h={dimensions.detailsHeight} justify="space-between" align="center">
+    <Group
+      p="xs"
+      h={dimensions.detailsHeight}
+      justify="space-between"
+      align="center">
       <Group>
         <Text>
           Page: {uiPage}/{totalPages}

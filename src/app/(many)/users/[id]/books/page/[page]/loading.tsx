@@ -7,7 +7,7 @@ export default function Loading() {
     <Grid visibleFrom="sm">
       {Array.from({ length: 12 }, (_, index) => (
         <GridCol key={index} span={dimensions.gridColSpan}>
-          <CustomSkeleton h={300} w="100%" a="pulse" v="rounded" />
+          <CustomSkeleton h={300} w="100%" a="pulse" v="rounded" r="xs" />
         </GridCol>
       ))}
     </Grid>
@@ -17,7 +17,7 @@ export default function Loading() {
     <Grid hiddenFrom="sm">
       {Array.from({ length: 2 }, (_, index) => (
         <GridCol key={index} span={dimensions.gridColSpan}>
-          <CustomSkeleton h={300} w="100%" a="pulse" v="rounded" />
+          <CustomSkeleton h={300} w="100%" a="pulse" v="rounded" r="xs" />
         </GridCol>
       ))}
     </Grid>
@@ -25,12 +25,7 @@ export default function Loading() {
 
   return (
     <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
-      <CustomSkeleton
-        h={dimensions.headerHeight}
-        w="100%"
-        a="pulse"
-        v="rounded"
-      />
+      <CustomSkeleton h={150} w="100%" a="pulse" v="rounded" r="xs" />
       {gridDesktop}
       {gridMobile}
     </Stack>

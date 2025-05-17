@@ -15,6 +15,7 @@ export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
       <Button onClick={open} size="xs" fz="xs">
         Add Comment
       </Button>
+
       <AddCommentModal bookId={bookId} opened={opened} close={close} />
     </>
   );

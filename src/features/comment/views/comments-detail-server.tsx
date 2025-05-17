@@ -6,7 +6,7 @@ export default async function CommentsDetailsServer({ dataPage }: any) {
   const uiPage = page + 1;
 
   return (
-    <Group h={dimensions.detailsHeight} justify="start" align="center">
+    <Group p="xs" h={dimensions.detailsHeight} justify="start" align="center">
       <Text>
         Page: {uiPage}/{totalPages}
       </Text>

@@ -25,7 +25,7 @@ export default function DropBooksButton({ authorId }: DropBooksButtonProps) {
         message="Are you sure you want to delete all your books?"
       />
 
-      <Button color="red" onClick={open}>
+      <Button color="red" onClick={open} size="xs" fz="xs">
         Delete Books
       </Button>
     </>

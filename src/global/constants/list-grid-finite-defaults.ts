@@ -29,7 +29,7 @@ export const listGridFiniteDefaults = {
   },
   listGridServerProps: {
     listGridProps: {
-      py: "xs" as const,
+      p: "xs" as const,
       gap: "xs" as const,
       layout: "grid" as const,
       gutter: { base: "xs", sm: "sm" } as const,

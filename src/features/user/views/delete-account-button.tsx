@@ -25,7 +25,7 @@ export default function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
         message="Are you sure you want to delete your account?"
       />
 
-      <Button color="red" onClick={open}>
+      <Button color="red" onClick={open} size="xs" fz="xs">
         Delete Account
       </Button>
     </>
