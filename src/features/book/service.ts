@@ -66,10 +66,6 @@ export class BookService extends Service {
     return await this.bookRepository.getAllBookIdsByAuthorId(authorId, session);
   }
 
-  async searchBooks(getManyDTO: GetManyDTO) {
-    return await this.bookRepository.searchBooks(getManyDTO);
-  }
-
   async getBooks(getManyDTO: GetManyDTO) {
     return await this.bookRepository.getBooks(getManyDTO);
   }

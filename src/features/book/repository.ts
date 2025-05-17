@@ -72,16 +72,6 @@ export class BookRepository extends Repository {
     );
   }
 
-  async searchBooks(getManyDTO: GetManyDTO) {
-    return await this.getMany(Book, {
-      ...getManyDTO,
-      select,
-      populate,
-      populateSelect,
-      searchFields,
-    });
-  }
-
   async getBooks(getManyDTO: GetManyDTO) {
     return await this.getMany(Book, {
       ...getManyDTO,

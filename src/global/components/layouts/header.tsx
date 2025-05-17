@@ -32,6 +32,7 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
 
         <Group visibleFrom="sm" gap={0}>
           <Button
+            size="input-sm"
             href={homeRoute}
             component={Link}
             style={stillButtonProps.style}
@@ -44,6 +45,7 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
           </Button>
 
           <Button
+            size="input-sm"
             href={subscribeRoute}
             component={Link}
             style={stillButtonProps.style}
@@ -56,6 +58,7 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
           </Button>
 
           <Button
+            size="input-sm"
             href={purchaseRoute}
             component={Link}
             style={stillButtonProps.style}

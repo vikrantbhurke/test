@@ -89,15 +89,6 @@ export const getBookByIndex = async (index: number) => {
   }
 };
 
-export const searchBooks = async (getManyDTO: GetManyDTO) => {
-  try {
-    const booksPage = await bookService.searchBooks(getManyDTO);
-    return { success: true, data: booksPage };
-  } catch (error: any) {
-    throw error;
-  }
-};
-
 export const getBooks = async (getManyDTO: GetManyDTO) => {
   try {
     const booksPage = await bookService.getBooks(getManyDTO);
