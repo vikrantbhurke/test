@@ -14,10 +14,6 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-  await delay(3000);
-
   const {
     buttonProps,
     scrollButtonsProps,

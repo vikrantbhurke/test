@@ -16,10 +16,6 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
-  // artificial delay of 30 seconds with promise timeout
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-  await delay(3000);
   const { id } = await params;
   const {
     paginationProps,
