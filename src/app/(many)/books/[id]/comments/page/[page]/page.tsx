@@ -16,7 +16,6 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
-  await new Promise((res) => setTimeout(res, 3000));
   const { id } = await params;
   const {
     paginationProps,

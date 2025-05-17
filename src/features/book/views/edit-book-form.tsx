@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { editBookById } from "../action";
 import { EditBookSchema } from "../schema";
-import { Button, Paper, Stack } from "@mantine/core";
+import { Button, Paper, Stack, useMantineColorScheme } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { FloatingInput } from "@/global/components/common";
 import { useNotification } from "@/global/hooks";
@@ -11,7 +11,8 @@ import { RootState } from "@/global/states/store";
 import { useToast } from "@/global/hooks/use-toast";
 import { Action } from "@/global/classes";
 import { useRouter } from "next/navigation";
-import { bookRoute } from "@/global/constants/routes";
+import { viewBookRoute } from "@/global/constants/routes";
+import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
 
 type EditBookFormProps = {
   book: any;
@@ -23,6 +24,7 @@ export default function EditBookForm({ book }: EditBookFormProps) {
   const { showNotification } = useNotification();
   const [stateBook, setStateBook] = useState(book);
   const [isMutating, setIsMutating] = useState(false);
+  const { colorScheme } = useMantineColorScheme();
   const { isMobile } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
@@ -47,7 +49,7 @@ export default function EditBookForm({ book }: EditBookFormProps) {
         const alert = { message: response.message, status: "success" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
-        router.push(bookRoute(book.id));
+        router.push(viewBookRoute(book.id));
       } else {
         const alert = { message: response.error, status: "error" as const };
         if (isMobile) showToast(alert);
@@ -65,9 +67,10 @@ export default function EditBookForm({ book }: EditBookFormProps) {
 
   return (
     <form onSubmit={form.onSubmit(handleEditBook)}>
-      <Paper radius="md" p="lg">
-        <Stack gap="sm">
+      <Paper p="xl">
+        <Stack gap="md">
           <FloatingInput
+            styles={lightBgOneDarkBgTwo(colorScheme)}
             name="title"
             label="Title"
             key={form.key("title")}
@@ -75,6 +78,7 @@ export default function EditBookForm({ book }: EditBookFormProps) {
           />
 
           <FloatingInput
+            styles={lightBgOneDarkBgTwo(colorScheme)}
             name="synopsis"
             label="Synopsis"
             key={form.key("synopsis")}

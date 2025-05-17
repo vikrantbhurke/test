@@ -6,7 +6,7 @@ import { Suspense } from "react";
 export default function Page() {
   return (
     <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
-      <Suspense fallback={<div>SaveBookForm Loading...</div>}>
+      <Suspense fallback={<></>}>
         <SaveBookForm />
       </Suspense>
     </Stack>

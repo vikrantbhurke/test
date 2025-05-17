@@ -12,10 +12,10 @@ import Link from "next/link";
 import DropBookButton from "./drop-book-button";
 import {
   bookCommentsRoute,
-  bookRoute,
+  viewBookRoute,
   editBookRoute,
   userBooksRoute,
-  userRoute,
+  viewUserRoute,
 } from "@/global/constants/routes";
 import { LikeButton } from "@/features/book-liker/views";
 import { checkBookLiker } from "@/features/book-liker/action";
@@ -30,18 +30,18 @@ export default async function BooksItemServer({ item }: any) {
   });
 
   return (
-    <Paper radius="md" p="lg">
+    <Paper p="xl">
       <Stack gap="sm">
-        <Anchor component={Link} href={bookRoute(id)}>
+        <Anchor component={Link} href={viewBookRoute(id)}>
           <Title order={6}>{title}</Title>
         </Anchor>
 
         <Text>{synopsis}</Text>
 
         <Stack gap={4}>
-          <Anchor component={Link} href={userRoute(authorId.id)}>
+          <Anchor component={Link} href={viewUserRoute(authorId.id)}>
             <Text>
-              {authorId.firstname} {authorId.lastname} (Page & Modal)
+              {authorId.firstname} {authorId.lastname}
             </Text>
           </Anchor>
 

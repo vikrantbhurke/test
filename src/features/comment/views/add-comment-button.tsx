@@ -27,7 +27,6 @@ export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
 
       <AddCommentModal
         bookId={bookId}
-        title="Add Comment"
         opened={modalOpened}
         close={modalClose}
       />
@@ -35,7 +34,6 @@ export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
       <AddCommentDrawer
         size={250}
         bookId={bookId}
-        title="Add Comment"
         opened={drawerOpened}
         close={drawerClose}
       />

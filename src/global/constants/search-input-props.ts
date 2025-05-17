@@ -9,6 +9,7 @@ export const searchInputProps = {
       borderRight: 0,
       borderLeft: 0,
       height: dimensions.headerHeight,
+      backgroundColor: "var(--bg-one)",
     },
   },
 };

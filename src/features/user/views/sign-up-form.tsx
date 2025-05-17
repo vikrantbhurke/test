@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Gender } from "../enums";
 import { useForm } from "@mantine/form";
 import { SignUpUserSchema } from "../schema";
-import { Button, Stack } from "@mantine/core";
+import { Button, Stack, useMantineColorScheme } from "@mantine/core";
 import { signUpUser } from "@/features/user/action";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { FloatingInput, FormSelect } from "@/global/components/common";
@@ -14,12 +14,14 @@ import { useNotification } from "@/global/hooks";
 import { useToast } from "@/global/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { homeRoute } from "@/global/constants/routes";
+import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
 
 export default function SignUpForm() {
   const [isMutating, setIsMutating] = useState(false);
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();
+  const { colorScheme } = useMantineColorScheme();
   const { isMobile } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
@@ -68,6 +70,7 @@ export default function SignUpForm() {
     <form onSubmit={form.onSubmit(handleSignUpUser)}>
       <Stack gap="md">
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="firstname"
           label="Firstname"
           key={form.key("firstname")}
@@ -75,6 +78,7 @@ export default function SignUpForm() {
         />
 
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="lastname"
           label="Lastname"
           key={form.key("lastname")}
@@ -82,6 +86,7 @@ export default function SignUpForm() {
         />
 
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="email"
           label="Email"
           key={form.key("email")}
@@ -89,6 +94,7 @@ export default function SignUpForm() {
         />
 
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="username"
           label="Username"
           key={form.key("username")}
@@ -96,6 +102,7 @@ export default function SignUpForm() {
         />
 
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="password"
           label="Password"
           type="password"
@@ -104,6 +111,7 @@ export default function SignUpForm() {
         />
 
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="confirmPassword"
           label="Confirm Password"
           type="password"
@@ -112,6 +120,7 @@ export default function SignUpForm() {
         />
 
         <FormSelect
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           value="Male"
           name="gender"
           label="Gender"
@@ -119,8 +128,12 @@ export default function SignUpForm() {
           {...form.getInputProps("gender")}
         />
 
-        <Button c="var(--bg-one)" color="var(--tx-one)" type="submit">
-          Sign Up User
+        <Button
+          c="var(--bg-one)"
+          color="var(--tx-one)"
+          type="submit"
+          disabled={isMutating}>
+          {isMutating ? "Signing Up..." : "Sign Up"}
         </Button>
       </Stack>
     </form>

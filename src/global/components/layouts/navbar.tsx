@@ -98,14 +98,14 @@ export default function Navbar({ pathname }: NavbarProps) {
 
       <DesktopButton
         href={saveBookRoute}
-        className={pathname.startsWith(saveBookRoute) && classes.themeThree}
+        className={pathname === saveBookRoute && classes.themeThree}
         Icon={<IconPencil size={16} />}
         label="Create Book"
       />
 
       <MobileButton
         href={saveBookRoute}
-        className={pathname.startsWith(saveBookRoute) && classes.themeThree}
+        className={pathname === saveBookRoute && classes.themeThree}
         Icon={<IconPencil size={16} />}
         label="Create Book"
       />

@@ -12,8 +12,8 @@ import {
 import Link from "next/link";
 import DropBookButton from "./drop-book-button";
 import {
-  userRoute,
-  bookRoute,
+  viewUserRoute,
+  viewBookRoute,
   editBookRoute,
   userBooksRoute,
   bookCommentsRoute,
@@ -32,16 +32,16 @@ export default function BooksItemClient({ item }: any) {
   );
 
   return (
-    <Paper radius="md" p="lg">
+    <Paper p="xl">
       <Stack gap="sm">
-        <Anchor component={Link} href={bookRoute(id)}>
+        <Anchor component={Link} href={viewBookRoute(id)}>
           <Title order={6}>{title}</Title>
         </Anchor>
 
         <Text>{synopsis}</Text>
 
         <Stack gap={4}>
-          <Anchor component={Link} href={userRoute(authorId.id)}>
+          <Anchor component={Link} href={viewUserRoute(authorId.id)}>
             <Text>
               {authorId.firstname} {authorId.lastname}
             </Text>

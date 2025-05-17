@@ -1,6 +1,6 @@
 import Link from "next/link";
 import DeleteAccountButton from "./delete-account-button";
-import { editProfileRoute } from "@/global/constants/routes";
+import { editUserRoute } from "@/global/constants/routes";
 import { Button, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import DropBooksButton from "@/features/book/views/drop-books-button";
 
@@ -13,7 +13,7 @@ export default function UserItem({ user, radius = "md" }: UserItemProps) {
   const { id, firstname, lastname, username } = user;
 
   return (
-    <Paper radius={radius} p="lg">
+    <Paper radius={radius} p="xl">
       <Stack gap="sm">
         <Title order={6}>
           {firstname} {lastname}
@@ -22,7 +22,7 @@ export default function UserItem({ user, radius = "md" }: UserItemProps) {
         <Text>{username}</Text>
 
         <Group justify="center">
-          <Button component={Link} href={editProfileRoute}>
+          <Button component={Link} href={editUserRoute(id)}>
             Edit
           </Button>
 

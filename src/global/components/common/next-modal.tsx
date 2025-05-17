@@ -1,16 +1,14 @@
 "use client";
 import { Modal } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
-type ModalClientProps = {
+type NextModalProps = {
   children: React.ReactNode;
   title?: string;
 };
 
-export default function ModalClient({ children, title }: ModalClientProps) {
+export default function NextModal({ children, title }: NextModalProps) {
   const router = useRouter();
-  useEffect(() => {}, []);
   const handleBack = () => router.back();
 
   return (

@@ -9,8 +9,16 @@ import { Action } from "@/global/classes/action";
 import { useNotification } from "@/global/hooks";
 import { booksRoute } from "@/global/constants/routes";
 import { zodResolver } from "mantine-form-zod-resolver";
-import { Button, FileButton, Paper, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  FileButton,
+  Paper,
+  Stack,
+  Text,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { FormSelect, FloatingInput } from "@/global/components/common";
+import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
 
 export default function SaveBookForm() {
   const router = useRouter();
@@ -18,6 +26,7 @@ export default function SaveBookForm() {
   const [isMutating, setIsMutating] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const resetRef = useRef<() => void>(null);
+  const { colorScheme } = useMantineColorScheme();
 
   const clearFile = () => {
     setFile(null);
@@ -78,9 +87,9 @@ export default function SaveBookForm() {
 
   return (
     <>
-      <Paper radius="md" p="lg">
-        <Stack gap="sm">
-          <Stack gap="sm">
+      <Paper p="xl">
+        <Stack gap="md">
+          <Stack gap="md">
             {file && (
               <Text size="sm" ta="center" mt="sm">
                 Picked file: {file.name}
@@ -94,7 +103,9 @@ export default function SaveBookForm() {
               {(props) => <Button {...props}>Upload JSON</Button>}
             </FileButton>
 
-            <Button onClick={handleSaveBooks}>Save Books</Button>
+            <Button onClick={handleSaveBooks} disabled={isMutating}>
+              {isMutating ? "Saving..." : "Save"}
+            </Button>
 
             <Button disabled={!file} color="yellow" onClick={clearFile}>
               Reset
@@ -102,8 +113,9 @@ export default function SaveBookForm() {
           </Stack>
 
           <form onSubmit={form.onSubmit(handleSaveBook)}>
-            <Stack gap="sm">
+            <Stack gap="md">
               <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
                 name="title"
                 label="Title"
                 key={form.key("title")}
@@ -111,6 +123,7 @@ export default function SaveBookForm() {
               />
 
               <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
                 name="synopsis"
                 label="Synopsis"
                 key={form.key("synopsis")}
@@ -118,6 +131,7 @@ export default function SaveBookForm() {
               />
 
               <FormSelect
+                styles={lightBgOneDarkBgTwo(colorScheme)}
                 value="Fantasy"
                 name="genre"
                 label="Genre"

@@ -2,7 +2,7 @@
 import { Genre } from "../enums";
 import { Suspense } from "react";
 import { Sort } from "../enums/sort";
-import { Modal, Stack } from "@mantine/core";
+import { Modal, Stack, Title } from "@mantine/core";
 import { Order } from "@/global/enums";
 import { modalProps } from "@/global/constants";
 import { UrlSelect, SelectSkeleton } from "@/global/components/common";
@@ -25,7 +25,7 @@ export default function BooksFilterModal({
   return (
     <Modal
       centered
-      title={title}
+      title={<Title order={6}>{title}</Title>}
       onClose={close}
       opened={opened}
       overlayProps={modalProps.overlayProps}>

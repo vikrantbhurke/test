@@ -6,7 +6,7 @@ export default function CommentsItemClient({ item }: any) {
   const { id, body, commenterId } = item;
 
   return (
-    <Paper radius="md" p="lg">
+    <Paper p="lg">
       <Stack gap="sm">
         <Title order={6}>{body}</Title>
         <Text>Comment By: {commenterId.username}</Text>

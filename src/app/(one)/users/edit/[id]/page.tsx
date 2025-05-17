@@ -9,7 +9,7 @@ type PageProps = {
 
 export default async function Page({ params }: PageProps) {
   return (
-    <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawSm}>
+    <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
       <GetUserById params={params}>
         {(user) => <EditProfileForm user={user} />}
       </GetUserById>

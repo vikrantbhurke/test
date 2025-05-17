@@ -59,7 +59,7 @@ export default function AddCommentForm({ bookId }: AddCommentFormProps) {
 
   return (
     <form onSubmit={form.onSubmit(handleSaveComment)}>
-      <Stack p="lg" gap="xs">
+      <Stack pt={4} gap="md" p="sm">
         <FloatingInput
           name="body"
           label="Body"
@@ -67,12 +67,8 @@ export default function AddCommentForm({ bookId }: AddCommentFormProps) {
           {...form.getInputProps("body")}
         />
 
-        <Button
-          type="submit"
-          disabled={isMutating}
-          loading={isMutating}
-          loaderProps={{ type: "dots" }}>
-          Save Comment
+        <Button type="submit" disabled={isMutating}>
+          {isMutating ? "Saving..." : "Save"}
         </Button>
       </Stack>
     </form>

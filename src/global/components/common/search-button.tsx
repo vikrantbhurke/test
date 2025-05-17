@@ -19,7 +19,7 @@ export default function SearchButton() {
       onMouseDown={stillButtonProps.onMouseDown}
       onClick={handleToggleSearch}
       className={classes.themeOneWithHover}>
-      <Stack align="center" gap={4}>
+      <Stack align="center" gap={0}>
         <IconSearch size={16} />
         <Text size="sm">Search</Text>
       </Stack>

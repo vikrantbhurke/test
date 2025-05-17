@@ -5,6 +5,7 @@ import {
   InputBase,
   ScrollArea,
   useCombobox,
+  InputBaseProps,
 } from "@mantine/core";
 import { ReactNode } from "react";
 import classes from "@/global/styles/common.module.css";
@@ -23,7 +24,7 @@ type FormSelectProps = {
   value: OptionValue | null;
   labelstyle?: "floating" | "above";
   onChange: (value: OptionValue) => void;
-};
+} & Partial<InputBaseProps>;
 
 export default function FormSelect({
   value,

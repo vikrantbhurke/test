@@ -1,6 +1,7 @@
-import { Grid, Paper, Stack } from "@mantine/core";
+import { Grid, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { Fragment } from "react";
+import { Ad } from "../common";
 
 export default function ListGridClient({ props }: any) {
   const { content, DataItemClient, listGridProps } = props;
@@ -59,14 +60,4 @@ export default function ListGridClient({ props }: any) {
     );
 
   return null;
-}
-
-function Ad() {
-  return (
-    <Paper radius="md" p="xl" h="100%">
-      <Stack align="center" justify="center" h="100%">
-        <Stack h={200} w={200} bg="red"></Stack>
-      </Stack>
-    </Paper>
-  );
 }

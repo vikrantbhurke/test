@@ -10,6 +10,7 @@ import {
   createTheme,
   PasswordInput,
   mergeThemeOverrides,
+  Button,
 } from "@mantine/core";
 import { colorsTheme } from "./colors.theme";
 import classes from "@/global/styles/app.module.css";
@@ -34,6 +35,12 @@ export const coreTheme = createTheme({
     Text: Text.extend({
       defaultProps: {
         fz: "sm",
+      },
+    }),
+
+    Button: Button.extend({
+      defaultProps: {
+        size: "xs",
       },
     }),
 

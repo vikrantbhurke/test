@@ -7,7 +7,7 @@ export const drawerProps = {
     },
     content: {
       backgroundColor: "var(--bg-one)",
-      borderRadius: "20px 20px 0 0",
+      height: "auto",
     },
     header: { backgroundColor: "var(--bg-one)" },
   },

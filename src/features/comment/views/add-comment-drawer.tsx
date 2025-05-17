@@ -6,7 +6,6 @@ import { drawerProps } from "@/global/constants";
 type BooksFilterDrawerProps = {
   bookId: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | number;
-  title: string;
   opened: boolean;
   close: () => void;
 };
@@ -14,7 +13,6 @@ type BooksFilterDrawerProps = {
 export default function AddCommentDrawer({
   bookId,
   size = "xs",
-  title,
   close,
   opened,
 }: BooksFilterDrawerProps) {
@@ -22,7 +20,6 @@ export default function AddCommentDrawer({
     <Drawer
       size={size}
       zIndex={201}
-      title={title}
       opened={opened}
       onClose={close}
       position="bottom"

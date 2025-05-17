@@ -1,7 +1,7 @@
-import { BookItem } from "@/features/book/views";
-import { GetBookById } from "@/features/book/queries";
-import ModalClient from "./modal-client";
 import { Stack } from "@mantine/core";
+import { BookItem } from "@/features/book/views";
+import { NextModal } from "@/global/components/common";
+import { GetBookById } from "@/features/book/queries";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -9,12 +9,12 @@ type PageProps = {
 
 export default function Page({ params }: PageProps) {
   return (
-    <ModalClient>
-      <Stack p="xs" pt={0} bg="var(--bg-one)">
+    <NextModal>
+      <Stack p="xs" pt={0}>
         <GetBookById params={params}>
           {(book) => <BookItem book={book} />}
         </GetBookById>
       </Stack>
-    </ModalClient>
+    </NextModal>
   );
 }

@@ -3,13 +3,14 @@ import { Suspense } from "react";
 import { Genre } from "../enums";
 import { Sort } from "../enums/sort";
 import { Order } from "@/global/enums";
-import { Drawer, Stack } from "@mantine/core";
+import { Drawer, Stack, Title } from "@mantine/core";
 import { drawerProps } from "@/global/constants";
 import { UrlSelect, SelectSkeleton } from "@/global/components/common";
 
 type BooksFilterDrawerProps = {
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   title: string;
+  radius?: number | "xs" | "sm" | "md" | "lg" | "xl" | "full";
   opened: boolean;
   close: () => void;
 };
@@ -17,6 +18,7 @@ type BooksFilterDrawerProps = {
 export default function BooksFilterDrawer({
   size = "xs",
   title,
+  radius,
   close,
   opened,
 }: BooksFilterDrawerProps) {
@@ -28,8 +30,9 @@ export default function BooksFilterDrawer({
     <Drawer
       size={size}
       zIndex={201}
-      title={title}
+      title={<Title order={6}>{title}</Title>}
       opened={opened}
+      radius={radius}
       onClose={close}
       position="bottom"
       styles={drawerProps.styles}>

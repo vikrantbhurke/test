@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "@mantine/form";
-import { Button, Stack } from "@mantine/core";
+import { Button, Stack, useMantineColorScheme } from "@mantine/core";
 import { signUpUser } from "@/features/user/action";
 import { FloatingInput } from "@/global/components/common";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/global/states/store";
 import { Action } from "@/global/classes";
 import { homeRoute } from "@/global/constants/routes";
+import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
 
 export default function SignInForm() {
   const [isMutating, setIsMutating] = useState(false);
@@ -18,6 +19,7 @@ export default function SignInForm() {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const { isMobile } = useSelector((state: RootState) => state.global);
+  const { colorScheme } = useMantineColorScheme();
 
   const form = useForm({
     mode: "controlled",
@@ -56,6 +58,7 @@ export default function SignInForm() {
     <form onSubmit={form.onSubmit(handleSignUpUser)}>
       <Stack gap="md">
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="username"
           label="Username"
           key={form.key("username")}
@@ -63,6 +66,7 @@ export default function SignInForm() {
         />
 
         <FloatingInput
+          styles={lightBgOneDarkBgTwo(colorScheme)}
           name="password"
           label="Password"
           type="password"
@@ -70,8 +74,12 @@ export default function SignInForm() {
           {...form.getInputProps("password")}
         />
 
-        <Button c="var(--bg-one)" color="var(--tx-one)" type="submit">
-          Sign In User
+        <Button
+          c="var(--bg-one)"
+          color="var(--tx-one)"
+          type="submit"
+          disabled={isMutating}>
+          {isMutating ? "Signing In..." : "Sign In"}
         </Button>
       </Stack>
     </form>

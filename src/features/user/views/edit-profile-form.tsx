@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { editUserById } from "../action";
 import { EditUserSchema } from "../schema";
-import { Button, Paper, Stack, Text } from "@mantine/core";
+import { Button, Paper, Stack, useMantineColorScheme } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { FloatingInput } from "@/global/components/common";
 import { Action } from "@/global/classes";
@@ -11,7 +11,8 @@ import { useNotification } from "@/global/hooks";
 import { useToast } from "@/global/hooks/use-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "@/global/states/store";
-import { userRoute } from "@/global/constants/routes";
+import { viewUserRoute } from "@/global/constants/routes";
+import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
 
 type EditProfileFormProps = {
   user: any;
@@ -24,6 +25,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
   const [stateUser, setStateUser] = useState(user);
   const [isMutating, setIsMutating] = useState(false);
   const { isMobile } = useSelector((state: RootState) => state.global);
+  const { colorScheme } = useMantineColorScheme();
 
   const form = useForm({
     mode: "controlled",
@@ -47,7 +49,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
         const alert = { message: response.message, status: "success" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
-        router.push(userRoute(user.id));
+        router.push(viewUserRoute(user.id));
       } else {
         const alert = { message: response.error, status: "error" as const };
         if (isMobile) showToast(alert);
@@ -65,12 +67,10 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
 
   return (
     <form onSubmit={form.onSubmit(handleEditProfile)}>
-      <Paper radius="md" p="lg">
-        <Stack gap="xs" w={400}>
-          <Text>Optimistic firstname: {stateUser.firstname}</Text>
-          <Text>Original firstname: {user.firstname}</Text>
-
+      <Paper p="xl">
+        <Stack gap="md">
           <FloatingInput
+            styles={lightBgOneDarkBgTwo(colorScheme)}
             name="firstname"
             label="Firstname"
             key={form.key("firstname")}
@@ -78,6 +78,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
           />
 
           <FloatingInput
+            styles={lightBgOneDarkBgTwo(colorScheme)}
             name="lastname"
             label="Lastname"
             key={form.key("lastname")}

@@ -8,10 +8,9 @@ type PageProps = {
 };
 
 export default async function Page({ params }: PageProps) {
-  await new Promise((res) => setTimeout(res, 3000));
   return (
     <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
-      <Paper radius="md" p="lg">
+      <Paper p="xl">
         <GetBookById params={params}>
           {(book) => <BookItem book={book} />}
         </GetBookById>
