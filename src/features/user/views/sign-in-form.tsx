@@ -69,7 +69,7 @@ export default function SignInForm() {
           styles={lightBgOneDarkBgTwo(colorScheme)}
           name="password"
           label="Password"
-          type="password"
+          type="password-input"
           key={form.key("password")}
           {...form.getInputProps("password")}
         />

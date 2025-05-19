@@ -66,12 +66,13 @@ export default function ListGridInfinite({
   scrollWrapperProps,
   listGridClientProps,
 }: ListGridInfiniteProps) {
+  console.log("Books Client Window Page");
   const scrollRef = useRef<any>(null);
   const [page, setPage] = useState(0);
   const firstRender = useIsFirstRender();
   const jsonDataArgs = JSON.stringify(getDataArgs);
   const [isFetching, setIsFetching] = useState(false);
-  const [hasMoreData, setHasMoreData] = useState(true);
+  const [isLastPage, setIsLastPage] = useState(initialDataPage.lastPage);
   const [dataPage, setDataPage] = useState(initialDataPage);
   const [content, setContent] = useState<any[]>(initialDataPage.content);
 
@@ -81,7 +82,7 @@ export default function ListGridInfinite({
 
     try {
       const response = await getData({ ...getDataArgs, page: page + 1 });
-      if (response.data.lastPage) setHasMoreData(false);
+      setIsLastPage(response.data.lastPage);
       setDataPage(response.data);
       setPage((prevPage) => prevPage + 1);
       setContent((prevData) => [...prevData, ...response.data.content]);
@@ -98,8 +99,7 @@ export default function ListGridInfinite({
 
     try {
       const response = await getData({ ...getDataArgs, page: 0 });
-      if (response.data.lastPage) setHasMoreData(false);
-      else setHasMoreData(true);
+      setIsLastPage(response.data.lastPage);
       setPage(0);
       setDataPage(response.data);
       setContent(response.data.content);
@@ -112,23 +112,29 @@ export default function ListGridInfinite({
 
   useEffect(() => {
     const handleScroll = () => {
+      const threshold = 0.8; // 80% of the page height
+
       if (scrollButtonsProps?.scrollbar === "window") {
+        const scrollTop = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
         if (
-          hasMoreData &&
+          !isLastPage &&
           more === "scroll" &&
-          window.scrollY + window.innerHeight >=
-            document.documentElement.scrollHeight
+          scrollTop + windowHeight >= threshold * docHeight
         ) {
           loadMore();
         }
       }
 
       if (scrollButtonsProps?.scrollbar === "container" && scrollRef?.current) {
+        const { scrollTop, clientHeight, scrollHeight } = scrollRef.current;
+
         if (
-          hasMoreData &&
+          !isLastPage &&
           more === "scroll" &&
-          scrollRef.current.scrollTop + scrollRef.current.clientHeight >=
-            scrollRef.current.scrollHeight
+          scrollTop + clientHeight >= threshold * scrollHeight
         ) {
           loadMore();
         }
@@ -140,14 +146,14 @@ export default function ListGridInfinite({
 
     target?.addEventListener("scroll", handleScroll);
     return () => target?.removeEventListener("scroll", handleScroll);
-  }, [hasMoreData, more, scrollButtonsProps?.scrollbar, scrollRef, loadMore]);
+  }, [more, loadMore, scrollRef, isLastPage, scrollButtonsProps?.scrollbar]);
 
   useEffect(() => {
     if (firstRender) return;
     loadNew();
   }, [loadNew, firstRender, jsonDataArgs]);
 
-  const listGridEnd = hasMoreData || (
+  const listGridEnd = !isLastPage || (
     <Text ta="center" p="sm" {...endProps}>
       {endLabel}
     </Text>
@@ -155,7 +161,7 @@ export default function ListGridInfinite({
 
   const { justify, ...rest } = buttonProps;
 
-  const loadMoreButton = hasMoreData ? (
+  const loadMoreButton = !isLastPage ? (
     <Group justify={justify}>
       <Button
         {...rest}

@@ -42,15 +42,15 @@ export default function BooksFilterDrawer({
       styles={drawerProps.styles}>
       <Stack gap="md" p="sm">
         <Suspense fallback={<></>}>
-          <UrlSelect paramKey="sort" options={sortMap} />
+          <UrlSelect paramKey="sort" options={sortMap} label="Sort" />
         </Suspense>
 
         <Suspense fallback={<></>}>
-          <UrlSelect paramKey="order" options={orderMap} />
+          <UrlSelect paramKey="order" options={orderMap} label="Order" />
         </Suspense>
 
         <Suspense fallback={<></>}>
-          <UrlSelect paramKey="genre" options={genreMap} />
+          <UrlSelect paramKey="genre" options={genreMap} label="Genre" />
         </Suspense>
       </Stack>
     </Drawer>

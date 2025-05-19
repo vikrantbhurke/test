@@ -3,19 +3,21 @@ import {
   TextInput,
   PasswordInput,
   TextInputProps,
+  TextareaProps,
   PasswordInputProps,
+  Textarea,
 } from "@mantine/core";
 import { useState } from "react";
 import classes from "@/global/styles/common.module.css";
 
 type FloatingInputProps = {
-  type?: "text" | "password";
+  type?: "text-input" | "text-area" | "password-input";
   variant?: "form" | "normal";
   value?: string;
-} & Partial<TextInputProps & PasswordInputProps>;
+} & Partial<TextInputProps & PasswordInputProps & TextareaProps>;
 
 export default function FloatingInput({
-  type = "text",
+  type = "text-input",
   variant = "form",
   value: formValue,
   ...rest
@@ -40,7 +42,7 @@ export default function FloatingInput({
     input: classes.input,
   };
 
-  if (type === "text") {
+  if (type === "text-input") {
     if (variant === "form") {
       return (
         <TextInput
@@ -69,7 +71,36 @@ export default function FloatingInput({
     }
   }
 
-  if (type === "password") {
+  if (type === "text-area") {
+    if (variant === "form") {
+      return (
+        <Textarea
+          {...rest}
+          value={value}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          labelProps={labelProps}
+          classNames={classNames}
+        />
+      );
+    }
+
+    if (variant === "normal") {
+      return (
+        <Textarea
+          {...rest}
+          value={value}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          onChange={handleChange}
+          labelProps={labelProps}
+          classNames={classNames}
+        />
+      );
+    }
+  }
+
+  if (type === "password-input") {
     if (variant === "form") {
       return (
         <PasswordInput

@@ -2,22 +2,26 @@ import { notifications } from "@mantine/notifications";
 import { useSelector } from "react-redux";
 import { RootState } from "../states/store";
 import classes from "@/global/styles/app.module.css";
+import { ReactNode } from "react";
+import { Text, Title } from "@mantine/core";
 
 type ShowNotificationArgs = {
+  icon?: ReactNode;
   title?: string;
   message?: string;
   autoClose?: number;
   withCloseButton?: boolean;
-  status: "success" | "warning" | "error" | "info";
+  status: "success" | "warning" | "error" | "info" | "default";
 };
 
 export const useNotification = () => {
   const { isMobile } = useSelector((state: RootState) => state.global);
 
   const showNotification = ({
+    icon,
     title,
-    message,
     status,
+    message,
     autoClose = 5000,
     withCloseButton = false,
   }: ShowNotificationArgs) => {
@@ -26,11 +30,13 @@ export const useNotification = () => {
     if (status == "warning") color = "yellow";
     if (status == "error") color = "rose";
     if (status == "info") color = "blue";
+    if (status === "default") color = "transparent";
 
     notifications.show({
+      icon,
       color,
-      title,
-      message,
+      title: <Title order={6}>{title}</Title>,
+      message: <Text c="var(--tx-five)">{message}</Text>,
       autoClose,
       withCloseButton,
       classNames: {

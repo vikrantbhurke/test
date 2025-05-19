@@ -105,7 +105,7 @@ export default function SignUpForm() {
           styles={lightBgOneDarkBgTwo(colorScheme)}
           name="password"
           label="Password"
-          type="password"
+          type="password-input"
           key={form.key("password")}
           {...form.getInputProps("password")}
         />
@@ -114,7 +114,7 @@ export default function SignUpForm() {
           styles={lightBgOneDarkBgTwo(colorScheme)}
           name="confirmPassword"
           label="Confirm Password"
-          type="password"
+          type="password-input"
           key={form.key("confirmPassword")}
           {...form.getInputProps("confirmPassword")}
         />

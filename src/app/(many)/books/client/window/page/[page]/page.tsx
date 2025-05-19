@@ -56,6 +56,7 @@ export default async function Page({ params, searchParams }: PageProps) {
           //   }}
           // />
           <ListGridInfinite
+            more="scroll"
             getData={getBooks}
             initialDataPage={booksPage}
             DataDetailsClient={BooksDetailsClient}

@@ -80,7 +80,7 @@ export default async function BooksItemServer({ item }: any) {
             href={editBookRoute(id)}
             size="xs"
             fz="xs">
-            Edit Book
+            Edit
           </Button>
 
           <DropBookButton id={id} />
