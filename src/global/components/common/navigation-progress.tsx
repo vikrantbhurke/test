@@ -1,19 +1,37 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { usePathname } from "next/navigation";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 
 export default function NProgress() {
   const pathname = usePathname();
+  const [isPending] = useTransition();
 
   useEffect(() => {
-    nprogress.start();
-    const timeout = setTimeout(() => {
+    if (isPending) {
+      nprogress.start();
+    } else {
       nprogress.complete();
-    }, 300);
+    }
+  }, [isPending]);
 
-    return () => clearTimeout(timeout);
+  useEffect(() => {
+    nprogress.complete(); // once pathname changes, navigation is done
   }, [pathname]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        nprogress.start();
+      } else if (document.visibilityState === "visible") {
+        nprogress.complete();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
 
   return <NavigationProgress />;
 }
