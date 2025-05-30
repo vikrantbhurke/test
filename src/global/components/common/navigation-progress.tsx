@@ -8,24 +8,16 @@ export default function NProgress() {
   const [isPending] = useTransition();
 
   useEffect(() => {
-    if (isPending) {
-      nprogress.start();
-    } else {
-      nprogress.complete();
-    }
+    if (isPending) nprogress.start();
+    else nprogress.complete();
   }, [isPending]);
 
-  useEffect(() => {
-    nprogress.complete(); // once pathname changes, navigation is done
-  }, [pathname]);
+  useEffect(() => nprogress.complete(), [pathname]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        nprogress.start();
-      } else if (document.visibilityState === "visible") {
-        nprogress.complete();
-      }
+      if (document.visibilityState === "hidden") nprogress.start();
+      else if (document.visibilityState === "visible") nprogress.complete();
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
