@@ -2,7 +2,8 @@ import { User } from "./model";
 import { Repository } from "@/global/classes";
 import { SignUpUserDTO, EditUserDTO } from "./schema";
 
-const select = "firstname lastname username email";
+const select =
+  "firstname lastname username email role provider avatar hashedPassword";
 
 export class UserRepository extends Repository {
   async signUpUser(signUpUserDTO: SignUpUserDTO) {
@@ -50,6 +51,23 @@ export class UserRepository extends Repository {
       filter: { _id: id },
       update: { avatar },
       mode: "set",
+    });
+  }
+
+  async pushProviderById(id: string, provider: string) {
+    await this.editOne(User, {
+      filter: { _id: id },
+      mode: "push",
+      arrayField: "provider",
+      element: provider,
+    });
+  }
+  async pullProviderById(id: string, provider: string) {
+    await this.editOne(User, {
+      filter: { _id: id },
+      mode: "pull",
+      arrayField: "provider",
+      element: provider,
     });
   }
 

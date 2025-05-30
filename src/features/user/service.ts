@@ -4,6 +4,8 @@ import {
   CommentService,
   BookLikerService,
 } from "..";
+import bcrypt from "bcryptjs";
+import { Provider } from "./enums";
 import { Service } from "@/global/classes";
 import { SignUpUserDTO, EditUserDTO } from "./schema";
 
@@ -29,25 +31,38 @@ export class UserService extends Service {
     this.commentService = commentService;
   }
 
-  async signUpUsers(signUpUsersDTO: SignUpUserDTO[]) {
-    for (const signUpUserDTO of signUpUsersDTO)
-      await this.signUpUser(signUpUserDTO);
+  async encryptPassword(password: string) {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
   }
 
-  async signUpUser(signUpUserDTO: SignUpUserDTO) {
+  async validatePassword(password: string, hashedPassword: string) {
+    return bcrypt.compareSync(password, hashedPassword);
+  }
+
+  async signUpUsers(signUpUsersDTO: SignUpUserDTO[]) {
+    for (const signUpUserDTO of signUpUsersDTO)
+      await this.signUpUser(Provider.credentials, signUpUserDTO);
+  }
+
+  async signUpUser(provider: Provider, signUpUserDTO: SignUpUserDTO) {
+    const { username, email } = signUpUserDTO;
+    const u1 = await this.getUserByUsername(username);
+    const u2 = await this.getUserByEmail(email);
+
+    if (u1)
+      throw new Error(`Account with username ${username} already exists.`);
+
+    if (u2) throw new Error(`Account with email ${email} already exists.`);
+
     const newUser = {
       ...signUpUserDTO,
-      hashedPassword: signUpUserDTO.password, // TODO: Hash password here
+      provider,
+      hashedPassword: await this.encryptPassword(signUpUserDTO.password),
     };
 
     await this.userRepository.signUpUser(newUser);
   }
-
-  // async signInUser() {}
-
-  // async verifyAccount() {}
-
-  // async verifyEmail() {}
 
   async getUserById(id: string) {
     return await this.userRepository.getUserById(id);
@@ -75,6 +90,14 @@ export class UserService extends Service {
 
   async editAvatarById(id: string, avatar: string) {
     await this.userRepository.editAvatarById(id, avatar);
+  }
+
+  async pushProviderById(id: string, provider: string) {
+    await this.userRepository.pushProviderById(id, provider);
+  }
+
+  async pullProviderById(id: string, provider: string) {
+    await this.userRepository.pullProviderById(id, provider);
   }
 
   async setFavBookIdById(id: string, favBookId: string) {

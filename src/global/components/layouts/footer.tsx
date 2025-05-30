@@ -10,12 +10,17 @@ import {
   booksStartsWith,
 } from "@/global/constants/routes";
 import { stillButtonProps } from "@/global/constants";
+import { SignOutFooterButton } from "@/features/user/views";
+import { useSession } from "next-auth/react";
 
 type NavbarProps = {
   pathname: string;
 };
 
 export default function Footer({ pathname }: NavbarProps) {
+  const { data: session } = useSession();
+  const id = session?.user?.id;
+
   return (
     <Group grow h="100%" gap={4} p={4}>
       <Button
@@ -54,22 +59,26 @@ export default function Footer({ pathname }: NavbarProps) {
         </Stack>
       </Button>
 
-      <Button
-        p={4}
-        h="100%"
-        href={signInRoute}
-        component={Link}
-        style={stillButtonProps.style}
-        onFocus={stillButtonProps.onFocus}
-        onMouseDown={stillButtonProps.onMouseDown}
-        className={`${classes.themeOneWithHover} ${
-          pathname === signInRoute && classes.themeThree
-        }`}>
-        <Stack align="center" justify="center" gap={0}>
-          <IconLogin size={16} />
-          <Text size="sm">Sign In</Text>
-        </Stack>
-      </Button>
+      {id ? (
+        <SignOutFooterButton />
+      ) : (
+        <Button
+          p={4}
+          h="100%"
+          href={signInRoute}
+          component={Link}
+          style={stillButtonProps.style}
+          onFocus={stillButtonProps.onFocus}
+          onMouseDown={stillButtonProps.onMouseDown}
+          className={`${classes.themeOneWithHover} ${
+            pathname === signInRoute && classes.themeThree
+          }`}>
+          <Stack align="center" justify="center" gap={0}>
+            <IconLogin size={16} />
+            <Text size="sm">Sign In</Text>
+          </Stack>
+        </Button>
+      )}
     </Group>
   );
 }

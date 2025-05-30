@@ -14,7 +14,11 @@ import { appShellProps } from "@/global/constants";
 import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 
-export default function AppMany({ children }: any) {
+type AppManyProps = {
+  children: React.ReactNode;
+};
+
+export default function AppMany({ children }: AppManyProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();

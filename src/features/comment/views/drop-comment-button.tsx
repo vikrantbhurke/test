@@ -11,15 +11,23 @@ type DropCommentButtonProps = {
 export default function DropCommentButton({ id }: DropCommentButtonProps) {
   const [opened, { open, close }] = useDisclosure();
 
+  const handleDropComment = async () => {
+    return await dropCommentById(id);
+  };
+
   return (
     <>
       <CustomModal
+        buttonProps={{
+          color: "red",
+          fullWidth: true,
+          loaderProps: { type: "dots" },
+        }}
         close={close}
-        buttonColor="red"
         opened={opened}
-        loaderType="dots"
         buttonLabel="Delete"
-        action={async () => await dropCommentById(id)}
+        action={handleDropComment}
+        routeType="refresh"
         message="Are you sure you want to delete this comment?"
       />
 

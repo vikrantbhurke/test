@@ -13,11 +13,13 @@ const UserSchema = new Schema(
     favBookId: { type: ObjectId, ref: "Book", default: null },
     gender: { type: String, enum: Object.values(Gender), required: true },
     role: { type: String, enum: Object.values(Role), default: Role.Public },
-    provider: {
-      type: String,
-      enum: Object.values(Provider),
-      default: Provider.Credentials,
-    },
+    provider: [
+      {
+        type: String,
+        enum: Object.values(Provider),
+        default: Provider.credentials,
+      },
+    ],
     payment: {
       type: String,
       enum: Object.values(Payment),

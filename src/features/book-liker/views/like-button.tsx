@@ -8,24 +8,29 @@ import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 import { Action } from "@/global/classes";
+import { stillButtonProps } from "@/global/constants";
 
 type LikeButtonProps = {
   bookId: string;
+  likerId: string;
   likes: number;
   exists: boolean;
 };
 
-export default function LikeButton({ bookId, likes, exists }: LikeButtonProps) {
+export default function LikeButton({
+  bookId,
+  likerId,
+  likes,
+  exists,
+}: LikeButtonProps) {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const [isMutating, setIsMutating] = useState(false);
   const [stateLikes, setStateLikes] = useState(likes);
   const [stateExists, setStateExists] = useState(exists);
   const { isMobile } = useSelector((state: RootState) => state.global);
-  // const { auth } = useAuthContext();
 
   const handleLike = async () => {
-    // If (!auth) route.push("/sign-in");
     if (isMutating) return;
     setIsMutating(true);
     const previousExists = stateExists;
@@ -36,7 +41,7 @@ export default function LikeButton({ bookId, likes, exists }: LikeButtonProps) {
     try {
       const response = await saveBookLiker({
         bookId,
-        likerId: "6801671fe63ce6ae26ae2f21", // Replace with auth ID from cookie
+        likerId,
       });
 
       if (Action.isSuccess(response)) {
@@ -60,7 +65,6 @@ export default function LikeButton({ bookId, likes, exists }: LikeButtonProps) {
   };
 
   const handleUnlike = async () => {
-    // If (!auth) route.push("/sign-in");
     if (isMutating) return;
     setIsMutating(true);
     const previousExists = stateExists;
@@ -71,7 +75,7 @@ export default function LikeButton({ bookId, likes, exists }: LikeButtonProps) {
     try {
       const response = await dropBookLiker({
         bookId,
-        likerId: "6801671fe63ce6ae26ae2f21", // Replace with auth ID from cookie
+        likerId,
       });
 
       if (Action.isSuccess(response)) {
@@ -97,16 +101,28 @@ export default function LikeButton({ bookId, likes, exists }: LikeButtonProps) {
   return (
     <Group gap={0}>
       {stateExists ? (
-        <ActionIcon c="crimson" variant="subtle" onClick={handleUnlike}>
+        <ActionIcon
+          c="crimson"
+          variant="subtle"
+          onClick={handleUnlike}
+          style={stillButtonProps.style}
+          onFocus={stillButtonProps.onFocus}
+          onMouseDown={stillButtonProps.onMouseDown}>
           <IconHeartFilled size={16} />
         </ActionIcon>
       ) : (
-        <ActionIcon c="crimson" variant="subtle" onClick={handleLike}>
+        <ActionIcon
+          c="crimson"
+          variant="subtle"
+          onClick={handleLike}
+          style={stillButtonProps.style}
+          onFocus={stillButtonProps.onFocus}
+          onMouseDown={stillButtonProps.onMouseDown}>
           <IconHeart size={16} />
         </ActionIcon>
       )}
 
-      <Text>{stateLikes ? stateLikes : 0}</Text>
+      <Text>{stateLikes || "0"}</Text>
     </Group>
   );
 }

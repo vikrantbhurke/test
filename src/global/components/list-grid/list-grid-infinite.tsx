@@ -2,9 +2,9 @@
 import ScrollButtons from "./scroll-buttons";
 import ScrollWrapper from "./scroll-wrapper";
 import ListGridClient from "./list-grid-client";
+import { stillButtonProps } from "@/global/constants";
 import { Text, Stack, Button, Group } from "@mantine/core";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { stillButtonProps } from "@/global/constants";
 import { useDebouncedCallback, useIsFirstRender } from "@mantine/hooks";
 
 type ScrollButtonsProps = {
@@ -66,7 +66,6 @@ export default function ListGridInfinite({
   scrollWrapperProps,
   listGridClientProps,
 }: ListGridInfiniteProps) {
-  console.log("Books Client Window Page");
   const scrollRef = useRef<any>(null);
   const [page, setPage] = useState(0);
   const firstRender = useIsFirstRender();

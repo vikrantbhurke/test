@@ -1,3 +1,4 @@
+"use client";
 import { notifications } from "@mantine/notifications";
 import { useSelector } from "react-redux";
 import { RootState } from "../states/store";
@@ -9,6 +10,13 @@ type ShowNotificationArgs = {
   icon?: ReactNode;
   title?: string;
   message?: string;
+  position?:
+    | "top-right"
+    | "top-left"
+    | "bottom-right"
+    | "bottom-left"
+    | "bottom-center"
+    | "top-center";
   autoClose?: number;
   withCloseButton?: boolean;
   status: "success" | "warning" | "error" | "info" | "default";
@@ -22,6 +30,7 @@ export const useNotification = () => {
     title,
     status,
     message,
+    position,
     autoClose = 5000,
     withCloseButton = false,
   }: ShowNotificationArgs) => {
@@ -42,7 +51,11 @@ export const useNotification = () => {
       classNames: {
         root: classes.shadow,
       },
-      position: isMobile ? "bottom-center" : "bottom-right",
+      position: position
+        ? position
+        : isMobile
+        ? "bottom-center"
+        : "bottom-right",
     });
   };
 

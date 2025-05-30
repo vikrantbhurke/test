@@ -1,27 +1,27 @@
 "use client";
 import { useState } from "react";
-import { Gender } from "../enums";
+import { Gender, Provider } from "../enums";
 import { useForm } from "@mantine/form";
-import { SignUpUserSchema } from "../schema";
-import { Button, Stack, useMantineColorScheme } from "@mantine/core";
-import { signUpUser } from "@/features/user/action";
-import { zodResolver } from "mantine-form-zod-resolver";
-import { FloatingInput, FormSelect } from "@/global/components/common";
 import { Action } from "@/global/classes";
 import { useSelector } from "react-redux";
-import { RootState } from "@/global/states/store";
-import { useNotification } from "@/global/hooks";
-import { useToast } from "@/global/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { homeRoute } from "@/global/constants/routes";
+import { SignUpUserSchema } from "../schema";
+import { useNotification } from "@/global/hooks";
+import { RootState } from "@/global/states/store";
+import { signUpUser } from "@/features/user/action";
+import { useToast } from "@/global/hooks/use-toast";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { signInRoute } from "@/global/constants/routes";
+import { Button, Stack, useMantineColorScheme } from "@mantine/core";
+import { FloatingInput, FormSelect } from "@/global/components/common";
 import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
 
 export default function SignUpForm() {
-  const [isMutating, setIsMutating] = useState(false);
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const { colorScheme } = useMantineColorScheme();
+  const [isMutating, setIsMutating] = useState(false);
   const { isMobile } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
@@ -43,13 +43,14 @@ export default function SignUpForm() {
     try {
       if (isMutating) return;
       setIsMutating(true);
-      const response = await signUpUser(values);
+
+      const response = await signUpUser(Provider.credentials, values);
 
       if (Action.isSuccess(response)) {
         const alert = { message: response.message, status: "success" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
-        router.push(homeRoute);
+        router.push(signInRoute);
       } else {
         const alert = { message: response.error, status: "error" as const };
         if (isMobile) showToast(alert);
@@ -132,8 +133,10 @@ export default function SignUpForm() {
           c="var(--bg-one)"
           color="var(--tx-one)"
           type="submit"
-          disabled={isMutating}>
-          {isMutating ? "Signing Up..." : "Sign Up"}
+          disabled={isMutating}
+          loading={isMutating}
+          loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
+          Sign Up
         </Button>
       </Stack>
     </form>

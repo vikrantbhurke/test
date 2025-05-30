@@ -9,7 +9,9 @@ export const BookSchema = z.object({
   votes: z.number().optional(),
   voterIds: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
-  genre: z.nativeEnum(Genre),
+  genre: z.nativeEnum(Genre, {
+    message: "Genre is required.",
+  }),
 });
 
 export const SaveBookSchema = BookSchema.omit({

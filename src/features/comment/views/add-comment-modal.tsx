@@ -20,7 +20,7 @@ export default function AddCommentModal({
       onClose={close}
       opened={opened}
       overlayProps={modalProps.overlayProps}>
-      <AddCommentForm bookId={bookId} />
+      <AddCommentForm bookId={bookId} close={close} />
     </Modal>
   );
 }

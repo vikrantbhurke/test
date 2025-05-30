@@ -7,7 +7,7 @@ type ToastProps = {
   title?: string;
   message?: string;
   status: "success" | "warning" | "error" | "info";
-  time?: number;
+  autoClose?: number;
   position?: "top" | "bottom";
 };
 
@@ -25,7 +25,7 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
     title: "",
     message: "",
     status: "info",
-    time: 5000,
+    autoClose: 5000,
     position: "bottom",
   });
 
@@ -37,7 +37,7 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
 
     const timeout = setTimeout(() => {
       setOpened(false);
-    }, props.time || 5000);
+    }, props.autoClose || 5000);
 
     return () => clearTimeout(timeout);
   }, []);

@@ -11,7 +11,8 @@ import { RootState } from "@/global/states/store";
 
 type CustomModalProps = {
   action: any;
-  route?: string;
+  route?: string; // Pass route if routeType is push or replace
+  routeType?: "push" | "replace" | "back" | "refresh";
   opened: boolean;
   message?: string;
   buttonColor?: string;
@@ -20,19 +21,19 @@ type CustomModalProps = {
   fullWidth?: boolean;
   buttonLabel?: string;
   loaderLabel?: string;
+  buttonProps?: any;
 };
 
 export default function CustomModal({
   route,
+  routeType,
   close,
   opened,
   action,
   message,
-  buttonColor,
   buttonLabel,
-  fullWidth = true,
-  loaderType,
   loaderLabel,
+  buttonProps,
 }: CustomModalProps) {
   const router = useRouter();
   const { showToast } = useToast();
@@ -50,7 +51,10 @@ export default function CustomModal({
         const alert = { message: response.message, status: "success" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
-        route && router.push(route);
+        if (routeType === "push" && route) router.push(route);
+        if (routeType === "replace" && route) router.replace(route);
+        if (routeType === "back") router.back();
+        if (routeType === "refresh") router.refresh();
       } else {
         const alert = { message: response.error, status: "error" as const };
         if (isMobile) showToast(alert);
@@ -66,6 +70,8 @@ export default function CustomModal({
     }
   };
 
+  const { loaderProps, ...rest } = buttonProps || {};
+
   return (
     <Modal
       centered
@@ -77,25 +83,21 @@ export default function CustomModal({
           {message}
         </Text>
 
-        {/* Either pass loaderType or loaderLabel */}
+        {/* Either pass loaderProps or loaderLabel */}
 
-        {loaderType && (
+        {loaderProps && (
           <Button
-            color={buttonColor}
+            {...rest}
             loading={isMutating}
             disabled={isMutating}
             onClick={handleClick}
-            fullWidth={fullWidth}
-            loaderProps={{ type: loaderType }}>
+            loaderProps={loaderProps}>
             {buttonLabel}
           </Button>
         )}
 
         {loaderLabel && (
-          <Button
-            fullWidth={fullWidth}
-            color={buttonColor}
-            onClick={handleClick}>
+          <Button {...rest} onClick={handleClick}>
             {isMutating ? buttonLabel : loaderLabel}
           </Button>
         )}

@@ -1,3 +1,4 @@
+"use client";
 import { useViewportSize } from "@mantine/hooks";
 import { useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";

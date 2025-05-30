@@ -14,7 +14,11 @@ import { appShellProps } from "@/global/constants";
 import { useSelector } from "react-redux";
 import { RootState } from "@/global/states/store";
 
-export default function AppOne({ children }: any) {
+type AppOneProps = {
+  children: React.ReactNode;
+};
+
+export default function AppOne({ children }: AppOneProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();

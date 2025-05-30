@@ -1,5 +1,5 @@
 import Ad from "./ad";
-import Providers from "./provider";
+import Providers from "./providers";
 import NextModal from "./next-modal";
 import UrlSelect from "./url-select";
 import FormSelect from "./form-select";
@@ -10,6 +10,7 @@ import CustomModal from "./custom-modal";
 import SearchButton from "./search-button";
 import BurgerButton from "./burger-button";
 import FloatingInput from "./floating-input";
+import NProgress from "./navigation-progress";
 import CustomSkeleton from "./custom-skeleton";
 import ToastProvider, { ToastContext } from "./toast-provider";
 
@@ -17,6 +18,7 @@ export {
   Ad,
   UrlSelect,
   NextModal,
+  NProgress,
   Providers,
   SearchIcon,
   FormSelect,

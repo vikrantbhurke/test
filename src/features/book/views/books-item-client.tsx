@@ -7,7 +7,6 @@ import {
   Paper,
   Anchor,
   Button,
-  ActionIcon,
 } from "@mantine/core";
 import Link from "next/link";
 import DropBookButton from "./drop-book-button";
@@ -18,16 +17,18 @@ import {
   userBooksRoute,
   bookCommentsRoute,
 } from "@/global/constants/routes";
-import { LikeButton } from "@/features/book-liker/views";
+import { LikeButton, LikeUnauthButton } from "@/features/book-liker/views";
 import { checkBookLiker } from "@/features/book-liker/action";
 import useSWR from "swr";
-import { IconHeartFilled } from "@tabler/icons-react";
+import { useSession } from "next-auth/react";
 
 export default function BooksItemClient({ item }: any) {
   const { id, title, synopsis, authorId, genre } = item;
+  const { data: session } = useSession();
+  const userId = session?.user?.id || null;
 
-  const { data } = useSWR(
-    { bookId: id, likerId: "6801671fe63ce6ae26ae2f21" }, // Replace with auth ID from cookie
+  const { data: bookLikerResponse } = useSWR(
+    userId && { bookId: id, likerId: userId },
     checkBookLiker
   );
 
@@ -61,31 +62,29 @@ export default function BooksItemClient({ item }: any) {
         </Stack>
 
         <Group justify="center">
-          {!data || !data?.success ? (
-            <Group gap={0}>
-              <ActionIcon c="crimson" variant="subtle">
-                <IconHeartFilled size={16} />
-              </ActionIcon>
-              <Text>0</Text>
-            </Group>
-          ) : (
+          {userId && bookLikerResponse && bookLikerResponse?.success ? (
             <LikeButton
               bookId={id}
+              likerId={userId}
               likes={item.likes}
-              exists={data.exists || true}
+              exists={bookLikerResponse.exists}
             />
+          ) : (
+            <LikeUnauthButton likes={item.likes} />
           )}
 
-          <Button
-            color="blue"
-            component={Link}
-            href={editBookRoute(id)}
-            size="xs"
-            fz="xs">
-            Edit
-          </Button>
+          {userId === authorId.id && (
+            <Button
+              color="blue"
+              component={Link}
+              href={editBookRoute(id)}
+              size="xs"
+              fz="xs">
+              Edit
+            </Button>
+          )}
 
-          <DropBookButton id={id} />
+          {userId === authorId.id && <DropBookButton id={id} />}
         </Group>
       </Stack>
     </Paper>

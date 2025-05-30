@@ -31,10 +31,13 @@ export class BookService extends Service {
   }
 
   async saveBooks(saveBooksDTO: SaveBookDTO[]) {
-    await this.bookRepository.saveBooks(saveBooksDTO);
+    for (const saveBookDTO of saveBooksDTO) await this.saveBook(saveBookDTO);
   }
 
   async saveBook(saveBookDTO: SaveBookDTO) {
+    const { title } = saveBookDTO;
+    const book = await this.getBookByTitle(title);
+    if (book) throw new Error(`Book with title ${title} already exists.`);
     await this.bookRepository.saveBook(saveBookDTO);
   }
 

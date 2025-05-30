@@ -1,15 +1,6 @@
+"use client";
 import Link from "next/link";
 import { Button, Group, Stack, Text } from "@mantine/core";
-import {
-  booksRoute,
-  saveBookRoute,
-  homeRoute,
-  purchaseRoute,
-  signInRoute,
-  signUpRoute,
-  subscribeRoute,
-  booksStartsWith,
-} from "@/global/constants/routes";
 import {
   IconBook,
   IconCoin,
@@ -18,14 +9,32 @@ import {
   IconPencil,
   IconAppWindow,
 } from "@tabler/icons-react";
+import {
+  homeRoute,
+  booksRoute,
+  signInRoute,
+  signUpRoute,
+  saveBookRoute,
+  purchaseRoute,
+  subscribeRoute,
+  booksStartsWith,
+} from "@/global/constants/routes";
 import classes from "@/global/styles/app.module.css";
 import { stillButtonProps } from "@/global/constants";
+import {
+  DeleteAccountButton,
+  SignOutNavbarButton,
+} from "@/features/user/views";
+import { useSession } from "next-auth/react";
 
 type NavbarProps = {
   pathname: string;
 };
 
 export default function Navbar({ pathname }: NavbarProps) {
+  const { data: session } = useSession();
+  const id = session?.user?.id;
+
   const DesktopButton = ({ href, className, Icon, label }: any) => {
     return (
       <Button
@@ -150,19 +159,23 @@ export default function Navbar({ pathname }: NavbarProps) {
         label="Books Client Window"
       />
 
-      <DesktopButton
-        href={saveBookRoute}
-        className={pathname === saveBookRoute && classes.themeThree}
-        Icon={<IconPencil size={16} />}
-        label="Create Book"
-      />
+      {id && (
+        <>
+          <DesktopButton
+            href={saveBookRoute}
+            className={pathname === saveBookRoute && classes.themeThree}
+            Icon={<IconPencil size={16} />}
+            label="Create Book"
+          />
 
-      <MobileButton
-        href={saveBookRoute}
-        className={pathname === saveBookRoute && classes.themeThree}
-        Icon={<IconPencil size={16} />}
-        label="Create Book"
-      />
+          <MobileButton
+            href={saveBookRoute}
+            className={pathname === saveBookRoute && classes.themeThree}
+            Icon={<IconPencil size={16} />}
+            label="Create Book"
+          />
+        </>
+      )}
 
       <DesktopButton
         href={subscribeRoute}
@@ -192,33 +205,42 @@ export default function Navbar({ pathname }: NavbarProps) {
         label="Purchase"
       />
 
-      <DesktopButton
-        href={signInRoute}
-        className={pathname.startsWith(signInRoute) && classes.themeThree}
-        Icon={<IconLogin size={16} />}
-        label="Sign In"
-      />
+      {id ? (
+        <>
+          <SignOutNavbarButton />
+          <DeleteAccountButton id={id} />
+        </>
+      ) : (
+        <>
+          <DesktopButton
+            href={signUpRoute}
+            className={pathname.startsWith(signUpRoute) && classes.themeThree}
+            Icon={<IconAppWindow size={16} />}
+            label="Sign Up"
+          />
 
-      <MobileButton
-        href={signInRoute}
-        className={pathname.startsWith(signInRoute) && classes.themeThree}
-        Icon={<IconLogin size={16} />}
-        label="Sign In"
-      />
+          <MobileButton
+            href={signUpRoute}
+            className={pathname.startsWith(signUpRoute) && classes.themeThree}
+            Icon={<IconAppWindow size={16} />}
+            label="Sign Up"
+          />
 
-      <DesktopButton
-        href={signUpRoute}
-        className={pathname.startsWith(signUpRoute) && classes.themeThree}
-        Icon={<IconAppWindow size={16} />}
-        label="Sign Up"
-      />
+          <DesktopButton
+            href={signInRoute}
+            className={pathname.startsWith(signInRoute) && classes.themeThree}
+            Icon={<IconLogin size={16} />}
+            label="Sign In"
+          />
 
-      <MobileButton
-        href={signUpRoute}
-        className={pathname.startsWith(signUpRoute) && classes.themeThree}
-        Icon={<IconAppWindow size={16} />}
-        label="Sign Up"
-      />
+          <MobileButton
+            href={signInRoute}
+            className={pathname.startsWith(signInRoute) && classes.themeThree}
+            Icon={<IconLogin size={16} />}
+            label="Sign In"
+          />
+        </>
+      )}
     </Stack>
   );
 }

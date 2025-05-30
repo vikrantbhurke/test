@@ -15,12 +15,16 @@ export default function DropBookButton({ id }: DropBookButtonProps) {
   return (
     <>
       <CustomModal
+        buttonProps={{
+          color: "red",
+          fullWidth: true,
+          loaderProps: { type: "dots" },
+        }}
         close={close}
-        buttonColor="red"
         opened={opened}
-        loaderType="dots"
         buttonLabel="Delete"
         route={booksRoute}
+        routeType="push"
         action={async () => await dropBookById(id)}
         message="Are you sure you want to delete this book?"
       />

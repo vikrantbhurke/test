@@ -77,9 +77,11 @@ export const UserSchema = z.object({
     .refine((value) => isMongoId(value))
     .nullable(),
 
-  gender: z.nativeEnum(Gender),
+  gender: z.nativeEnum(Gender, {
+    message: "Gender is required.",
+  }),
   role: z.nativeEnum(Role).default(Role.Public),
-  provider: z.nativeEnum(Provider).default(Provider.Credentials),
+  provider: z.array(z.nativeEnum(Provider).default(Provider.credentials)),
   payment: z.nativeEnum(Payment).default(Payment.Free),
   status: z.nativeEnum(Status).default(Status.Inactive),
   isVerified: z.boolean().default(false),
@@ -104,9 +106,19 @@ export const SignUpUserSchema = UserSchema.pick({
     path: ["confirmPassword"],
   });
 
+export const SignInUserSchema = UserSchema.pick({
+  username: true,
+}).extend({
+  password: z.string().refine((value) => isStrongPassword(value), {
+    message:
+      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.",
+  }),
+});
+
 export const EditUserSchema = UserSchema.pick({
   firstname: true,
   lastname: true,
+  provider: true,
 }).partial();
 
 export const GetUserSchema = UserSchema.pick({
@@ -121,5 +133,6 @@ export const GetUserSchema = UserSchema.pick({
 });
 
 export type SignUpUserDTO = z.infer<typeof SignUpUserSchema>;
+export type SignInUserDTO = z.infer<typeof SignInUserSchema>;
 export type EditUserDTO = z.infer<typeof EditUserSchema>;
 export type GetUserDTO = z.infer<typeof GetUserSchema>;

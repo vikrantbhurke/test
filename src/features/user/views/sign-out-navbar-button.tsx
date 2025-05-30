@@ -1,35 +1,32 @@
 "use client";
-import { Button, Group, Text } from "@mantine/core";
-import { dropUserById } from "../action";
+import { signOutUser } from "../action";
 import { useDisclosure } from "@mantine/hooks";
-import { CustomModal } from "@/global/components/common";
-import { signUpRoute } from "@/global/constants/routes";
+import { IconLogout } from "@tabler/icons-react";
+import { Button, Group, Text } from "@mantine/core";
 import classes from "@/global/styles/app.module.css";
-import { IconTrash } from "@tabler/icons-react";
+import { signInRoute } from "@/global/constants/routes";
 import { stillButtonProps } from "@/global/constants";
+import { CustomModal } from "@/global/components/common";
 
-type DeleteAccountButtonProps = {
-  id: string;
-};
-
-export default function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
+export default function SignOutNavbarButton() {
   const [opened, { open, close }] = useDisclosure();
 
   return (
     <>
       <CustomModal
         buttonProps={{
-          color: "red",
           fullWidth: true,
-          loaderProps: { type: "dots" },
+          c: "var(--bg-one)",
+          color: "var(--tx-one)",
+          loaderProps: { type: "dots", color: "var(--bg-one)" },
         }}
         close={close}
         opened={opened}
-        buttonLabel="Delete Account"
-        route={signUpRoute}
+        buttonLabel="Sign Out"
+        route={signInRoute}
         routeType="replace"
-        action={async () => await dropUserById(id)}
-        message="Are you sure you want to delete your account?"
+        action={async () => await signOutUser()}
+        message="Are you sure you want to sign out?"
       />
 
       <Button
@@ -42,8 +39,8 @@ export default function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
         onMouseDown={stillButtonProps.onMouseDown}
         className={`${classes.themeOneWithHover}`}>
         <Group align="center" justify="center" gap="xs">
-          <IconTrash size={16} />
-          <Text size="sm">Delete Account</Text>
+          <IconLogout size={16} />
+          <Text size="sm">Sign Out</Text>
         </Group>
       </Button>
 
@@ -57,8 +54,8 @@ export default function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
         onMouseDown={stillButtonProps.onMouseDown}
         className={`${classes.themeOneWithHover}`}>
         <Group align="center" justify="center" gap="xs">
-          <IconTrash size={16} />
-          <Text size="sm">Delete Account</Text>
+          <IconLogout size={16} />
+          <Text size="sm">Sign Out</Text>
         </Group>
       </Button>
     </>

@@ -1,7 +1,7 @@
 export enum Provider {
-  Credentials = "Credentials",
-  Google = "Google",
-  Apple = "Apple",
-  Microsoft = "Microsoft",
-  Github = "Github",
+  credentials = "credentials",
+  google = "google",
+  apple = "apple",
+  microsoft = "microsoft",
+  github = "github",
 }

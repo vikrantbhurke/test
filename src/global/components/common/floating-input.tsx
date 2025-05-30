@@ -1,11 +1,11 @@
 "use client";
 import {
+  Textarea,
   TextInput,
+  TextareaProps,
   PasswordInput,
   TextInputProps,
-  TextareaProps,
   PasswordInputProps,
-  Textarea,
 } from "@mantine/core";
 import { useState } from "react";
 import classes from "@/global/styles/common.module.css";

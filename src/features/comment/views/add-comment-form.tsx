@@ -11,23 +11,29 @@ import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 import { Action } from "@/global/classes";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type AddCommentFormProps = {
   bookId: string;
+  close: () => void;
 };
 
-export default function AddCommentForm({ bookId }: AddCommentFormProps) {
+export default function AddCommentForm({ bookId, close }: AddCommentFormProps) {
+  const router = useRouter();
   const [isMutating, setIsMutating] = useState(false);
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const { isMobile } = useSelector((state: RootState) => state.global);
+  const { data: session } = useSession();
+  const userId = session?.user?.id || "";
 
   const form = useForm({
     mode: "controlled",
     initialValues: {
       body: "",
       bookId: bookId,
-      commenterId: "6801671fe63ce6ae26ae2f25", // Authenticated user ID should be set here
+      commenterId: userId,
     },
 
     validate: zodResolver(SaveCommentSchema),
@@ -43,11 +49,14 @@ export default function AddCommentForm({ bookId }: AddCommentFormProps) {
         const alert = { message: response.message, status: "success" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
+
+        router.refresh();
       } else {
         const alert = { message: response.error, status: "error" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
       }
+      close();
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);

@@ -19,6 +19,7 @@ import {
 } from "@mantine/core";
 import { FormSelect, FloatingInput } from "@/global/components/common";
 import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
+import { useSession } from "next-auth/react";
 
 export default function SaveBookForm() {
   const router = useRouter();
@@ -27,6 +28,8 @@ export default function SaveBookForm() {
   const [file, setFile] = useState<File | null>(null);
   const resetRef = useRef<() => void>(null);
   const { colorScheme } = useMantineColorScheme();
+  const { data: session } = useSession();
+  const userId = session?.user?.id || "";
 
   const clearFile = () => {
     setFile(null);
@@ -39,7 +42,7 @@ export default function SaveBookForm() {
       title: "",
       genre: "",
       synopsis: "",
-      authorId: "6801671fe63ce6ae26ae2f21",
+      authorId: userId,
     },
 
     validate: zodResolver(SaveBookSchema),
