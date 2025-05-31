@@ -1,9 +1,9 @@
 "use client";
+import NProgress from "./nprogress";
 import { Provider } from "react-redux";
 import ToastProvider from "./toast-provider";
 import { store } from "@/global/states/store";
 import { theme } from "@/global/styles/theme";
-import NProgress from "./navigation-progress";
 import { MantineProvider } from "@mantine/core";
 import { SessionProvider } from "next-auth/react";
 import { Notifications } from "@mantine/notifications";

@@ -1,6 +1,6 @@
 import "@mantine/core/styles.css";
-import "@mantine/nprogress/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/nprogress/styles.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import "@/global/configurations/mongoose";

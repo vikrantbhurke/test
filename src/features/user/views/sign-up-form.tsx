@@ -12,9 +12,19 @@ import { signUpUser } from "@/features/user/action";
 import { useToast } from "@/global/hooks/use-toast";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { signInRoute } from "@/global/constants/routes";
-import { Button, Stack, useMantineColorScheme } from "@mantine/core";
+import {
+  Button,
+  Grid,
+  List,
+  Stack,
+  Stepper,
+  Text,
+  ThemeIcon,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { FloatingInput, FormSelect } from "@/global/components/common";
 import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
+import { IconCircleCheckFilled, IconCircleXFilled } from "@tabler/icons-react";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -23,6 +33,13 @@ export default function SignUpForm() {
   const { colorScheme } = useMantineColorScheme();
   const [isMutating, setIsMutating] = useState(false);
   const { isMobile } = useSelector((state: RootState) => state.global);
+  const [active, setActive] = useState(1);
+
+  const nextStep = () =>
+    setActive((current) => (current < 3 ? current + 1 : current));
+
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
 
   const form = useForm({
     mode: "controlled",
@@ -70,74 +87,156 @@ export default function SignUpForm() {
   return (
     <form onSubmit={form.onSubmit(handleSignUpUser)}>
       <Stack gap="md">
-        <FloatingInput
-          styles={lightBgOneDarkBgTwo(colorScheme)}
-          name="firstname"
-          label="Firstname"
-          key={form.key("firstname")}
-          {...form.getInputProps("firstname")}
-        />
+        <Stepper
+          active={active}
+          size="xs"
+          iconSize={24}
+          onStepClick={setActive}>
+          <Stepper.Step label="Name">
+            <Stack gap="md" my="md">
+              <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
+                name="firstname"
+                label="Firstname"
+                key={form.key("firstname")}
+                {...form.getInputProps("firstname")}
+              />
 
-        <FloatingInput
-          styles={lightBgOneDarkBgTwo(colorScheme)}
-          name="lastname"
-          label="Lastname"
-          key={form.key("lastname")}
-          {...form.getInputProps("lastname")}
-        />
+              <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
+                name="lastname"
+                label="Lastname"
+                key={form.key("lastname")}
+                {...form.getInputProps("lastname")}
+              />
+            </Stack>
+          </Stepper.Step>
 
-        <FloatingInput
-          styles={lightBgOneDarkBgTwo(colorScheme)}
-          name="email"
-          label="Email"
-          key={form.key("email")}
-          {...form.getInputProps("email")}
-        />
+          <Stepper.Step label="Details">
+            <Stack gap="md" my="md">
+              <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
+                name="email"
+                label="Email"
+                key={form.key("email")}
+                {...form.getInputProps("email")}
+              />
 
-        <FloatingInput
-          styles={lightBgOneDarkBgTwo(colorScheme)}
-          name="username"
-          label="Username"
-          key={form.key("username")}
-          {...form.getInputProps("username")}
-        />
+              <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
+                name="username"
+                label="Username"
+                key={form.key("username")}
+                {...form.getInputProps("username")}
+              />
 
-        <FloatingInput
-          styles={lightBgOneDarkBgTwo(colorScheme)}
-          name="password"
-          label="Password"
-          type="password-input"
-          key={form.key("password")}
-          {...form.getInputProps("password")}
-        />
+              <FormSelect
+                styles={lightBgOneDarkBgTwo(colorScheme)}
+                value="Male"
+                name="gender"
+                label="Gender"
+                options={genderMap}
+                {...form.getInputProps("gender")}
+              />
+            </Stack>
+          </Stepper.Step>
 
-        <FloatingInput
-          styles={lightBgOneDarkBgTwo(colorScheme)}
-          name="confirmPassword"
-          label="Confirm Password"
-          type="password-input"
-          key={form.key("confirmPassword")}
-          {...form.getInputProps("confirmPassword")}
-        />
+          <Stepper.Step label="Password">
+            <Stack gap="md" my="md">
+              <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
+                name="password"
+                label="Password"
+                type="password-input"
+                key={form.key("password")}
+                {...form.getInputProps("password")}
+              />
 
-        <FormSelect
-          styles={lightBgOneDarkBgTwo(colorScheme)}
-          value="Male"
-          name="gender"
-          label="Gender"
-          options={genderMap}
-          {...form.getInputProps("gender")}
-        />
+              <FloatingInput
+                styles={lightBgOneDarkBgTwo(colorScheme)}
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password-input"
+                key={form.key("confirmPassword")}
+                {...form.getInputProps("confirmPassword")}
+              />
+            </Stack>
+          </Stepper.Step>
 
-        <Button
-          c="var(--bg-one)"
-          color="var(--tx-one)"
-          type="submit"
-          disabled={isMutating}
-          loading={isMutating}
-          loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
-          Sign Up
-        </Button>
+          <Stepper.Completed>
+            <Stack my="md" align="center">
+              <List>
+                {Object.keys(form.errors).length > 0 ? (
+                  <List.Item
+                    icon={
+                      <ThemeIcon size={40} c="red" bg="transparent">
+                        <IconCircleXFilled size={40} />
+                      </ThemeIcon>
+                    }>
+                    <Text>Oops! Found invalid values. Enter valid ones.</Text>
+                  </List.Item>
+                ) : (
+                  <List.Item
+                    icon={
+                      <ThemeIcon size={40} c="emerald" bg="transparent">
+                        <IconCircleCheckFilled size={40} />
+                      </ThemeIcon>
+                    }>
+                    <Text>Great! Everything looks good. Click Sign Up.</Text>
+                  </List.Item>
+                )}
+              </List>
+            </Stack>
+          </Stepper.Completed>
+        </Stepper>
+
+        {active !== 3 && (
+          <Grid>
+            <Grid.Col span={6}>
+              <Button
+                onClick={prevStep}
+                w="100%"
+                c="var(--bg-one)"
+                color="var(--tx-one)">
+                Back
+              </Button>
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <Button
+                onClick={nextStep}
+                w="100%"
+                c="var(--bg-one)"
+                color="var(--tx-one)">
+                Next step
+              </Button>
+            </Grid.Col>
+          </Grid>
+        )}
+
+        {active === 3 && (
+          <>
+            {Object.keys(form.errors).length > 0 ? (
+              <Button
+                onClick={prevStep}
+                w="100%"
+                c="var(--bg-one)"
+                color="var(--tx-one)">
+                Back
+              </Button>
+            ) : (
+              <Button
+                c="var(--bg-one)"
+                color="var(--tx-one)"
+                type="submit"
+                disabled={isMutating}
+                loading={isMutating}
+                loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
+                Sign Up
+              </Button>
+            )}
+          </>
+        )}
       </Stack>
     </form>
   );

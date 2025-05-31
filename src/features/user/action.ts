@@ -116,7 +116,7 @@ export const validatePassword = async (
 
 // export const verifyAccount = async () => {};
 
-// export const verifyEmail = async () => {};
+// export const forgotPassword = async () => {};
 
 export const getUserById = async (id: string) => {
   try {
