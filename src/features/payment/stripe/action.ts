@@ -3,7 +3,7 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
-export const createStripeSubscription = async (userId: string) => {
+export const createStripeSubscription = async () => {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -15,8 +15,8 @@ export const createStripeSubscription = async (userId: string) => {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/users/${userId}?subscribed=true&subscription=stripe&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/users/${userId}?subscribed=false`,
+      success_url: `${process.env.CLIENT_URL}/subscribe?subscribed=true&subscription=stripe&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.CLIENT_URL}/subscribe?subscribed=false`,
     });
 
     return { approve_url: session.url };
@@ -37,9 +37,7 @@ export const getStripeSubscriptionId = async (sessionId: string) => {
 
 export const getStripeSubscription = async (subscriptionId: string) => {
   try {
-    if (subscriptionId === "none")
-      return { message: "User has no active subscription." };
-
+    if (!subscriptionId) return { message: "User has no active subscription." };
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
     return {

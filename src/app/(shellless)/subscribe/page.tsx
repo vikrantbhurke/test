@@ -9,7 +9,7 @@ export default async function Page() {
   const session = await auth();
   const subscriptionId = session?.user.subscriptionId || "";
 
-  if (!subscriptionId) {
+  if (!subscriptionId || !session?.user) {
     return (
       <Stack h="100vh" justify="center" align="center">
         <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
@@ -21,15 +21,20 @@ export default async function Page() {
     );
   }
 
-  const response = await getPayPalSubscription(subscriptionId);
-  console.log("Subscription Response:", response?.data);
+  const paypalResponse = await getPayPalSubscription(subscriptionId);
 
   return (
     <Stack h="100vh" justify="center" align="center">
       <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
         <Paper p="xl">
-          <PaymentInfo />
-          <PayPalButtons subscriptionId={subscriptionId} />
+          <Stack gap="md">
+            <PaymentInfo />
+            <PayPalButtons
+              subscriptionId={subscriptionId}
+              paypalStatus={paypalResponse?.data?.status}
+              payment={session?.user?.payment}
+            />
+          </Stack>
         </Paper>
       </Stack>
     </Stack>

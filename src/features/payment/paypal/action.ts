@@ -52,21 +52,20 @@ export const createPayPalSubscription = async () => {
       },
       await getHeader()
     );
+
     const approve_url = session.data.links.find(
       (link: any) => link.rel === "approve"
     ).href;
 
-    return { approve_url };
+    return { success: true, data: approve_url };
   } catch (error: any) {
-    console.error("Error creating PayPal subscription:", error.message);
-    throw new Error("Failed to create PayPal subscription");
+    throw error;
   }
 };
 
 export const getPayPalSubscription = async (subscriptionId: string) => {
   try {
-    if (subscriptionId === "none")
-      return { message: "User has no active subscription." };
+    if (!subscriptionId) return { message: "User has no active subscription." };
 
     const subscription = await axios.get(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}`,
@@ -76,15 +75,9 @@ export const getPayPalSubscription = async (subscriptionId: string) => {
     return {
       success: true,
       data: subscription.data,
-      message: "Subscription retrieved successfully.",
     };
   } catch (error: any) {
-    console.error("Error retrieving PayPal subscription:", error.message);
-    if (error.response && error.response.status === 404) {
-      return { message: "Subscription not found." };
-    }
-
-    throw new Error("Failed to retrieve PayPal subscription");
+    throw error;
   }
 };
 
@@ -96,14 +89,9 @@ export const suspendPayPalSubscription = async (subscriptionId: string) => {
       await getHeader()
     );
 
-    return { message: "Subscription suspended successfully." };
+    return { success: true, message: "Subscription suspended successfully." };
   } catch (error: any) {
-    console.error("Error retrieving PayPal subscription:", error.message);
-    if (error.response && error.response.status === 404) {
-      return { message: "Subscription not found." };
-    }
-
-    throw new Error("Failed to retrieve PayPal subscription");
+    throw error;
   }
 };
 
@@ -115,14 +103,9 @@ export const activatePayPalSubscription = async (subscriptionId: string) => {
       await getHeader()
     );
 
-    return { message: "Subscription activated successfully." };
+    return { success: true, message: "Subscription activated successfully." };
   } catch (error: any) {
-    console.error("Error retrieving PayPal subscription:", error.message);
-    if (error.response && error.response.status === 404) {
-      return { message: "Subscription not found." };
-    }
-
-    throw new Error("Failed to retrieve PayPal subscription");
+    throw error;
   }
 };
 
@@ -134,13 +117,8 @@ export const cancelPayPalSubscription = async (subscriptionId: string) => {
       await getHeader()
     );
 
-    return { message: "Subscription canceled successfully." };
+    return { success: true, message: "Subscription canceled successfully." };
   } catch (error: any) {
-    console.error("Error retrieving PayPal subscription:", error.message);
-    if (error.response && error.response.status === 404) {
-      return { message: "Subscription not found." };
-    }
-
-    throw new Error("Failed to retrieve PayPal subscription");
+    throw error;
   }
 };

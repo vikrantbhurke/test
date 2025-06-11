@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
 
       let role: Role;
       let payment: Payment;
-      let subscriptionId: string;
+      let subscriptionId: string | null;
       let status: Status;
 
       switch (stripeStatus) {
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
         default:
           role = Role.Private;
           payment = Payment.Free;
-          subscriptionId = "none";
+          subscriptionId = null;
           status = Status.Inactive;
           break;
       }

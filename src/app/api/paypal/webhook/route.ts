@@ -22,10 +22,10 @@ export async function POST(request: NextRequest) {
       email
     );
 
-    let role;
-    let payment;
-    let subscriptionId;
-    let status;
+    let role: Role;
+    let payment: Payment;
+    let subscriptionId: string | null;
+    let status: Status = Status.Inactive;
 
     if (!email || !subId || !paypalStatus || !eventType) {
       return NextResponse.json(
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       case "BILLING.SUBSCRIPTION.CANCELLED":
       case "BILLING.SUBSCRIPTION.EXPIRED":
         role = Role.Private;
-        subscriptionId = "none";
+        subscriptionId = null;
         payment = Payment.Free;
         if (paypalStatus === "CANCELLED" || paypalStatus === "EXPIRED")
           status = Status.Inactive;
@@ -64,9 +64,9 @@ export async function POST(request: NextRequest) {
 
     const editUserDTO = {
       role,
+      status,
       payment,
       subscriptionId,
-      status,
     };
 
     await editUserByEmail(email, editUserDTO);

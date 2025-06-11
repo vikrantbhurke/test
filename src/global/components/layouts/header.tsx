@@ -80,31 +80,35 @@ export default function Header({
             <Text size="sm">Home</Text>
           </Button>
 
-          <Button
-            size="input-sm"
-            href={subscribeRoute}
-            component={Link}
-            style={stillButtonProps.style}
-            onFocus={stillButtonProps.onFocus}
-            onMouseDown={stillButtonProps.onMouseDown}
-            className={`${classes.themeOneWithHover} ${
-              pathname === subscribeRoute && classes.themeThree
-            }`}>
-            <Text size="sm">Subscribe</Text>
-          </Button>
+          {session?.user?.id && (
+            <>
+              <Button
+                size="input-sm"
+                href={subscribeRoute}
+                component={Link}
+                style={stillButtonProps.style}
+                onFocus={stillButtonProps.onFocus}
+                onMouseDown={stillButtonProps.onMouseDown}
+                className={`${classes.themeOneWithHover} ${
+                  pathname === subscribeRoute && classes.themeThree
+                }`}>
+                <Text size="sm">Subscribe</Text>
+              </Button>
 
-          <Button
-            size="input-sm"
-            href={purchaseRoute}
-            component={Link}
-            style={stillButtonProps.style}
-            onFocus={stillButtonProps.onFocus}
-            onMouseDown={stillButtonProps.onMouseDown}
-            className={`${classes.themeOneWithHover} ${
-              pathname === purchaseRoute && classes.themeThree
-            }`}>
-            <Text size="sm">Purchase</Text>
-          </Button>
+              <Button
+                size="input-sm"
+                href={purchaseRoute}
+                component={Link}
+                style={stillButtonProps.style}
+                onFocus={stillButtonProps.onFocus}
+                onMouseDown={stillButtonProps.onMouseDown}
+                className={`${classes.themeOneWithHover} ${
+                  pathname === purchaseRoute && classes.themeThree
+                }`}>
+                <Text size="sm">Purchase</Text>
+              </Button>
+            </>
+          )}
 
           <AvatarComp />
         </Group>
