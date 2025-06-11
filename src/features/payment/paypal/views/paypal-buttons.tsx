@@ -49,7 +49,7 @@ export default function PayPalButtons({
         router.push(homeRoute);
 
         setTimeout(() => {
-          const message = `Congrats! You have successfully subscribed to ${process.env.APP_NAME}.`;
+          const message = `Congrats! You have successfully subscribed to ${process.env.NEXT_PUBLIC_APP_NAME}. It may take few seconds to activate your subscription.`;
           const alert = { message, status: "success" as const };
           if (isMobile) showToast(alert);
           else showNotification(alert);

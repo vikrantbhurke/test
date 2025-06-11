@@ -66,7 +66,7 @@ export const createPayPalSubscription = async () => {
 export const getPayPalSubscription = async (subscriptionId: string | null) => {
   try {
     if (!subscriptionId)
-      return { success: false, message: "User has no active subscription." };
+      return { success: false, message: "No active subscription found." };
 
     const subscription = await axios.get(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}`,
@@ -90,7 +90,11 @@ export const suspendPayPalSubscription = async (subscriptionId: string) => {
       await getHeader()
     );
 
-    return { success: true, message: "Subscription suspended successfully." };
+    return {
+      success: true,
+      message:
+        "Subscription suspended successfully. It may take few seconds to suspend your subscription.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -106,7 +110,11 @@ export const activatePayPalSubscription = async (
       await getHeader()
     );
 
-    return { success: true, message: "Subscription activated successfully." };
+    return {
+      success: true,
+      message:
+        "Subscription activated successfully. It may take few seconds to activate your subscription.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -120,7 +128,11 @@ export const cancelPayPalSubscription = async (subscriptionId: string) => {
       await getHeader()
     );
 
-    return { success: true, message: "Subscription canceled successfully." };
+    return {
+      success: true,
+      message:
+        "Subscription canceled successfully. It may take few seconds to cancel your subscription.",
+    };
   } catch (error: any) {
     throw error;
   }
