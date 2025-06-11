@@ -32,7 +32,7 @@ export const getHeader = async () => {
   };
 };
 
-export const createPayPalSubscription = async (userId: string) => {
+export const createPayPalSubscription = async () => {
   try {
     const session = await axios.post(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions`,
@@ -46,8 +46,8 @@ export const createPayPalSubscription = async (userId: string) => {
             payer_selected: "PAYPAL",
             payee_preferred: "IMMEDIATE_PAYMENT_REQUIRED",
           },
-          return_url: `${process.env.APP_URL}/subscribe/${userId}?subscribed=true&subscription=paypal`,
-          cancel_url: `${process.env.APP_URL}/subscribe/${userId}?subscribed=false`,
+          return_url: `${process.env.APP_URL}/subscribe?subscribed=true&subscription=paypal`,
+          cancel_url: `${process.env.APP_URL}/subscribe?subscribed=false`,
         },
       },
       await getHeader()
