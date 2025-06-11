@@ -9,6 +9,7 @@ import { dimensions, listGridFiniteDefaults } from "@/global/constants";
 import { AddCommentButton } from "@/features/comment/views";
 import { ListGridFinite } from "@/global/components/list-grid";
 import { GetCommentsByBookId } from "@/features/comment/queries";
+import { auth } from "@/auth";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;
@@ -16,7 +17,9 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
+  const session = await auth();
   const { id } = await params;
+
   const {
     paginationProps,
     scrollButtonsProps,
@@ -33,7 +36,7 @@ export default async function Page({ params, searchParams }: PageProps) {
           </GetBookById>
         </Paper>
 
-        <AddCommentButton bookId={id} />
+        <AddCommentButton bookId={id} session={session} />
       </Stack>
 
       <GetCommentsByBookId params={params} searchParams={searchParams}>

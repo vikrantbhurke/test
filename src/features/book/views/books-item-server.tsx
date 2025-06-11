@@ -6,6 +6,7 @@ import {
   Title,
   Button,
   Anchor,
+  Avatar,
 } from "@mantine/core";
 import Link from "next/link";
 import DropBookButton from "./drop-book-button";
@@ -33,6 +34,10 @@ export default async function BooksItemServer({ item }: any) {
     });
   }
 
+  const aid = authorId.id;
+  const name = authorId.firstname + " " + authorId.lastname;
+  const image = authorId.avatar.secureUrl || undefined;
+
   return (
     <Paper p="xl">
       <Stack gap="sm">
@@ -44,9 +49,24 @@ export default async function BooksItemServer({ item }: any) {
 
         <Stack gap={4}>
           <Anchor component={Link} href={viewUserRoute(authorId.id)}>
-            <Text>
-              {authorId.firstname} {authorId.lastname}
-            </Text>
+            <Group gap="xs">
+              {!aid && <Avatar src="" size={20} />}
+              {aid && !image && (
+                <Avatar name={name} color="initials" size={20} />
+              )}
+              {aid && image && (
+                <Avatar
+                  src={image}
+                  alt="Avatar"
+                  size={20}
+                  className="rounded-full"
+                />
+              )}
+
+              <Text>
+                {authorId.firstname} {authorId.lastname}
+              </Text>
+            </Group>
           </Anchor>
 
           <Anchor component={Link} href={userBooksRoute(authorId.id)}>

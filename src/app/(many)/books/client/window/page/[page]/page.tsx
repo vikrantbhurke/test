@@ -14,6 +14,7 @@ import {
 } from "@/global/constants";
 import { Stack } from "@mantine/core";
 import { getBooks } from "@/features/book/action";
+import { auth } from "@/auth";
 
 type PageProps = {
   params: Promise<{ page: string }>;
@@ -21,6 +22,7 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
+  const session = await auth();
   // const {
   //   paginationProps,
   //   scrollButtonsProps,
@@ -71,6 +73,7 @@ export default async function Page({ params, searchParams }: PageProps) {
             scrollWrapperProps={scrollWrapperProps}
             listGridClientProps={{
               ...listGridClientProps,
+              session,
               content: booksPage.content,
               DataItemClient: BooksItemClient,
             }}

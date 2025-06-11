@@ -1,5 +1,14 @@
 "use client";
+import {
+  Text,
+  Paper,
+  Stack,
+  Button,
+  FileButton,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { Genre } from "../enums";
+import { Session } from "next-auth";
 import { useForm } from "@mantine/form";
 import { useRef, useState } from "react";
 import { SaveBookSchema } from "../schema";
@@ -9,26 +18,20 @@ import { Action } from "@/global/classes/action";
 import { useNotification } from "@/global/hooks";
 import { booksRoute } from "@/global/constants/routes";
 import { zodResolver } from "mantine-form-zod-resolver";
-import {
-  Button,
-  FileButton,
-  Paper,
-  Stack,
-  Text,
-  useMantineColorScheme,
-} from "@mantine/core";
 import { FormSelect, FloatingInput } from "@/global/components/common";
 import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
-import { useSession } from "next-auth/react";
 
-export default function SaveBookForm() {
+type SaveBookFormProps = {
+  session?: Session | null;
+};
+
+export default function SaveBookForm({ session }: SaveBookFormProps) {
   const router = useRouter();
   const { showNotification } = useNotification();
   const [isMutating, setIsMutating] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const resetRef = useRef<() => void>(null);
   const { colorScheme } = useMantineColorScheme();
-  const { data: session } = useSession();
   const userId = session?.user?.id || "";
 
   const clearFile = () => {
@@ -71,7 +74,7 @@ export default function SaveBookForm() {
     try {
       if (isMutating) return;
       setIsMutating(true);
-      const response = await saveBook(values);
+      const response = await saveBook({ ...values, authorId: userId });
 
       if (Action.isSuccess(response)) {
         showNotification({ message: response.message, status: "success" });
@@ -86,7 +89,11 @@ export default function SaveBookForm() {
     }
   };
 
-  const genreMap = new Map(Object.entries(Genre).map((g) => [g[1], g[0]]));
+  const genreMap = new Map(
+    Object.entries(Genre)
+      .filter((g) => g[0] !== "All")
+      .map((g) => [g[1], g[0]])
+  );
 
   return (
     <>

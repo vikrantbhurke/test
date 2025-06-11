@@ -4,12 +4,16 @@ import {
   pushProviderById,
   validatePassword,
   getUserByUsername,
+  sendEmail,
+  generateToken,
+  // generateToken,
 } from "./features/user/action";
 import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
+import Credentials from "next-auth/providers/credentials";
 import { Gender, Provider } from "./features/user/enums";
+import { Template } from "./global/constants";
 
 export const config = {
   providers: [
@@ -43,6 +47,22 @@ export const config = {
         );
 
         if (!response2.data) throw new Error("Invalid password.");
+
+        if (!user.isVerified) {
+          const { data } = await generateToken({ username: user.username });
+
+          await sendEmail(user.email, Template.Welcome, {
+            token: data,
+            name: user.firstname,
+            url: process.env.APP_URL as string,
+            app: process.env.APP_NAME as string,
+          });
+
+          throw new Error(
+            "Account not verified. Check your email for account verification link."
+          );
+        }
+
         return user;
       },
     }),
@@ -67,6 +87,10 @@ export const config = {
           gender: Gender.Other,
           password: "Passw0rd!",
           confirmPassword: "Passw0rd!",
+          avatar: {
+            secureUrl: user.image || "",
+            publicId: "",
+          },
         });
       } else {
         if (!dbUser.provider.includes(account.provider))
@@ -88,7 +112,10 @@ export const config = {
       session.user.email = user.email;
       session.user.role = user.role;
       session.user.provider = user.provider;
-      session.user.image = session.user.image || user.avatar;
+      session.user.image = session.user.image || user.avatar.secureUrl;
+      session.user.publicId = user.avatar.publicId;
+      session.user.payment = user.payment;
+      session.user.subscriptionId = user.subscriptionId;
       return session;
     },
   },

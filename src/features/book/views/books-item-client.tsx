@@ -7,6 +7,7 @@ import {
   Paper,
   Anchor,
   Button,
+  Avatar,
 } from "@mantine/core";
 import Link from "next/link";
 import DropBookButton from "./drop-book-button";
@@ -17,20 +18,31 @@ import {
   userBooksRoute,
   bookCommentsRoute,
 } from "@/global/constants/routes";
-import { LikeButton, LikeUnauthButton } from "@/features/book-liker/views";
-import { checkBookLiker } from "@/features/book-liker/action";
 import useSWR from "swr";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
+import { checkBookLiker } from "@/features/book-liker/action";
+import { LikeButton, LikeUnauthButton } from "@/features/book-liker/views";
 
-export default function BooksItemClient({ item }: any) {
+type BooksItemClientProps = {
+  item: any;
+  session?: Session | null;
+};
+
+export default function BooksItemClient({
+  item,
+  session,
+}: BooksItemClientProps) {
   const { id, title, synopsis, authorId, genre } = item;
-  const { data: session } = useSession();
   const userId = session?.user?.id || null;
 
   const { data: bookLikerResponse } = useSWR(
     userId && { bookId: id, likerId: userId },
     checkBookLiker
   );
+
+  const aid = authorId.id;
+  const name = authorId.firstname + " " + authorId.lastname;
+  const image = authorId.avatar.secureUrl || undefined;
 
   return (
     <Paper p="xl">
@@ -43,9 +55,24 @@ export default function BooksItemClient({ item }: any) {
 
         <Stack gap={4}>
           <Anchor component={Link} href={viewUserRoute(authorId.id)}>
-            <Text>
-              {authorId.firstname} {authorId.lastname}
-            </Text>
+            <Group gap="xs">
+              {!aid && <Avatar src="" size={20} />}
+              {aid && !image && (
+                <Avatar name={name} color="initials" size={20} />
+              )}
+              {aid && image && (
+                <Avatar
+                  src={image}
+                  alt="Avatar"
+                  size={20}
+                  className="rounded-full"
+                />
+              )}
+
+              <Text>
+                {authorId.firstname} {authorId.lastname}
+              </Text>
+            </Group>
           </Anchor>
 
           <Anchor component={Link} href={userBooksRoute(authorId.id)}>

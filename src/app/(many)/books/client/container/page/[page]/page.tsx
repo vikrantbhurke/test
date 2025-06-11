@@ -1,5 +1,5 @@
-import { ListGridInfinite } from "@/global/components/list-grid";
 import { GetBooks } from "@/features/book/queries";
+import { ListGridInfinite } from "@/global/components/list-grid";
 // import { ListGridFinite } from "@/global/components/list-grid";
 import {
   BooksItemClient,
@@ -12,6 +12,7 @@ import {
   // listGridFiniteDefaults,
   listGridInfiniteDefaults,
 } from "@/global/constants";
+import { auth } from "@/auth";
 import { Stack } from "@mantine/core";
 import { getBooks } from "@/features/book/action";
 
@@ -21,6 +22,8 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
+  const session = await auth();
+
   // const {
   // paginationProps,
   // scrollButtonsProps,
@@ -74,6 +77,7 @@ export default async function Page({ params, searchParams }: PageProps) {
             scrollWrapperProps={scrollWrapperProps}
             listGridClientProps={{
               ...listGridClientProps,
+              session,
               content: booksPage.content,
               DataItemClient: BooksItemClient,
             }}

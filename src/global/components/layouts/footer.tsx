@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { SearchButton } from "../common";
 import { Button, Group, Stack, Text } from "@mantine/core";
@@ -11,16 +12,14 @@ import {
 } from "@/global/constants/routes";
 import { stillButtonProps } from "@/global/constants";
 import { SignOutFooterButton } from "@/features/user/views";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
-type NavbarProps = {
+type FooterProps = {
   pathname: string;
+  session?: Session | null;
 };
 
-export default function Footer({ pathname }: NavbarProps) {
-  const { data: session } = useSession();
-  const id = session?.user?.id;
-
+export default function Footer({ pathname, session }: FooterProps) {
   return (
     <Group grow h="100%" gap={4} p={4}>
       <Button
@@ -59,7 +58,7 @@ export default function Footer({ pathname }: NavbarProps) {
         </Stack>
       </Button>
 
-      {id ? (
+      {session ? (
         <SignOutFooterButton />
       ) : (
         <Button

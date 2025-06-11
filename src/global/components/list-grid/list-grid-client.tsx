@@ -1,10 +1,10 @@
+import { Ad } from "../common";
+import { Fragment } from "react";
 import { Grid, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
-import { Fragment } from "react";
-import { Ad } from "../common";
 
 export default function ListGridClient({ props }: any) {
-  const { content, DataItemClient, listGridProps } = props;
+  const { content, DataItemClient, listGridProps, session } = props;
   const { gutter, gap, layout, ...rest } = listGridProps;
 
   if (layout === "grid")
@@ -24,7 +24,7 @@ export default function ListGridClient({ props }: any) {
 
           cols.push(
             <Grid.Col span={dimensions.gridColSpan} key={item.id}>
-              <DataItemClient item={item} />
+              <DataItemClient item={item} session={session} />
             </Grid.Col>
           );
 

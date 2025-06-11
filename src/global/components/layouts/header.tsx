@@ -1,22 +1,41 @@
+"use client";
 import {
   homeRoute,
   purchaseRoute,
   subscribeRoute,
 } from "@/global/constants/routes";
 import Link from "next/link";
-import { Button, Group, Text, Title } from "@mantine/core";
+import { Session } from "next-auth";
 import classes from "@/global/styles/app.module.css";
-import { stillButtonProps } from "@/global/constants";
-import { ThemeButton, SearchInput, BurgerButton, SearchIcon } from "../common";
 import { IconAppsFilled } from "@tabler/icons-react";
+import { stillButtonProps } from "@/global/constants";
+import { Avatar, Button, Group, Text, Title } from "@mantine/core";
+import { ThemeButton, SearchInput, BurgerButton, SearchIcon } from "../common";
+import { sendEmail } from "@/features/user/action";
 
 type HeaderProps = {
   opened: boolean;
   toggle: () => void;
   pathname: string;
+  session?: Session | null;
 };
 
-export default function Header({ opened, toggle, pathname }: HeaderProps) {
+export default function Header({
+  opened,
+  toggle,
+  pathname,
+  session,
+}: HeaderProps) {
+  const id = session?.user?.id;
+  const name = session?.user?.name || undefined;
+  const image = session?.user?.image || undefined;
+
+  const AvatarComp = () => {
+    if (!session) return <></>;
+    if (id && !image) return <Avatar name={name} color="initials" size="sm" />;
+    if (id && image) return <Avatar src={image} alt="Avatar" size="sm" />;
+  };
+
   return (
     <Group justify="space-between" h="100%" px="md" align="center">
       <Group gap="xs">
@@ -35,9 +54,16 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
       </Group>
 
       <Group>
+        <Button onClick={async () => await sendEmail("", {}, {})}>
+          Send Email
+        </Button>
+
         <SearchInput placeholder="Search..." />
+
         <SearchIcon />
+
         <ThemeButton />
+
         <BurgerButton opened={opened} toggle={toggle} />
 
         <Group visibleFrom="sm" gap={0}>
@@ -79,6 +105,8 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
             }`}>
             <Text size="sm">Purchase</Text>
           </Button>
+
+          <AvatarComp />
         </Group>
       </Group>
     </Group>

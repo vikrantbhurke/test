@@ -1,3 +1,4 @@
+import { Template } from "./templates";
 import { dimensions } from "./dimensions";
 import { modalProps } from "./modal-props";
 import { drawerProps } from "./drawer-props";
@@ -8,6 +9,7 @@ import { listGridFiniteDefaults } from "./list-grid-finite-defaults";
 import { listGridInfiniteDefaults } from "./list-grid-infinite-defaults";
 
 export {
+  Template,
   dimensions,
   modalProps,
   drawerProps,

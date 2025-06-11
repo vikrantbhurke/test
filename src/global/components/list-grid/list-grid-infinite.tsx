@@ -1,4 +1,5 @@
 "use client";
+import { Session } from "next-auth";
 import ScrollButtons from "./scroll-buttons";
 import ScrollWrapper from "./scroll-wrapper";
 import ListGridClient from "./list-grid-client";
@@ -31,6 +32,7 @@ type ListGridProps = {
 
 type ListGridClientProps = {
   content: any[];
+  session?: Session | null;
   DataItemClient: React.FC<{ item: any }> | React.ComponentType<{ item: any }>;
   listGridProps?: ListGridProps;
 };
@@ -71,8 +73,8 @@ export default function ListGridInfinite({
   const firstRender = useIsFirstRender();
   const jsonDataArgs = JSON.stringify(getDataArgs);
   const [isFetching, setIsFetching] = useState(false);
-  const [isLastPage, setIsLastPage] = useState(initialDataPage.lastPage);
   const [dataPage, setDataPage] = useState(initialDataPage);
+  const [isLastPage, setIsLastPage] = useState(initialDataPage.lastPage);
   const [content, setContent] = useState<any[]>(initialDataPage.content);
 
   const loadMore = useCallback(async () => {

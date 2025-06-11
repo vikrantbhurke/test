@@ -13,12 +13,14 @@ import classes from "@/global/styles/app.module.css";
 import { appShellProps } from "@/global/constants";
 import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
+import { Session } from "next-auth";
 
 type AppManyProps = {
   children: React.ReactNode;
+  session?: Session | null;
 };
 
-export default function AppMany({ children }: AppManyProps) {
+export default function AppMany({ children, session }: AppManyProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();
@@ -33,11 +35,16 @@ export default function AppMany({ children }: AppManyProps) {
       header={appShellProps.header}
       navbar={appShellProps.navbar(opened)}>
       <AppShell.Header className={`${!isMobile && classes.blurBg}`}>
-        <Header opened={opened} toggle={toggle} pathname={pathname} />
+        <Header
+          opened={opened}
+          toggle={toggle}
+          pathname={pathname}
+          session={session}
+        />
       </AppShell.Header>
 
       <AppShell.Navbar>
-        <Navbar pathname={pathname} />
+        <Navbar pathname={pathname} session={session} />
       </AppShell.Navbar>
 
       <AppShell.Aside>
@@ -49,7 +56,7 @@ export default function AppMany({ children }: AppManyProps) {
       </AppShell.Main>
 
       <AppShell.Footer>
-        <Footer pathname={pathname} />
+        <Footer pathname={pathname} session={session} />
       </AppShell.Footer>
     </AppShell>
   );

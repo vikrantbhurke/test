@@ -10,7 +10,7 @@ const reservedUsernames = ["admin", "support", "api", "root", "login"];
 export const UserSchema = z.object({
   firstname: z
     .string()
-    .min(3, { message: "First name must be at least 3 characters." })
+    .min(2, { message: "First name must be at least 2 characters." })
     .max(30, { message: "First name must be at most 30 characters." })
     .trim()
     .refine((value) => isAlpha(value), {
@@ -22,7 +22,7 @@ export const UserSchema = z.object({
 
   lastname: z
     .string()
-    .min(3, { message: "Last name must be at least 3 characters." })
+    .min(2, { message: "Last name must be at least 2 characters." })
     .max(30, { message: "Last name must be at most 30 characters." })
     .trim()
     .refine((value) => isAlpha(value), {
@@ -70,7 +70,12 @@ export const UserSchema = z.object({
     .trim(),
 
   hashedPassword: z.string().trim(),
-  avatar: z.string().url().nullable(),
+  avatar: z
+    .object({
+      secureUrl: z.string().url().nullable(),
+      publicId: z.string().nullable(),
+    })
+    .optional(),
   subscriptionId: z.string().nullable(),
   favBookId: z
     .string()
@@ -93,6 +98,7 @@ export const SignUpUserSchema = UserSchema.pick({
   username: true,
   email: true,
   gender: true,
+  avatar: true,
 })
   .extend({
     password: z.string().refine((value) => isStrongPassword(value), {
@@ -118,7 +124,14 @@ export const SignInUserSchema = UserSchema.pick({
 export const EditUserSchema = UserSchema.pick({
   firstname: true,
   lastname: true,
+  hashedPassword: true,
   provider: true,
+  avatar: true,
+  role: true,
+  status: true,
+  payment: true,
+  subscriptionId: true,
+  isVerified: true,
 }).partial();
 
 export const GetUserSchema = UserSchema.pick({
@@ -132,7 +145,26 @@ export const GetUserSchema = UserSchema.pick({
   id: z.string(),
 });
 
+export const RequestEmailSchema = UserSchema.pick({
+  email: true,
+});
+
+export const ResetPasswordSchema = UserSchema.pick({})
+  .extend({
+    password: z.string().refine((value) => isStrongPassword(value), {
+      message:
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.",
+    }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => equals(data.password, data.confirmPassword), {
+    message: "Confirm password must match password.",
+    path: ["confirmPassword"],
+  });
+
 export type SignUpUserDTO = z.infer<typeof SignUpUserSchema>;
 export type SignInUserDTO = z.infer<typeof SignInUserSchema>;
 export type EditUserDTO = z.infer<typeof EditUserSchema>;
 export type GetUserDTO = z.infer<typeof GetUserSchema>;
+export type RequestEmailDTO = z.infer<typeof RequestEmailSchema>;
+export type ResetPasswordDTO = z.infer<typeof ResetPasswordSchema>;

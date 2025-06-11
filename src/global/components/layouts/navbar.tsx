@@ -25,16 +25,14 @@ import {
   DeleteAccountButton,
   SignOutNavbarButton,
 } from "@/features/user/views";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 type NavbarProps = {
   pathname: string;
+  session?: Session | null;
 };
 
-export default function Navbar({ pathname }: NavbarProps) {
-  const { data: session } = useSession();
-  const id = session?.user?.id;
-
+export default function Navbar({ pathname, session }: NavbarProps) {
   const DesktopButton = ({ href, className, Icon, label }: any) => {
     return (
       <Button
@@ -159,7 +157,7 @@ export default function Navbar({ pathname }: NavbarProps) {
         label="Books Client Window"
       />
 
-      {id && (
+      {session?.user?.id && (
         <>
           <DesktopButton
             href={saveBookRoute}
@@ -205,10 +203,10 @@ export default function Navbar({ pathname }: NavbarProps) {
         label="Purchase"
       />
 
-      {id ? (
+      {session?.user?.id ? (
         <>
           <SignOutNavbarButton />
-          <DeleteAccountButton id={id} />
+          <DeleteAccountButton id={session?.user?.id} />
         </>
       ) : (
         <>

@@ -2,15 +2,98 @@
 import {
   EditUserDTO,
   SignUpUserDTO,
+  SignInUserDTO,
   EditUserSchema,
   SignUpUserSchema,
   SignInUserSchema,
-  SignInUserDTO,
+  RequestEmailSchema,
+  RequestEmailDTO,
+  ResetPasswordDTO,
+  ResetPasswordSchema,
 } from "./schema";
 import { userService } from "..";
+import { Provider } from "./enums";
 import { signIn, signOut } from "@/auth";
 import { Exception } from "@/global/classes";
-import { Provider } from "./enums";
+import { TemplateVariables } from "mailtrap";
+
+export const sendEmail = async (
+  recipient: string,
+  template: any,
+  variables: TemplateVariables
+) => {
+  try {
+    await userService.sendEmail(recipient, template, variables);
+    return { success: true, message: "Email sent successfully." };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+      issues: undefined,
+    };
+  }
+};
+
+export const requestEmail = async (requestEmailDTO: RequestEmailDTO) => {
+  const result = RequestEmailSchema.safeParse(requestEmailDTO);
+  if (!result.success) return Exception.getZodError(result);
+
+  try {
+    await userService.requestEmail(result.data);
+
+    return {
+      success: true,
+      message: "Check your email for password reset link.",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+      issues: undefined,
+    };
+  }
+};
+
+export const resetPassword = async (
+  token: string,
+  resetPasswordDTO: ResetPasswordDTO
+) => {
+  const result = ResetPasswordSchema.safeParse(resetPasswordDTO);
+  if (!result.success) return Exception.getZodError(result);
+
+  try {
+    await userService.resetPassword(token, result.data);
+    return { success: true, message: "Password reset successfully." };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+      issues: undefined,
+    };
+  }
+};
+
+export const generateToken = async (payload: any) => {
+  try {
+    const token = await userService.generateToken(payload);
+    return { success: true, data: token };
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+export const verifyAccount = async (token: string) => {
+  try {
+    await userService.verifyAccount(token);
+    return { success: true, message: "Account verified successfully." };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+      issues: undefined,
+    };
+  }
+};
 
 export const signUpUsers = async (signUpUsersDTO: SignUpUserDTO[]) => {
   const result = SignUpUserSchema.array().safeParse(signUpUsersDTO);
@@ -33,7 +116,12 @@ export const signUpUser = async (
 
   try {
     await userService.signUpUser(provider, result.data);
-    return { success: true, message: "Profile created successfully." };
+
+    return {
+      success: true,
+      message:
+        "Profile created successfully. Check your email for account verification link.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -114,10 +202,6 @@ export const validatePassword = async (
   }
 };
 
-// export const verifyAccount = async () => {};
-
-// export const forgotPassword = async () => {};
-
 export const getUserById = async (id: string) => {
   try {
     const user = await userService.getUserById(id);
@@ -181,9 +265,13 @@ export const editEmailById = async (id: string, email: string) => {
   }
 };
 
-export const editAvatarById = async (id: string, avatar: string) => {
+export const editAvatarById = async (
+  id: string,
+  secure_url: string,
+  public_id: string
+) => {
   try {
-    await userService.editAvatarById(id, avatar);
+    await userService.editAvatarById(id, secure_url, public_id);
     return { success: true, message: "Avatar updated successfully." };
   } catch (error: any) {
     throw error;

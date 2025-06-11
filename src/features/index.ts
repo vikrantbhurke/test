@@ -1,3 +1,6 @@
+import { PaymentService } from "./payment/service";
+import { StripeService } from "./payment/stripe/service";
+import { PayPalService } from "./payment/paypal/service";
 import { UserService } from "./user/service";
 import { UserRepository } from "./user/repository";
 import { BookService } from "./book/service";
@@ -7,6 +10,9 @@ import { CommentRepository } from "./comment/repository";
 import { BookLikerService } from "./book-liker/service";
 import { BookLikerRepository } from "./book-liker/repository";
 
+const paymentService = new PaymentService();
+const stripeService = new StripeService();
+const paypalService = new PayPalService();
 const userService = new UserService();
 const userRepository = new UserRepository();
 const bookService = new BookService();
@@ -29,6 +35,9 @@ bookLikerService.setBookLikerRepository(bookLikerRepository);
 bookLikerService.setBookService(bookService);
 
 export {
+  paymentService,
+  stripeService,
+  paypalService,
   userService,
   bookService,
   commentService,

@@ -2,17 +2,20 @@
 import { Modal } from "@mantine/core";
 import { modalProps } from "@/global/constants";
 import AddCommentForm from "./add-comment-form";
+import { Session } from "next-auth";
 
 type AddCommentModalProps = {
   bookId: string;
   opened: boolean;
   close: () => void;
+  session?: Session | null;
 };
 
 export default function AddCommentModal({
   bookId,
   close,
   opened,
+  session,
 }: AddCommentModalProps) {
   return (
     <Modal
@@ -20,7 +23,7 @@ export default function AddCommentModal({
       onClose={close}
       opened={opened}
       overlayProps={modalProps.overlayProps}>
-      <AddCommentForm bookId={bookId} close={close} />
+      <AddCommentForm bookId={bookId} close={close} session={session} />
     </Modal>
   );
 }

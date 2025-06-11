@@ -3,7 +3,7 @@ import { Repository } from "@/global/classes";
 import { SignUpUserDTO, EditUserDTO } from "./schema";
 
 const select =
-  "firstname lastname username email role provider avatar hashedPassword";
+  "firstname lastname username email role provider avatar hashedPassword isVerified payment subscriptionId";
 
 export class UserRepository extends Repository {
   async signUpUser(signUpUserDTO: SignUpUserDTO) {
@@ -46,10 +46,10 @@ export class UserRepository extends Repository {
     });
   }
 
-  async editAvatarById(id: string, avatar: string) {
+  async editAvatarById(id: string, secure_url: string, public_id: string) {
     await this.editOne(User, {
       filter: { _id: id },
-      update: { avatar },
+      update: { avatar: { secureUrl: secure_url, publicId: public_id } },
       mode: "set",
     });
   }

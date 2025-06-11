@@ -5,7 +5,7 @@ import { Repository, GetManyDTO } from "@/global/classes";
 
 const select = "title synopsis authorId likes votes voterIds tags genre";
 const populate = ["authorId"];
-const populateSelect = ["firstname lastname username"];
+const populateSelect = ["firstname lastname username avatar"];
 const searchFields = ["title", "synopsis"];
 
 export class BookRepository extends Repository {

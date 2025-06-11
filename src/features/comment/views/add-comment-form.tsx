@@ -12,28 +12,31 @@ import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 import { Action } from "@/global/classes";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 type AddCommentFormProps = {
   bookId: string;
   close: () => void;
+  session?: Session | null;
 };
 
-export default function AddCommentForm({ bookId, close }: AddCommentFormProps) {
+export default function AddCommentForm({
+  bookId,
+  close,
+  session,
+}: AddCommentFormProps) {
   const router = useRouter();
   const [isMutating, setIsMutating] = useState(false);
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const { isMobile } = useSelector((state: RootState) => state.global);
-  const { data: session } = useSession();
-  const userId = session?.user?.id || "";
 
   const form = useForm({
     mode: "controlled",
     initialValues: {
       body: "",
       bookId: bookId,
-      commenterId: userId,
+      commenterId: session?.user?.id || "",
     },
 
     validate: zodResolver(SaveCommentSchema),

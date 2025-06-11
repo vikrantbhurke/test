@@ -13,12 +13,14 @@ import classes from "@/global/styles/app.module.css";
 import { appShellProps } from "@/global/constants";
 import { useSelector } from "react-redux";
 import { RootState } from "@/global/states/store";
+import { Session } from "next-auth";
 
 type AppOneProps = {
   children: React.ReactNode;
+  session?: Session | null;
 };
 
-export default function AppOne({ children }: AppOneProps) {
+export default function AppOne({ children, session }: AppOneProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();
@@ -34,11 +36,16 @@ export default function AppOne({ children }: AppOneProps) {
       navbar={appShellProps.navbar(opened)}
       h="100vh">
       <AppShell.Header className={`${!isMobile && classes.blurBg}`}>
-        <Header opened={opened} toggle={toggle} pathname={pathname} />
+        <Header
+          opened={opened}
+          toggle={toggle}
+          pathname={pathname}
+          session={session}
+        />
       </AppShell.Header>
 
       <AppShell.Navbar>
-        <Navbar pathname={pathname} />
+        <Navbar pathname={pathname} session={session} />
       </AppShell.Navbar>
 
       <AppShell.Aside>
@@ -50,7 +57,7 @@ export default function AppOne({ children }: AppOneProps) {
       </AppShell.Main>
 
       <AppShell.Footer>
-        <Footer pathname={pathname} />
+        <Footer pathname={pathname} session={session} />
       </AppShell.Footer>
     </AppShell>
   );

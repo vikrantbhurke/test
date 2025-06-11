@@ -4,8 +4,10 @@ import "@mantine/nprogress/styles.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import "@/global/configurations/mongoose";
-import { Providers } from "@/global/components/common";
+import "@/global/configurations/cloudinary";
+import "@/global/configurations/nodemailer";
 import { inter } from "@/global/styles/fonts.style";
+import { Providers } from "@/global/components/common";
 import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
 
 export const metadata: Metadata = {

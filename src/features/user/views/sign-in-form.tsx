@@ -14,10 +14,18 @@ import { useToast } from "@/global/hooks/use-toast";
 import { homeRoute } from "@/global/constants/routes";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { FloatingInput } from "@/global/components/common";
-import { Button, Divider, Stack, useMantineColorScheme } from "@mantine/core";
+import {
+  Anchor,
+  Button,
+  Divider,
+  Group,
+  Stack,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { signInWithCreds, signInWithOAuth } from "@/features/user/action";
 import { lightBgOneDarkBgTwo } from "@/global/constants/floating-input-props";
 import { IconLogin } from "@tabler/icons-react";
+import Link from "next/link";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -97,14 +105,21 @@ export default function SignInForm() {
             {...form.getInputProps("username")}
           />
 
-          <FloatingInput
-            styles={lightBgOneDarkBgTwo(colorScheme)}
-            name="password"
-            label="Password"
-            type="password-input"
-            key={form.key("password")}
-            {...form.getInputProps("password")}
-          />
+          <Stack gap={4}>
+            <FloatingInput
+              styles={lightBgOneDarkBgTwo(colorScheme)}
+              name="password"
+              label="Password"
+              type="password-input"
+              key={form.key("password")}
+              {...form.getInputProps("password")}
+            />
+            <Group justify="end">
+              <Anchor component={Link} href="/request-email" c="blue" fz="xs">
+                Forgot Password?
+              </Anchor>
+            </Group>
+          </Stack>
 
           <Button
             leftSection={<IconLogin size={20} />}

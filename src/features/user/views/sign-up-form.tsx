@@ -33,7 +33,7 @@ export default function SignUpForm() {
   const { colorScheme } = useMantineColorScheme();
   const [isMutating, setIsMutating] = useState(false);
   const { isMobile } = useSelector((state: RootState) => state.global);
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
 
   const nextStep = () =>
     setActive((current) => (current < 3 ? current + 1 : current));
@@ -190,52 +190,39 @@ export default function SignUpForm() {
           </Stepper.Completed>
         </Stepper>
 
-        {active !== 3 && (
-          <Grid>
-            <Grid.Col span={6}>
-              <Button
-                onClick={prevStep}
-                w="100%"
-                c="var(--bg-one)"
-                color="var(--tx-one)">
-                Back
-              </Button>
-            </Grid.Col>
+        <Grid>
+          <Grid.Col span={6}>
+            <Button
+              onClick={prevStep}
+              w="100%"
+              c="var(--bg-one)"
+              color="var(--tx-one)">
+              Back
+            </Button>
+          </Grid.Col>
 
-            <Grid.Col span={6}>
-              <Button
-                onClick={nextStep}
-                w="100%"
-                c="var(--bg-one)"
-                color="var(--tx-one)">
-                Next step
-              </Button>
-            </Grid.Col>
-          </Grid>
-        )}
+          <Grid.Col span={6}>
+            <Button
+              onClick={nextStep}
+              w="100%"
+              c="var(--bg-one)"
+              color="var(--tx-one)">
+              Next
+            </Button>
+          </Grid.Col>
+        </Grid>
 
         {active === 3 && (
-          <>
-            {Object.keys(form.errors).length > 0 ? (
-              <Button
-                onClick={prevStep}
-                w="100%"
-                c="var(--bg-one)"
-                color="var(--tx-one)">
-                Back
-              </Button>
-            ) : (
-              <Button
-                c="var(--bg-one)"
-                color="var(--tx-one)"
-                type="submit"
-                disabled={isMutating}
-                loading={isMutating}
-                loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
-                Sign Up
-              </Button>
-            )}
-          </>
+          <Button
+            w="100%"
+            c="var(--bg-one)"
+            color="var(--tx-one)"
+            type="submit"
+            disabled={isMutating}
+            loading={isMutating}
+            loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
+            Sign Up
+          </Button>
         )}
       </Stack>
     </form>

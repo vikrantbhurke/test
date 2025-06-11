@@ -1,6 +1,14 @@
 import Link from "next/link";
 import DropBookButton from "./drop-book-button";
-import { Anchor, Button, Group, Stack, Text, Title } from "@mantine/core";
+import {
+  Anchor,
+  Avatar,
+  Button,
+  Group,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import {
   bookCommentsRoute,
   editBookRoute,
@@ -24,6 +32,10 @@ export default async function BookItem({ book }: any) {
     });
   }
 
+  const aid = authorId.id;
+  const name = authorId.firstname + " " + authorId.lastname;
+  const image = authorId.avatar.secureUrl || undefined;
+
   return (
     <Stack gap="sm">
       <Title order={6}>{title}</Title>
@@ -32,9 +44,21 @@ export default async function BookItem({ book }: any) {
 
       <Stack gap={4}>
         <Anchor component={Link} href={viewUserRoute(authorId.id)}>
-          <Text>
-            {authorId.firstname} {authorId.lastname}
-          </Text>
+          <Group gap="xs">
+            {!aid && <Avatar src="" size={20} />}
+            {aid && !image && <Avatar name={name} color="initials" size={20} />}
+            {aid && image && (
+              <Avatar
+                src={image}
+                alt="Avatar"
+                size={20}
+                className="rounded-full"
+              />
+            )}
+            <Text>
+              {authorId.firstname} {authorId.lastname}
+            </Text>{" "}
+          </Group>
         </Anchor>
 
         <Anchor component={Link} href={userBooksRoute(authorId.id)}>

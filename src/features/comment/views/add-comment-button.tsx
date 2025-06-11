@@ -1,23 +1,25 @@
 "use client";
 import Link from "next/link";
+import { Session } from "next-auth";
 import { Button } from "@mantine/core";
-import { useSession } from "next-auth/react";
 import { useDisclosure } from "@mantine/hooks";
 import AddCommentModal from "./add-comment-modal";
 import { signInRoute } from "@/global/constants/routes";
 
 type AddCommentButtonProps = {
   bookId: string;
+  session?: Session | null;
 };
 
-export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
+export default function AddCommentButton({
+  bookId,
+  session,
+}: AddCommentButtonProps) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { data: session } = useSession();
-  const id = session?.user?.id;
 
   return (
     <>
-      {id ? (
+      {session?.user?.id ? (
         <Button onClick={open} size="xs" fz="xs">
           Add Comment
         </Button>
@@ -27,7 +29,12 @@ export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
         </Button>
       )}
 
-      <AddCommentModal bookId={bookId} opened={opened} close={close} />
+      <AddCommentModal
+        bookId={bookId}
+        opened={opened}
+        close={close}
+        session={session}
+      />
     </>
   );
 }

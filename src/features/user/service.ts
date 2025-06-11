@@ -6,8 +6,12 @@ import {
 } from "..";
 import bcrypt from "bcryptjs";
 import { Provider } from "./enums";
+import jsonwebtoken from "jsonwebtoken";
 import { Service } from "@/global/classes";
-import { SignUpUserDTO, EditUserDTO } from "./schema";
+import { SignUpUserDTO, EditUserDTO, ResetPasswordDTO } from "./schema";
+import { MailtrapClient, TemplateVariables } from "mailtrap";
+import { transport } from "@/global/configurations/nodemailer";
+import { Template } from "@/global/constants";
 
 export class UserService extends Service {
   userRepository: UserRepository;
@@ -31,6 +35,75 @@ export class UserService extends Service {
     this.commentService = commentService;
   }
 
+  async sendEmail(
+    recipient: string,
+    template: any,
+    variables: TemplateVariables
+  ) {
+    const { id, subject, filename } = template;
+    const isProd = process.env.NODE_ENV === "production";
+
+    if (isProd) {
+      const client = new MailtrapClient({
+        token: process.env.MAILTRAP_TOKEN as string,
+      });
+
+      const sender = {
+        email: process.env.MAILTRAP_SENDER as string,
+        name: process.env.APP_NAME as string,
+      };
+
+      const recipients = [{ email: recipient }];
+
+      const mailOptions = {
+        from: sender,
+        to: recipients,
+        template_uuid: id,
+        template_variables: variables,
+      };
+
+      try {
+        await client.send(mailOptions);
+        console.log("Email sent successfully");
+      } catch (error) {
+        console.error("Error sending email:", error);
+      }
+    } else {
+      const { template } = await import(`@/global/templates/${filename}`);
+      const Handlebars = (await import("handlebars")).default;
+      const handlerbarsTemplate = Handlebars.compile(template);
+
+      const mailOptions = {
+        from: process.env.MAILTRAP_SENDER as string,
+        to: recipient,
+        subject,
+        html: handlerbarsTemplate(variables),
+      };
+
+      try {
+        await transport.sendMail(mailOptions);
+        console.log("Email sent successfully");
+      } catch (error) {
+        console.error("Error sending email:", error);
+      }
+    }
+  }
+
+  async generateToken(payload: any) {
+    return jsonwebtoken.sign(payload, process.env.JWT_SECRET_KEY as string, {
+      expiresIn: "1d",
+    });
+  }
+
+  async verifyToken(token: string) {
+    try {
+      return jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY as string);
+    } catch (err) {
+      console.error("Token Verification Error:", err);
+      return null;
+    }
+  }
+
   async encryptPassword(password: string) {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
@@ -40,13 +113,48 @@ export class UserService extends Service {
     return bcrypt.compareSync(password, hashedPassword);
   }
 
+  async verifyAccount(token: string) {
+    if (!token) throw new Error("Invalid or expired token.");
+    // @ts-expect-error...
+    const { username } = await this.verifyToken(token);
+    const user = await this.getUserByUsername(username as any);
+    if (user.isVerified) throw new Error("Email already verified.");
+    await this.editUserById(user.id, { isVerified: true });
+  }
+
   async signUpUsers(signUpUsersDTO: SignUpUserDTO[]) {
     for (const signUpUserDTO of signUpUsersDTO)
       await this.signUpUser(Provider.credentials, signUpUserDTO);
   }
 
+  async requestEmail({ email }: any) {
+    const user = await this.getUserByEmail(email);
+    if (!user) throw new Error("Account with this email does not exist.");
+    const token = await this.generateToken({ username: user.username });
+
+    await this.sendEmail(email, Template.Password, {
+      token,
+      name: user.firstname,
+      email: user.email,
+      url: process.env.APP_URL as string,
+      app: process.env.APP_NAME as string,
+    });
+
+    return { success: true, message: "Verification email sent." };
+  }
+
+  async resetPassword(token: string, { password }: ResetPasswordDTO) {
+    if (!token) throw new Error("Invalid or expired token.");
+    // @ts-expect-error...
+    const { username } = await this.verifyToken(token);
+    const user = await this.getUserByUsername(username as any);
+    if (!user) throw new Error("Account with this username does not exist.");
+    const hashedPassword = await this.encryptPassword(password);
+    await this.editUserById(user.id, { hashedPassword });
+  }
+
   async signUpUser(provider: Provider, signUpUserDTO: SignUpUserDTO) {
-    const { username, email } = signUpUserDTO;
+    const { firstname, username, email } = signUpUserDTO;
     const u1 = await this.getUserByUsername(username);
     const u2 = await this.getUserByEmail(email);
 
@@ -62,6 +170,14 @@ export class UserService extends Service {
     };
 
     await this.userRepository.signUpUser(newUser);
+    const token = await this.generateToken({ username });
+
+    await this.sendEmail(email, Template.Welcome, {
+      token,
+      name: firstname,
+      url: process.env.APP_URL as string,
+      app: process.env.APP_NAME as string,
+    });
   }
 
   async getUserById(id: string) {
@@ -88,8 +204,8 @@ export class UserService extends Service {
     await this.userRepository.editEmailById(id, email);
   }
 
-  async editAvatarById(id: string, avatar: string) {
-    await this.userRepository.editAvatarById(id, avatar);
+  async editAvatarById(id: string, secure_url: string, public_id: string) {
+    await this.userRepository.editAvatarById(id, secure_url, public_id);
   }
 
   async pushProviderById(id: string, provider: string) {
