@@ -1,4 +1,4 @@
-import { paypalService } from "@/features";
+import { editUserByEmail } from "@/features/user/action";
 import { Role, Status, Payment } from "@/features/user/enums";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -26,6 +26,13 @@ export async function POST(request: NextRequest) {
     let payment;
     let subscriptionId;
     let status;
+
+    if (!email || !subId || !paypalStatus || !eventType) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     switch (eventType) {
       case "BILLING.SUBSCRIPTION.ACTIVATED":
@@ -62,7 +69,7 @@ export async function POST(request: NextRequest) {
       status,
     };
 
-    await paypalService.editUserByEmail(email, editUserDTO);
+    await editUserByEmail(email, editUserDTO);
 
     return NextResponse.json({ message: "Webhook received." }, { status: 200 });
   } catch (error: any) {

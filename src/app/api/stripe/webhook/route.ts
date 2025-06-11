@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { NextRequest } from "next/server";
-import { stripeService } from "@/features";
 import { Role, Status, Payment } from "@/features/user/enums";
+import { editUserByEmail } from "@/features/user/action";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
         status,
       };
 
-      await stripeService.editUserByEmail(email, editUserDTO);
+      await editUserByEmail(email, editUserDTO);
       break;
     }
   }
