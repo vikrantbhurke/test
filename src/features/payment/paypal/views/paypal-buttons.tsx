@@ -9,14 +9,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { Button, Modal, Stack, Text } from "@mantine/core";
 
 type PayPalButtonsProps = {
-  userId: string;
   subscriptionId: string;
 };
 
-export default function PayPalButtons({
-  userId,
-  subscriptionId,
-}: PayPalButtonsProps) {
+export default function PayPalButtons({ subscriptionId }: PayPalButtonsProps) {
   const [suspendOpened, { open: suspendOpen, close: suspendClose }] =
     useDisclosure();
 
@@ -24,15 +20,12 @@ export default function PayPalButtons({
     useDisclosure();
 
   const handleCreate = async () => {
-    const response = await createPayPalSubscription(userId);
+    const response = await createPayPalSubscription();
     if (response.approve_url) window.open(response.approve_url, "_self");
   };
 
   const handleActivate = async () =>
     await activatePayPalSubscription(subscriptionId);
-
-  console.log("User ID:", userId);
-  console.log("Subscription ID:", subscriptionId);
 
   return (
     <Stack>

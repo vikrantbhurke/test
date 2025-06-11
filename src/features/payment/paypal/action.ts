@@ -56,7 +56,6 @@ export const createPayPalSubscription = async () => {
       (link: any) => link.rel === "approve"
     ).href;
 
-    console.log("PayPal approve_url:", approve_url);
     return { approve_url };
   } catch (error: any) {
     console.error("Error creating PayPal subscription:", error.message);

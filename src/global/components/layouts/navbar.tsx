@@ -175,36 +175,40 @@ export default function Navbar({ pathname, session }: NavbarProps) {
         </>
       )}
 
-      <DesktopButton
-        href={subscribeRoute}
-        className={pathname.startsWith(subscribeRoute) && classes.themeThree}
-        Icon={<IconCoin size={16} />}
-        label="Subscribe"
-      />
-
-      <MobileButton
-        href={subscribeRoute}
-        className={pathname.startsWith(subscribeRoute) && classes.themeThree}
-        Icon={<IconCoin size={16} />}
-        label="Subscribe"
-      />
-
-      <DesktopButton
-        href={purchaseRoute}
-        className={pathname.startsWith(purchaseRoute) && classes.themeThree}
-        Icon={<IconCoin size={16} />}
-        label="Purchase"
-      />
-
-      <MobileButton
-        href={purchaseRoute}
-        className={pathname.startsWith(purchaseRoute) && classes.themeThree}
-        Icon={<IconCoin size={16} />}
-        label="Purchase"
-      />
-
       {session?.user?.id ? (
         <>
+          <DesktopButton
+            href={subscribeRoute}
+            className={
+              pathname.startsWith(subscribeRoute) && classes.themeThree
+            }
+            Icon={<IconCoin size={16} />}
+            label="Subscribe"
+          />
+
+          <MobileButton
+            href={subscribeRoute}
+            className={
+              pathname.startsWith(subscribeRoute) && classes.themeThree
+            }
+            Icon={<IconCoin size={16} />}
+            label="Subscribe"
+          />
+
+          <DesktopButton
+            href={purchaseRoute}
+            className={pathname.startsWith(purchaseRoute) && classes.themeThree}
+            Icon={<IconCoin size={16} />}
+            label="Purchase"
+          />
+
+          <MobileButton
+            href={purchaseRoute}
+            className={pathname.startsWith(purchaseRoute) && classes.themeThree}
+            Icon={<IconCoin size={16} />}
+            label="Purchase"
+          />
+
           <SignOutNavbarButton />
           <DeleteAccountButton id={session?.user?.id} />
         </>
