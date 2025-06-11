@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import { homeRoute } from "@/global/constants/routes";
 
 type PayPalButtonsProps = {
-  subscriptionId: string;
+  subscriptionId: string | null;
   paypalStatus?: string;
   payment?: Payment;
 };

@@ -1,14 +1,14 @@
-import { UserService } from "../..";
-import { EditUserDTO } from "../../user/schema";
+// import { UserService } from "../..";
+// import { EditUserDTO } from "../../user/schema";
 
-export class StripeService {
-  userService: UserService;
+// export class StripeService {
+//   userService: UserService;
 
-  setUserService(userService: UserService) {
-    this.userService = userService;
-  }
+//   setUserService(userService: UserService) {
+//     this.userService = userService;
+//   }
 
-  async editUserByEmail(email: string, editUserDTO: EditUserDTO) {
-    return await this.userService.editUserByEmail(email, editUserDTO);
-  }
-}
+//   async editUserByEmail(email: string, editUserDTO: EditUserDTO) {
+//     return await this.userService.editUserByEmail(email, editUserDTO);
+//   }
+// }

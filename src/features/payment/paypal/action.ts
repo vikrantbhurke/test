@@ -63,9 +63,10 @@ export const createPayPalSubscription = async () => {
   }
 };
 
-export const getPayPalSubscription = async (subscriptionId: string) => {
+export const getPayPalSubscription = async (subscriptionId: string | null) => {
   try {
-    if (!subscriptionId) return { message: "User has no active subscription." };
+    if (!subscriptionId)
+      return { success: false, message: "User has no active subscription." };
 
     const subscription = await axios.get(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}`,
@@ -95,7 +96,9 @@ export const suspendPayPalSubscription = async (subscriptionId: string) => {
   }
 };
 
-export const activatePayPalSubscription = async (subscriptionId: string) => {
+export const activatePayPalSubscription = async (
+  subscriptionId: string | null
+) => {
   try {
     await axios.post(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}/activate`,

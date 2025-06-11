@@ -6,8 +6,8 @@ import { paymentUtility } from "@/features";
 
 export default async function PaymentInfo() {
   const session = await auth();
-  const payment = session?.user?.payment || "";
-  const subscriptionId = session?.user.subscriptionId || "";
+  const payment = session?.user?.payment || Payment.Free;
+  const subscriptionId = session?.user?.subscriptionId || null;
   const paypalResponse = await getPayPalSubscription(subscriptionId);
 
   const list = [

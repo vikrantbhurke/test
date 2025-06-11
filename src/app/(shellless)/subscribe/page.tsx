@@ -7,9 +7,14 @@ import { getPayPalSubscription } from "@/features/payment/paypal/action";
 
 export default async function Page() {
   const session = await auth();
-  const subscriptionId = session?.user.subscriptionId || "";
+  const subscriptionId = session?.user?.subscriptionId || null;
+  let paypalResponse = null;
 
-  if (!subscriptionId || !session?.user) {
+  if (subscriptionId) {
+    paypalResponse = await getPayPalSubscription(subscriptionId);
+  }
+
+  if (!session?.user) {
     return (
       <Stack h="100vh" justify="center" align="center">
         <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
@@ -21,14 +26,13 @@ export default async function Page() {
     );
   }
 
-  const paypalResponse = await getPayPalSubscription(subscriptionId);
-
   return (
     <Stack h="100vh" justify="center" align="center">
       <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
         <Paper p="xl">
           <Stack gap="md">
             <PaymentInfo />
+
             <PayPalButtons
               subscriptionId={subscriptionId}
               paypalStatus={paypalResponse?.data?.status}
