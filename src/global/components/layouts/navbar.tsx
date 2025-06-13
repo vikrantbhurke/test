@@ -13,11 +13,13 @@ import {
   signInRoute,
   signUpRoute,
   saveBookRoute,
-  startsWithBooksServer,
+  startsWithBooksServerWindow,
   booksServerContainerRoute,
   booksClientWindowRoute,
   booksClientContainerRoute,
-  startsWithBooksClient,
+  startsWithBooksClientWindow,
+  startsWithBooksServerContainer,
+  startsWithBooksClientContainer,
 } from "@/global/constants/routes";
 import {
   DeleteAccountButton,
@@ -85,7 +87,7 @@ export default function Navbar({ pathname }: NavbarProps) {
       <NavbarButton
         href={booksServerWindowRoute}
         className={
-          pathname.startsWith(startsWithBooksServer) && classes.themeThree
+          pathname.startsWith(startsWithBooksServerWindow) && classes.themeThree
         }
         Icon={<IconBook size={16} />}
         label="Books Server Window"
@@ -94,7 +96,8 @@ export default function Navbar({ pathname }: NavbarProps) {
       <NavbarButton
         href={booksServerContainerRoute}
         className={
-          pathname.startsWith(startsWithBooksServer) && classes.themeThree
+          pathname.startsWith(startsWithBooksServerContainer) &&
+          classes.themeThree
         }
         Icon={<IconBook size={16} />}
         label="Books Server Container"
@@ -103,7 +106,7 @@ export default function Navbar({ pathname }: NavbarProps) {
       <NavbarButton
         href={booksClientWindowRoute}
         className={
-          pathname.startsWith(startsWithBooksClient) && classes.themeThree
+          pathname.startsWith(startsWithBooksClientWindow) && classes.themeThree
         }
         Icon={<IconBook size={16} />}
         label="Books Client Window"
@@ -112,7 +115,8 @@ export default function Navbar({ pathname }: NavbarProps) {
       <NavbarButton
         href={booksClientContainerRoute}
         className={
-          pathname.startsWith(startsWithBooksClient) && classes.themeThree
+          pathname.startsWith(startsWithBooksClientContainer) &&
+          classes.themeThree
         }
         Icon={<IconBook size={16} />}
         label="Books Client Container"

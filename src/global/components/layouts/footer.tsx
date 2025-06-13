@@ -9,7 +9,7 @@ import {
   homeRoute,
   booksServerWindowRoute,
   signInRoute,
-  startsWithBooksServer,
+  startsWithBooksServerWindow,
 } from "@/global/constants/routes";
 import { stillButtonProps } from "@/global/constants";
 import { SignOutFooterButton } from "@/features/user/views/client";
@@ -50,7 +50,7 @@ export default function Footer({ pathname }: FooterProps) {
         onFocus={stillButtonProps.onFocus}
         onMouseDown={stillButtonProps.onMouseDown}
         className={`${classes.themeOneWithHover} ${
-          pathname.startsWith(startsWithBooksServer) && classes.themeThree
+          pathname.startsWith(startsWithBooksServerWindow) && classes.themeThree
         }`}>
         <Stack align="center" justify="center" gap={0}>
           <IconBook size={16} />

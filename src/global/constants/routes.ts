@@ -27,9 +27,13 @@ export const booksClientWindowRoute =
 export const booksClientContainerRoute =
   "/books/client/container/page/1?sort=title&order=Asc&genre=All";
 
-export const startsWithBooksServer = "/books/server";
+export const startsWithBooksServerWindow = "/books/server/window";
 
-export const startsWithBooksClient = "/books/client";
+export const startsWithBooksServerContainer = "/books/server/container";
+
+export const startsWithBooksClientWindow = "/books/client/window";
+
+export const startsWithBooksClientContainer = "/books/client/container";
 
 export const viewBookRoute = (id: string) => `/books/view/${id}`;
 
