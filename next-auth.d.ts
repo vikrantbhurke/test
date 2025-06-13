@@ -1,4 +1,4 @@
-import { Payment } from "@/features/user/enums";
+import { Payment } from "@/features/payment/enums";
 import { DefaultSession, DefaultUser } from "next-auth";
 
 declare module "next-auth" {

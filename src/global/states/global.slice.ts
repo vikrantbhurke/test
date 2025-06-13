@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { Session } from "next-auth";
 
 export interface GlobalState {
+  session: Session | null;
   page: number;
   content: any[];
   isSearching: boolean;
@@ -9,6 +11,7 @@ export interface GlobalState {
 }
 
 const initialState: GlobalState = {
+  session: null,
   page: 0,
   content: [],
   isSearching: false,
@@ -19,6 +22,9 @@ export const globalSlice = createSlice({
   name: "global",
   initialState,
   reducers: {
+    setSession: (state, action: PayloadAction<Session | null>) => {
+      state.session = action.payload;
+    },
     setPage: (state, action: PayloadAction<number>) => {
       state.page = action.payload;
     },
@@ -34,7 +40,7 @@ export const globalSlice = createSlice({
   },
 });
 
-export const { setPage, setContent, toggleSearch, setIsMobile } =
+export const { setSession, setPage, setContent, toggleSearch, setIsMobile } =
   globalSlice.actions;
 
 export default globalSlice.reducer;

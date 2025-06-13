@@ -1,17 +1,14 @@
-import { AppOne } from "@/global/components/layouts";
-import { Stack } from "@mantine/core";
-import { IconAppsFilled } from "@tabler/icons-react";
 import { Suspense } from "react";
+import { Stack } from "@mantine/core";
+import { AppOne } from "@/global/components/layouts";
+import { IconAppsFilled } from "@tabler/icons-react";
 import classes from "@/global/styles/app.module.css";
-import { auth } from "@/auth";
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
 export default async function Layout({ children }: LayoutProps) {
-  const session = await auth();
-
   return (
     <Suspense
       fallback={
@@ -23,7 +20,7 @@ export default async function Layout({ children }: LayoutProps) {
           />
         </Stack>
       }>
-      <AppOne session={session}>{children}</AppOne>
+      <AppOne>{children}</AppOne>
     </Suspense>
   );
 }

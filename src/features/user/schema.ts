@@ -3,7 +3,8 @@ import equals from "validator/lib/equals";
 import isAlpha from "validator/lib/isAlpha";
 import isMongoId from "validator/lib/isMongoId";
 import isStrongPassword from "validator/lib/isStrongPassword";
-import { Gender, Role, Provider, Payment, Status } from "./enums";
+import { Gender, Role, Provider, Status } from "./enums";
+import { Payment } from "@/features/payment/enums";
 
 const reservedUsernames = ["admin", "support", "api", "root", "login"];
 

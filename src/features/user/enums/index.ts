@@ -1,7 +1,7 @@
 import { Gender } from "./gender";
-import { Payment } from "./payment";
 import { Provider } from "./provider";
 import { Role } from "./role";
 import { Status } from "./status";
+import { Clearance } from "./clearance";
 
-export { Gender, Payment, Provider, Role, Status };
+export { Gender, Provider, Role, Status, Clearance };

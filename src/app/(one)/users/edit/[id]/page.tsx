@@ -1,7 +1,7 @@
 import { Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
-import { GetUserById } from "@/features/user/queries";
-import { EditProfileForm } from "@/features/user/views";
+import { GetUserById } from "@/features/user/queries/server";
+import { EditProfileForm } from "@/features/user/views/client";
 
 type PageProps = {
   params: Promise<{ id: string }>;

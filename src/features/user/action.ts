@@ -13,9 +13,26 @@ import {
 } from "./schema";
 import { userService } from "..";
 import { Provider } from "./enums";
-import { signIn, signOut } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import { Exception } from "@/global/classes";
 import { TemplateVariables } from "mailtrap";
+
+export const getSession = async () => {
+  try {
+    const session = await auth();
+
+    if (!session)
+      return { success: false, error: "Unauthorized", issues: undefined };
+
+    return { success: true, data: session };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+      issues: undefined,
+    };
+  }
+};
 
 export const sendEmail = async (
   recipient: string,

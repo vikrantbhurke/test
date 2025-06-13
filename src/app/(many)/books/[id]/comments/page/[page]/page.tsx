@@ -1,15 +1,12 @@
-import {
-  CommentsItemServer,
-  CommentsDetailsServer,
-} from "@/features/comment/views";
 import { Paper, Stack } from "@mantine/core";
-import { BookItem } from "@/features/book/views";
+import { dimensions } from "@/global/constants";
 import { GetBookById } from "@/features/book/queries";
-import { dimensions, listGridFiniteDefaults } from "@/global/constants";
-import { AddCommentButton } from "@/features/comment/views";
-import { ListGridFinite } from "@/global/components/list-grid";
+import { BookItem } from "@/features/book/views/server";
+import { listGridDefaults } from "@/global/constants/server";
 import { GetCommentsByBookId } from "@/features/comment/queries";
-import { auth } from "@/auth";
+import { AddCommentButton } from "@/features/comment/views/client";
+import { ListGridOuter } from "@/global/components/list-grid/server";
+import { CommentsItem, CommentsDetails } from "@/features/comment/views/server";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;
@@ -17,15 +14,14 @@ type PageProps = {
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
-  const session = await auth();
   const { id } = await params;
 
   const {
     paginationProps,
     scrollButtonsProps,
     scrollWrapperProps,
-    listGridServerProps,
-  } = listGridFiniteDefaults;
+    listGridInnerProps,
+  } = listGridDefaults;
 
   return (
     <Stack h="100%" w="100%" justify="center" maw={dimensions.mawSm}>
@@ -36,7 +32,7 @@ export default async function Page({ params, searchParams }: PageProps) {
           </GetBookById>
         </Paper>
 
-        <AddCommentButton bookId={id} session={session} />
+        <AddCommentButton bookId={id} />
       </Stack>
 
       <GetCommentsByBookId params={params} searchParams={searchParams}>
@@ -45,9 +41,9 @@ export default async function Page({ params, searchParams }: PageProps) {
             {commentsPage.content.length === 0 ? (
               <></>
             ) : (
-              <ListGridFinite
+              <ListGridOuter
                 dataPage={commentsPage}
-                DataDetailsServer={CommentsDetailsServer}
+                DataDetails={CommentsDetails}
                 paginationProps={{
                   ...paginationProps,
                   value: commentsPage.page + 1,
@@ -55,12 +51,12 @@ export default async function Page({ params, searchParams }: PageProps) {
                 }}
                 scrollButtonsProps={scrollButtonsProps}
                 scrollWrapperProps={scrollWrapperProps}
-                listGridServerProps={{
-                  ...listGridServerProps,
+                listGridInnerProps={{
+                  ...listGridInnerProps,
                   content: commentsPage.content,
-                  DataItemServer: CommentsItemServer,
+                  DataItem: CommentsItem,
                   listGridProps: {
-                    ...listGridServerProps.listGridProps,
+                    ...listGridInnerProps.listGridProps,
                     layout: "list",
                   },
                 }}

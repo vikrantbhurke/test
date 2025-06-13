@@ -1,6 +1,6 @@
 import { Stack } from "@mantine/core";
-import { BookItem } from "@/features/book/views";
-import { NextModal } from "@/global/components/common";
+import { BookItem } from "@/features/book/views/server";
+import { NextModal } from "@/global/components/common/client";
 import { GetBookById } from "@/features/book/queries";
 
 type PageProps = {

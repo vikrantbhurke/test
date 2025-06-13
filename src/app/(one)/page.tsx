@@ -1,15 +1,16 @@
-import { auth } from "@/auth";
 import { Text } from "@mantine/core";
-import { AutoSignOut } from "@/features/user/views";
+import { AutoSignOut } from "@/features/user/views/client";
+import { GetSession } from "@/features/user/queries/server";
 
 export default async function Page() {
-  const session: any = await auth();
-  const id = session?.user?.id || "";
-  const provider = session?.user?.provider || [];
-
   return (
     <>
-      <AutoSignOut user={{ id, provider }} />
+      <GetSession>
+        {(session) => {
+          return <AutoSignOut session={session} />;
+        }}
+      </GetSession>
+
       <Text>Homepage</Text>
     </>
   );

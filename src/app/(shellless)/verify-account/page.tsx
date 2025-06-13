@@ -1,4 +1,4 @@
-import { VerifyAccount } from "@/features/user/views";
+import { VerifyAccount } from "@/features/user/views/client";
 import { Stack } from "@mantine/core";
 
 type PageProps = {

@@ -1,4 +1,4 @@
-import { RequestEmailForm } from "@/features/user/views";
+import { RequestEmailForm } from "@/features/user/views/client";
 import { dimensions } from "@/global/constants";
 import { Paper, Stack } from "@mantine/core";
 

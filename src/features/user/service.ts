@@ -49,49 +49,6 @@ export class UserService extends Service {
       const { sendEmailDev } = await import("./modules/send-email-dev");
       await sendEmailDev(filename, recipient, subject, variables);
     }
-
-    // if (isProd) {
-    // const client = new MailtrapClient({
-    //   token: process.env.MAILTRAP_TOKEN as string,
-    // });
-
-    // const sender = {
-    //   email: process.env.MAILTRAP_SENDER as string,
-    //   name: process.env.APP_NAME as string,
-    // };
-
-    // const recipients = [{ email: recipient }];
-
-    // const mailOptions = {
-    //   from: sender,
-    //   to: recipients,
-    //   template_uuid: id,
-    //   template_variables: variables,
-    // };
-
-    // try {
-    //   await client.send(mailOptions);
-    //   console.log("Email sent successfully");
-    // } catch (error) {
-    //   console.error("Error sending email:", error);
-    // }
-    // } else {
-    // const { template } = await import(`@/global/templates/${filename}`);
-    // const Handlebars = (await import("handlebars")).default;
-    // const handlerbarsTemplate = Handlebars.compile(template);
-    // const mailOptions = {
-    //   from: process.env.MAILTRAP_SENDER as string,
-    //   to: recipient,
-    //   subject,
-    //   html: handlerbarsTemplate(variables),
-    // };
-    // try {
-    //   await transport.sendMail(mailOptions);
-    //   console.log("Email sent successfully");
-    // } catch (error) {
-    //   console.error("Error sending email:", error);
-    // }
-    // }
   }
 
   async generateToken(payload: any) {

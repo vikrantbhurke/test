@@ -1,6 +1,6 @@
 import { Paper, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
-import { BookItem } from "@/features/book/views";
+import { BookItem } from "@/features/book/views/server";
 import { GetBookById } from "@/features/book/queries";
 
 type PageProps = {

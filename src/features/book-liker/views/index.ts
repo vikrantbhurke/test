@@ -1,4 +1,4 @@
 import LikeButton from "./like-button";
-import LikeUnauthButton from "./like-unauth-button";
+import LikePublicButton from "./like-public-button";
 
-export { LikeButton, LikeUnauthButton };
+export { LikeButton, LikePublicButton };

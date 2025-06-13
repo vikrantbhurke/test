@@ -6,7 +6,6 @@ import {
   getUserByUsername,
   sendEmail,
   generateToken,
-  // generateToken,
 } from "./features/user/action";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";

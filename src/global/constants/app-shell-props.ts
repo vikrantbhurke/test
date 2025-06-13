@@ -1,4 +1,4 @@
-import { dimensions } from "@/global/constants";
+import { dimensions } from "./dimensions";
 
 export const appShellProps = {
   header: { height: dimensions.headerHeight, offset: true },

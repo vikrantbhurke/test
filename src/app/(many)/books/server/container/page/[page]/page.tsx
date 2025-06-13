@@ -1,19 +1,9 @@
-// import { ListGridInfinite } from "@/global/components/list-grid";
-import { GetBooks } from "@/features/book/queries";
-import { ListGridFinite } from "@/global/components/list-grid";
-import {
-  // BooksItemClient,
-  // BooksDetailsClient,
-  BooksItemServer,
-  BooksDetailsServer,
-} from "@/features/book/views";
-import {
-  dimensions,
-  listGridFiniteDefaults,
-  // listGridInfiniteDefaults,
-} from "@/global/constants";
 import { Stack } from "@mantine/core";
-// import { getBooks } from "@/features/book/action";
+import { dimensions } from "@/global/constants";
+import { GetBooks } from "@/features/book/queries";
+import { listGridDefaults } from "@/global/constants/server";
+import { ListGridOuter } from "@/global/components/list-grid/server";
+import { BooksItem, BooksDetails } from "@/features/book/views/server";
 
 type PageProps = {
   params: Promise<{ page: string }>;
@@ -25,23 +15,16 @@ export default async function Page({ params, searchParams }: PageProps) {
     paginationProps,
     scrollButtonsProps,
     scrollWrapperProps,
-    listGridServerProps,
-  } = listGridFiniteDefaults;
-
-  // const {
-  //   buttonProps,
-  //   scrollButtonsProps,
-  //   scrollWrapperProps,
-  //   listGridClientProps,
-  // } = listGridInfiniteDefaults;
+    listGridInnerProps,
+  } = listGridDefaults;
 
   return (
     <Stack h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
       <GetBooks params={params} searchParams={searchParams}>
         {(booksPage) => (
-          <ListGridFinite
+          <ListGridOuter
             dataPage={booksPage}
-            DataDetailsServer={BooksDetailsServer}
+            DataDetails={BooksDetails}
             paginationProps={{
               ...paginationProps,
               value: booksPage.page + 1,
@@ -52,31 +35,12 @@ export default async function Page({ params, searchParams }: PageProps) {
               scrollbar: "container",
             }}
             scrollWrapperProps={scrollWrapperProps}
-            listGridServerProps={{
-              ...listGridServerProps,
+            listGridInnerProps={{
+              ...listGridInnerProps,
               content: booksPage.content,
-              DataItemServer: BooksItemServer,
+              DataItem: BooksItem,
             }}
           />
-          // <ListGridInfinite
-          //   getData={getBooks}
-          //   initialDataPage={booksPage}
-          //   DataDetailsClient={BooksDetailsClient}
-          //   getDataArgs={{
-          //     sort: booksPage.sort,
-          //     order: booksPage.order,
-          //     filter: booksPage.filter,
-          //     search: booksPage.search,
-          //   }}
-          //   buttonProps={buttonProps}
-          //   scrollButtonsProps={scrollButtonsProps}
-          //   scrollWrapperProps={scrollWrapperProps}
-          //   listGridClientProps={{
-          //     ...listGridClientProps,
-          //     content: booksPage.content,
-          //     DataItemClient: BooksItemClient,
-          //   }}
-          // />
         )}
       </GetBooks>
     </Stack>

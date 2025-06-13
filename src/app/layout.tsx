@@ -7,8 +7,9 @@ import "@/global/configurations/mongoose";
 import "@/global/configurations/cloudinary";
 import "@/global/configurations/nodemailer";
 import { inter } from "@/global/styles/fonts.style";
-import { Providers } from "@/global/components/common";
+import { Providers } from "@/global/components/common/client";
 import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
+import { GetSession } from "@/features/user/queries/server";
 
 export const metadata: Metadata = {
   title: "Test App",
@@ -19,7 +20,7 @@ type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-export default function Layout({ children }: RootLayoutProps) {
+export default async function Layout({ children }: RootLayoutProps) {
   return (
     <html lang="en" {...mantineHtmlProps}>
       <head>
@@ -27,7 +28,9 @@ export default function Layout({ children }: RootLayoutProps) {
       </head>
 
       <body className={`${inter.className} antialiased`}>
-        <Providers>{children}</Providers>
+        <GetSession>
+          {(session) => <Providers session={session}>{children}</Providers>}
+        </GetSession>
       </body>
     </html>
   );

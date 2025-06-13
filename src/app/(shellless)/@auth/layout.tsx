@@ -1,4 +1,5 @@
 import { dimensions } from "@/global/constants";
+import { signInRoute, signUpRoute } from "@/global/constants/routes";
 import { Anchor, Group, Paper, Stack } from "@mantine/core";
 import Link from "next/link";
 
@@ -13,10 +14,10 @@ export default function Layout({ children }: LayoutProps) {
         <Paper p="xl">
           <Stack gap="xl">
             <Group justify="space-evenly" w="100%">
-              <Anchor component={Link} href="/sign-in">
+              <Anchor component={Link} href={signInRoute}>
                 Sign In
               </Anchor>
-              <Anchor component={Link} href="/sign-up">
+              <Anchor component={Link} href={signUpRoute}>
                 Sign Up
               </Anchor>
             </Group>

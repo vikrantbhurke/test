@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
-import { Button, Stack, Title } from "@mantine/core";
 import { dimensions } from "@/global/constants";
+import { Button, Stack, Title } from "@mantine/core";
 
 type ErrorProps = {
   error: Error & { digest?: string };

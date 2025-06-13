@@ -1,4 +1,4 @@
-import { ResetPassword } from "@/features/user/views";
+import { ResetPassword } from "@/features/user/views/client";
 import { dimensions } from "@/global/constants";
 import { Loader, Paper, Stack } from "@mantine/core";
 

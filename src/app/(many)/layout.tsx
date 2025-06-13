@@ -3,15 +3,12 @@ import { Stack } from "@mantine/core";
 import { AppMany } from "@/global/components/layouts";
 import { IconAppsFilled } from "@tabler/icons-react";
 import classes from "@/global/styles/app.module.css";
-import { auth } from "@/auth";
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
 export default async function Layout({ children }: LayoutProps) {
-  const session = await auth();
-
   return (
     <Suspense
       fallback={
@@ -23,7 +20,7 @@ export default async function Layout({ children }: LayoutProps) {
           />
         </Stack>
       }>
-      <AppMany session={session}>{children}</AppMany>
+      <AppMany>{children}</AppMany>
     </Suspense>
   );
 }

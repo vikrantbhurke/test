@@ -1,5 +1,6 @@
 import { editUserByEmail } from "@/features/user/action";
-import { Role, Status, Payment } from "@/features/user/enums";
+import { Role, Status } from "@/features/user/enums";
+import { Payment } from "@/features/payment/enums";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

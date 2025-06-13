@@ -5,8 +5,7 @@ import { drawerProps } from "./drawer-props";
 import { appShellProps } from "./app-shell-props";
 import { stillButtonProps } from "./still-button-props";
 import { searchInputProps } from "./search-input-props";
-import { listGridFiniteDefaults } from "./list-grid-finite-defaults";
-import { listGridInfiniteDefaults } from "./list-grid-infinite-defaults";
+import { lightBgOneDarkBgTwo } from "./floating-input-props";
 
 export {
   Template,
@@ -16,6 +15,5 @@ export {
   appShellProps,
   stillButtonProps,
   searchInputProps,
-  listGridFiniteDefaults,
-  listGridInfiniteDefaults,
+  lightBgOneDarkBgTwo,
 };
