@@ -8,6 +8,7 @@ import { theme } from "@/global/styles/theme";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { resolveCssVariables } from "@/global/styles/css.variables";
+import { RegisterServiceWorker } from "@/global/components/common/client";
 import { Session } from "next-auth";
 
 type ProvidersProps = {
@@ -26,6 +27,7 @@ export default function Providers({ children, session }: ProvidersProps) {
           <SessionProvider session={session}>
             <Notifications />
             <NProgress />
+            <RegisterServiceWorker />
             {children}
           </SessionProvider>
         </ToastProvider>

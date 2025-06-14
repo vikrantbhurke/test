@@ -10,6 +10,7 @@ import {
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
+import LinkedIn from "next-auth/providers/linkedin";
 import Credentials from "next-auth/providers/credentials";
 import { Gender, Provider } from "./features/user/enums";
 import { Template } from "./global/constants";
@@ -18,6 +19,7 @@ export const config = {
   providers: [
     GitHub,
     Google,
+    LinkedIn,
     Credentials({
       authorize: async (credentials) => {
         if (!credentials) return null;

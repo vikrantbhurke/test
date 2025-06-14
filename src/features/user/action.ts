@@ -180,7 +180,7 @@ export const signInWithCreds = async (signInUserDTO: SignInUserDTO) => {
 };
 
 export const signInWithOAuth = async (
-  provider: "google" | "github" | "apple"
+  provider: "google" | "github" | "apple" | "linkedin"
 ) => {
   try {
     await signIn(provider);

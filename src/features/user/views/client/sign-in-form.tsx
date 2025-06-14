@@ -14,6 +14,7 @@ import { Action } from "@/global/classes";
 import { useSelector } from "react-redux";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+// import { FaLinkedin } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { IconLogin } from "@tabler/icons-react";
 import { Provider } from "@/features/user/enums";
@@ -76,7 +77,7 @@ export default function SignInForm() {
   };
 
   const handleSignInWithOAuth = async (
-    provider: "apple" | "github" | "google"
+    provider: "apple" | "github" | "google" | "linkedin"
   ) => {
     try {
       if (isMutating) return;
@@ -165,6 +166,17 @@ export default function SignInForm() {
         onClick={() => handleSignInWithOAuth("github")}>
         Sign In with Github
       </Button>
+
+      {/* <Button
+        leftSection={<FaLinkedin size={20} />}
+        c="var(--bg-one)"
+        color="var(--tx-one)"
+        disabled={isMutating && provider === Provider.linkedin}
+        loading={isMutating && provider === Provider.linkedin}
+        loaderProps={{ type: "dots", color: "var(--bg-one)" }}
+        onClick={() => handleSignInWithOAuth("linkedin")}>
+        Sign In with LinkedIn
+      </Button> */}
     </Stack>
   );
 }

@@ -14,7 +14,7 @@ export default async function UserItem({ user }: UserItemProps) {
   const { id, firstname, lastname, username } = user;
 
   return (
-    <Stack gap={4}>
+    <Stack gap={4} align="center">
       <ProfilePic user={user} />
 
       <Title order={6}>

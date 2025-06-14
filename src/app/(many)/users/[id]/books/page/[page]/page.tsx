@@ -1,5 +1,5 @@
 import { BooksDetails, BooksItem } from "@/features/book/views/client";
-import { Stack } from "@mantine/core";
+import { Paper, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { getBooks } from "@/features/book/action";
 import { UserItem } from "@/features/user/views/server";
@@ -29,9 +29,16 @@ export default async function Page({ params, searchParams }: PageProps) {
           {(user) => (
             <>
               <CollapsibleHeader
-                Component={<UserItem user={user} radius={0} />}
+                Component={
+                  <Paper radius="md" p="xl">
+                    <UserItem user={user} radius={0} />
+                  </Paper>
+                }
               />
-              <UserItem user={user} />
+
+              <Paper radius="md" p="xl">
+                <UserItem user={user} />
+              </Paper>
             </>
           )}
         </GetUserById>

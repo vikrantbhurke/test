@@ -13,6 +13,7 @@ import SearchButton from "./search-button";
 import BurgerButton from "./burger-button";
 import FloatingInput from "./floating-input";
 import SessionProvider from "./session-provider";
+import RegisterServiceWorker from "./register-service-worker";
 import ToastProvider, { ToastContext } from "./toast-provider";
 
 export {
@@ -33,4 +34,5 @@ export {
   ToastProvider,
   FloatingInput,
   SessionProvider,
+  RegisterServiceWorker,
 };

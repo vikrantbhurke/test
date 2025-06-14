@@ -1,18 +1,19 @@
 "use client";
-import Link from "next/link";
-import { AvatarNew } from "@/features/user/views/client";
-import classes from "@/global/styles/app.module.css";
-import { IconAppsFilled } from "@tabler/icons-react";
-import { stillButtonProps } from "@/global/constants";
-import { homeRoute } from "@/global/constants/routes";
-import { GetSession } from "@/features/user/queries/client";
-import { Button, Group, Text, Title } from "@mantine/core";
 import {
+  SearchIcon,
   ThemeButton,
   SearchInput,
   BurgerButton,
-  SearchIcon,
 } from "../common/client";
+import Link from "next/link";
+import { AvatarNew } from "@/features/user/views/client";
+import classes from "@/global/styles/app.module.css";
+import { IconAppsFilled, IconDownload } from "@tabler/icons-react";
+import { stillButtonProps } from "@/global/constants";
+import { homeRoute } from "@/global/constants/routes";
+import { GetSession } from "@/features/user/queries/client";
+import { ActionIcon, Button, Group, Text, Title } from "@mantine/core";
+import { useInstallApp } from "@/global/hooks";
 
 type HeaderProps = {
   opened: boolean;
@@ -21,6 +22,8 @@ type HeaderProps = {
 };
 
 export default function Header({ opened, toggle, pathname }: HeaderProps) {
+  const { installPrompt, isInstalled, handleInstallClick } = useInstallApp();
+
   return (
     <Group justify="space-between" h="100%" px="md" align="center">
       <Group gap="xs">
@@ -40,6 +43,24 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
 
       <Group>
         <SearchInput placeholder="Search..." />
+
+        {!isInstalled && installPrompt && (
+          <>
+            <Button
+              visibleFrom="sm"
+              onClick={handleInstallClick}
+              leftSection={<IconDownload size={16} />}>
+              Install App
+            </Button>
+
+            <ActionIcon
+              hiddenFrom="sm"
+              onClick={handleInstallClick}
+              title="Install App">
+              <IconDownload size={16} />
+            </ActionIcon>
+          </>
+        )}
 
         <SearchIcon />
 
