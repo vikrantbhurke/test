@@ -8,6 +8,7 @@ import { GetBooksByAuthorId } from "@/features/book/queries";
 import { CollapsibleHeader } from "@/global/components/layouts";
 import { listGridDefaults } from "@/global/constants/client";
 import { ListGridOuter } from "@/global/components/list-grid/client";
+import { GetSession } from "@/features/user/queries/client";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;
@@ -25,23 +26,27 @@ export default async function Page({ params, searchParams }: PageProps) {
   return (
     <Stack h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
       <Stack p="xs">
-        <GetUserById params={params}>
-          {(user) => (
-            <>
-              <CollapsibleHeader
-                Component={
-                  <Paper radius="md" p="xl">
-                    <UserItem user={user} radius={0} />
-                  </Paper>
-                }
-              />
+        <GetSession>
+          {(session) => (
+            <GetUserById params={params}>
+              {(user) => (
+                <>
+                  <CollapsibleHeader
+                    Component={
+                      <Paper radius="md" p="xl">
+                        <UserItem user={user} radius={0} session={session} />
+                      </Paper>
+                    }
+                  />
 
-              <Paper radius="md" p="xl">
-                <UserItem user={user} />
-              </Paper>
-            </>
+                  <Paper radius="md" p="xl">
+                    <UserItem user={user} session={session} />
+                  </Paper>
+                </>
+              )}
+            </GetUserById>
           )}
-        </GetUserById>
+        </GetSession>
       </Stack>
 
       <GetBooksByAuthorId params={params} searchParams={searchParams}>

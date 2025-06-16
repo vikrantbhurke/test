@@ -2,7 +2,7 @@ import { Role } from "@/features/user/enums";
 import { Session } from "next-auth";
 
 type ClearProps = {
-  session: Session | null;
+  session?: Session | null;
   level: Role[];
   one: React.ReactNode;
   two?: React.ReactNode;

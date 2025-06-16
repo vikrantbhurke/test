@@ -15,36 +15,38 @@ export default async function Page({ params }: PageProps) {
     <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
       <Paper radius="md" p="xl">
         <Stack gap="xl">
-          <GetUserById params={params}>
-            {(user) => <UserItem user={user} />}
-          </GetUserById>
-
           <GetSession>
-            {(session) =>
-              session && (
-                <GetPayPalSubscription session={session}>
-                  {(subscription) => {
-                    const payment = session.user.payment;
+            {(session) => (
+              <>
+                <GetUserById params={params}>
+                  {(user) => <UserItem user={user} session={session} />}
+                </GetUserById>
 
-                    return (
-                      payment && (
-                        <>
-                          <PaymentInfo
-                            subscription={subscription}
-                            payment={payment}
-                          />
+                {session && (
+                  <GetPayPalSubscription session={session}>
+                    {(subscription) => {
+                      const payment = session.user.payment;
 
-                          <PayPalButtons
-                            subscription={subscription}
-                            payment={payment}
-                          />
-                        </>
-                      )
-                    );
-                  }}
-                </GetPayPalSubscription>
-              )
-            }
+                      return (
+                        payment && (
+                          <>
+                            <PaymentInfo
+                              subscription={subscription}
+                              payment={payment}
+                            />
+
+                            <PayPalButtons
+                              subscription={subscription}
+                              payment={payment}
+                            />
+                          </>
+                        )
+                      );
+                    }}
+                  </GetPayPalSubscription>
+                )}
+              </>
+            )}
           </GetSession>
         </Stack>
       </Paper>

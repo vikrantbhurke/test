@@ -16,12 +16,11 @@ import {
 } from "@/global/constants/routes";
 import { Clear, Self } from "@/global/components/common/server";
 import { DropBookButton } from "../client";
-import { GetSession } from "@/features/user/queries/server";
 import { Clearance } from "@/features/user/enums";
 import { CheckBookLiker } from "@/features/book-liker/queries/server";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-export default async function BookItem({ book }: any) {
+export default async function BookItem({ book, session }: any) {
   const { id, title, synopsis, authorId, genre } = book;
 
   const aid = authorId.id;
@@ -64,31 +63,26 @@ export default async function BookItem({ book }: any) {
 
       <Group justify="center">
         <Clear
+          session={session}
           level={Clearance.LevelTwo}
           one={
-            <GetSession>
-              {(session) => (
-                <>
-                  {session && (
-                    <CheckBookLiker bookId={id} likerId={session.user.id}>
-                      {(exists: boolean) => (
-                        <LikeButton
-                          bookId={id}
-                          likerId={session.user.id}
-                          likes={book.likes}
-                          exists={exists}
-                        />
-                      )}
-                    </CheckBookLiker>
-                  )}
-                </>
-              )}
-            </GetSession>
+            session && (
+              <CheckBookLiker bookId={id} likerId={session.user.id}>
+                {(exists: boolean) => (
+                  <LikeButton
+                    bookId={id}
+                    likerId={session.user.id}
+                    likes={book.likes}
+                    exists={exists}
+                  />
+                )}
+              </CheckBookLiker>
+            )
           }
           two={<LikePublicButton likes={book.likes} />}
         />
 
-        <Self id={authorId.id}>
+        <Self id={authorId.id} session={session}>
           <Button
             color="blue"
             component={Link}

@@ -4,13 +4,15 @@ import { editUserRoute } from "@/global/constants/routes";
 import { DropBooksButton } from "@/features/book/views/client";
 import { Button, Group, Stack, Text, Title } from "@mantine/core";
 import { Self } from "@/global/components/common/server";
+import { Session } from "next-auth";
 
 type UserItemProps = {
   user: any;
+  session: Session | null;
   radius?: string | number;
 };
 
-export default async function UserItem({ user }: UserItemProps) {
+export default async function UserItem({ user, session }: UserItemProps) {
   const { id, firstname, lastname, username } = user;
 
   return (
@@ -23,7 +25,7 @@ export default async function UserItem({ user }: UserItemProps) {
 
       <Text>{username}</Text>
 
-      <Self id={id}>
+      <Self id={id} session={session}>
         <Group justify="center">
           <Button component={Link} href={editUserRoute(id)} size="xs" fz="xs">
             Edit

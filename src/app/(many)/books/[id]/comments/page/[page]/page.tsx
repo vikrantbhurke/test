@@ -7,6 +7,7 @@ import { GetCommentsByBookId } from "@/features/comment/queries";
 import { AddCommentButton } from "@/features/comment/views/client";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { CommentsItem, CommentsDetails } from "@/features/comment/views/server";
+import { GetSession } from "@/features/user/queries/server";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;
@@ -25,46 +26,53 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <Stack h="100%" w="100%" justify="center" maw={dimensions.mawSm}>
-      <Stack p="xs">
-        <Paper radius="md" p="xl">
-          <GetBookById params={params}>
-            {(book) => <BookItem book={book} />}
-          </GetBookById>
-        </Paper>
-
-        <AddCommentButton bookId={id} />
-      </Stack>
-
-      <GetCommentsByBookId params={params} searchParams={searchParams}>
-        {(commentsPage) => (
+      <GetSession>
+        {(session) => (
           <>
-            {commentsPage.content.length === 0 ? (
-              <></>
-            ) : (
-              <ListGridOuter
-                dataPage={commentsPage}
-                DataDetails={CommentsDetails}
-                paginationProps={{
-                  ...paginationProps,
-                  value: commentsPage.page + 1,
-                  total: commentsPage.totalPages,
-                }}
-                scrollButtonsProps={scrollButtonsProps}
-                scrollWrapperProps={scrollWrapperProps}
-                listGridInnerProps={{
-                  ...listGridInnerProps,
-                  content: commentsPage.content,
-                  DataItem: CommentsItem,
-                  listGridProps: {
-                    ...listGridInnerProps.listGridProps,
-                    layout: "list",
-                  },
-                }}
-              />
-            )}
+            <Stack p="xs">
+              <Paper radius="md" p="xl">
+                <GetBookById params={params}>
+                  {(book) => <BookItem book={book} session={session} />}
+                </GetBookById>
+              </Paper>
+
+              <AddCommentButton bookId={id} />
+            </Stack>
+
+            <GetCommentsByBookId params={params} searchParams={searchParams}>
+              {(commentsPage) => (
+                <>
+                  {commentsPage.content.length === 0 ? (
+                    <></>
+                  ) : (
+                    <ListGridOuter
+                      dataPage={commentsPage}
+                      DataDetails={CommentsDetails}
+                      paginationProps={{
+                        ...paginationProps,
+                        value: commentsPage.page + 1,
+                        total: commentsPage.totalPages,
+                      }}
+                      scrollButtonsProps={scrollButtonsProps}
+                      scrollWrapperProps={scrollWrapperProps}
+                      listGridInnerProps={{
+                        ...listGridInnerProps,
+                        session,
+                        content: commentsPage.content,
+                        DataItem: CommentsItem,
+                        listGridProps: {
+                          ...listGridInnerProps.listGridProps,
+                          layout: "list",
+                        },
+                      }}
+                    />
+                  )}
+                </>
+              )}
+            </GetCommentsByBookId>
           </>
         )}
-      </GetCommentsByBookId>
+      </GetSession>
     </Stack>
   );
 }

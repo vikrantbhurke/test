@@ -21,7 +21,6 @@ import { Clearance } from "@/features/user/enums";
 import { Self, Clear } from "@/global/components/common/server";
 import { CheckBookLiker } from "@/features/book-liker/queries/server";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
-// import { GetSession } from "@/features/user/queries/server";
 
 export default async function BooksItem({ item }: any) {
   const { id, title, synopsis, authorId, genre, session } = item;
