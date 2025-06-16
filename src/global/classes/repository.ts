@@ -184,7 +184,7 @@ export class Repository {
   ) => {
     const {
       page = 0,
-      pageSize = 30,
+      pageSize = 12,
       search = "",
       sort = "createdAt",
       order = Order.Descending,

@@ -4,6 +4,7 @@ import { GetBooks } from "@/features/book/queries";
 import { listGridDefaults } from "@/global/constants/server";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { BooksItem, BooksDetails } from "@/features/book/views/server";
+import { GetSession } from "@/features/user/queries/server";
 
 type PageProps = {
   params: Promise<{ page: string }>;
@@ -20,26 +21,31 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <Stack h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
-      <GetBooks params={params} searchParams={searchParams}>
-        {(booksPage) => (
-          <ListGridOuter
-            dataPage={booksPage}
-            DataDetails={BooksDetails}
-            paginationProps={{
-              ...paginationProps,
-              value: booksPage.page + 1,
-              total: booksPage.totalPages,
-            }}
-            scrollButtonsProps={scrollButtonsProps}
-            scrollWrapperProps={scrollWrapperProps}
-            listGridInnerProps={{
-              ...listGridInnerProps,
-              content: booksPage.content,
-              DataItem: BooksItem,
-            }}
-          />
+      <GetSession>
+        {(session) => (
+          <GetBooks params={params} searchParams={searchParams}>
+            {(booksPage) => (
+              <ListGridOuter
+                dataPage={booksPage}
+                DataDetails={BooksDetails}
+                paginationProps={{
+                  ...paginationProps,
+                  value: booksPage.page + 1,
+                  total: booksPage.totalPages,
+                }}
+                scrollButtonsProps={scrollButtonsProps}
+                scrollWrapperProps={scrollWrapperProps}
+                listGridInnerProps={{
+                  ...listGridInnerProps,
+                  session,
+                  content: booksPage.content,
+                  DataItem: BooksItem,
+                }}
+              />
+            )}
+          </GetBooks>
         )}
-      </GetBooks>
+      </GetSession>
     </Stack>
   );
 }

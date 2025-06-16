@@ -17,14 +17,14 @@ import {
   bookCommentsRoute,
 } from "@/global/constants/routes";
 import { DropBookButton } from "../client";
-import { Self, Clear } from "@/global/components/common/server";
-import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
-import { GetSession } from "@/features/user/queries/server";
 import { Clearance } from "@/features/user/enums";
+import { Self, Clear } from "@/global/components/common/server";
 import { CheckBookLiker } from "@/features/book-liker/queries/server";
+import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
+// import { GetSession } from "@/features/user/queries/server";
 
 export default async function BooksItem({ item }: any) {
-  const { id, title, synopsis, authorId, genre } = item;
+  const { id, title, synopsis, authorId, genre, session } = item;
 
   const aid = authorId.id;
   const name = authorId.firstname + " " + authorId.lastname;
@@ -76,31 +76,26 @@ export default async function BooksItem({ item }: any) {
 
         <Group justify="center">
           <Clear
+            session={session}
             level={Clearance.LevelTwo}
             one={
-              <GetSession>
-                {(session) => (
-                  <>
-                    {session && (
-                      <CheckBookLiker bookId={id} likerId={session.user.id}>
-                        {(exists: boolean) => (
-                          <LikeButton
-                            bookId={id}
-                            likerId={session.user.id}
-                            likes={item.likes}
-                            exists={exists}
-                          />
-                        )}
-                      </CheckBookLiker>
-                    )}
-                  </>
-                )}
-              </GetSession>
+              session && (
+                <CheckBookLiker bookId={id} likerId={session.user.id}>
+                  {(exists: boolean) => (
+                    <LikeButton
+                      bookId={id}
+                      likerId={session.user.id}
+                      likes={item.likes}
+                      exists={exists}
+                    />
+                  )}
+                </CheckBookLiker>
+              )
             }
             two={<LikePublicButton likes={item.likes} />}
           />
 
-          <Self id={authorId.id}>
+          <Self id={authorId.id} session={session}>
             <Button
               color="blue"
               component={Link}

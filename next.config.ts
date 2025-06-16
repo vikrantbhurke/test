@@ -5,7 +5,18 @@ const nextConfig: NextConfig = {
     domains: ["res.cloudinary.com", "lh3.googleusercontent.com"],
   },
   experimental: {
-    optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
+    optimizePackageImports: [
+      "zod",
+      "react",
+      "validator",
+      "@mantine/core",
+      "@mantine/hooks",
+      "@mantine/form",
+      "@mantine/hooks",
+      "@mantine/modals",
+      "@mantine/notifications",
+      "@mantine/nprogress",
+    ],
   },
   webpack: (config) => {
     config.experiments = {

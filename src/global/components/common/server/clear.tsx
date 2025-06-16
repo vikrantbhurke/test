@@ -1,14 +1,19 @@
-import { auth } from "@/auth";
 import { Role } from "@/features/user/enums";
+import { Session } from "next-auth";
 
 type ClearProps = {
+  session: Session | null;
   level: Role[];
   one: React.ReactNode;
   two?: React.ReactNode;
 };
 
-export default async function Clear({ level, one, two = null }: ClearProps) {
-  const session = await auth();
+export default async function Clear({
+  session,
+  level,
+  one,
+  two = null,
+}: ClearProps) {
   let role = Role.Public;
 
   if (session) {

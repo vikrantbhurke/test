@@ -9,7 +9,7 @@ import "@/global/configurations/nodemailer";
 import { inter } from "@/global/styles/fonts.style";
 import { Providers } from "@/global/components/common/client";
 import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
-import { GetSession } from "@/features/user/queries/server";
+// import { GetSession } from "@/features/user/queries/server";
 
 export const metadata: Metadata = {
   title: "Test App",
@@ -28,9 +28,10 @@ export default async function Layout({ children }: RootLayoutProps) {
       </head>
 
       <body className={`${inter.className} antialiased`}>
-        <GetSession>
+        <Providers>{children}</Providers>
+        {/* <GetSession>
           {(session) => <Providers session={session}>{children}</Providers>}
-        </GetSession>
+        </GetSession> */}
       </body>
     </html>
   );
