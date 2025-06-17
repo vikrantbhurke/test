@@ -19,7 +19,12 @@ export default async function Page({ params }: PageProps) {
             {(session) => (
               <>
                 <GetUserById params={params}>
-                  {(user) => <UserItem user={user} session={session} />}
+                  {(user) => (
+                    <UserItem
+                      user={user}
+                      sessionUser={{ id: session?.user.id }}
+                    />
+                  )}
                 </GetUserById>
 
                 {session && (

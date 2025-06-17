@@ -15,7 +15,15 @@ export default function Page({ params }: PageProps) {
         <GetSession>
           {(session) => (
             <GetBookById params={params}>
-              {(book) => <BookItem book={book} session={session} />}
+              {(book) => (
+                <BookItem
+                  book={book}
+                  sessionUser={{
+                    id: session?.user.id,
+                    role: session?.user.role,
+                  }}
+                />
+              )}
             </GetBookById>
           )}
         </GetSession>

@@ -2,7 +2,6 @@ import { Stack } from "@mantine/core";
 import ListGridInner from "./list-grid-inner";
 import { ScrollButtons, ScrollWrapper } from "../client";
 import { PaginationButtons } from "@/global/components/list-grid/client";
-import { Session } from "next-auth";
 
 type PaginationProps = {
   withPages?: boolean;
@@ -40,7 +39,7 @@ type ListGridProps = {
 
 type ListGridInnerProps = {
   content: any[];
-  session?: Session | null;
+  sessionUser?: any | null;
   DataItem: React.FC<{ item: any }> | React.ComponentType<{ item: any }>;
   listGridProps?: ListGridProps;
 };

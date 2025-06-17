@@ -1,13 +1,11 @@
-import { Session } from "next-auth";
-
 type SelfProps = {
-  id: string;
-  session: Session | null;
+  idOne: string;
+  idTwo: string;
   children: React.ReactNode;
 };
 
-export default async function Self({ session, id, children }: SelfProps) {
-  if (!session) return null;
-  if (session.user.id !== id) return null;
-  if (session.user.id === id) return children;
+export default async function Self({ idOne, idTwo, children }: SelfProps) {
+  if (!idOne) return null;
+  if (idOne !== idTwo) return null;
+  if (idOne === idTwo) return children;
 }

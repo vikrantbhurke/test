@@ -24,6 +24,15 @@ export const checkBookLiker = async (bookLikerDTO: BookLikerDTO) => {
   }
 };
 
+export const checkBookLikers = async (bookLikersDTO: BookLikerDTO[]) => {
+  try {
+    const existsArray = await bookLikerService.checkBookLikers(bookLikersDTO);
+    return { success: true, existsArray };
+  } catch (error: any) {
+    throw error;
+  }
+};
+
 export const dropBookLiker = async (bookLikerDTO: BookLikerDTO) => {
   const result = BookLikerSchema.safeParse(bookLikerDTO);
   if (!result.success) return Exception.getZodError(result);

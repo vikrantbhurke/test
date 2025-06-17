@@ -75,6 +75,25 @@ export class Repository {
       .exec());
   };
 
+  checkDocs = async (
+    Model: Model<any>,
+    filters: object[],
+    session?: ClientSession
+  ): Promise<boolean[]> => {
+    const docs = await Model.find({ $or: filters })
+      .session(session ?? null)
+      .select("_id")
+      .lean()
+      .exec();
+
+    const filtersMatch = (doc: any, filter: any): boolean =>
+      Object.keys(filter).every(
+        (key) => String(doc[key]) === String(filter[key])
+      );
+
+    return filters.map((f) => docs.some((d) => filtersMatch(d, f)));
+  };
+
   countDocs = async (
     Model: Model<any>,
     filter: object = {},

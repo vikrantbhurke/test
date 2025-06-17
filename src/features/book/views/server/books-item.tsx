@@ -19,16 +19,15 @@ import {
 import { DropBookButton } from "../client";
 import { Clearance } from "@/features/user/enums";
 import { Self, Clear } from "@/global/components/common/server";
-import { CheckBookLiker } from "@/features/book-liker/queries/server";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-export default async function BooksItem({ item }: any) {
-  const { id, title, synopsis, authorId, genre, session } = item;
+export default async function BooksItem({ item, sessionUser }: any) {
+  const { id, title, synopsis, authorId, genre, like } = item;
 
   const aid = authorId.id;
   const name = authorId.firstname + " " + authorId.lastname;
   const image = authorId.avatar.secureUrl || undefined;
-
+  console.log("BooksItem", item);
   return (
     <Paper p="xl">
       <Stack gap="sm">
@@ -75,26 +74,20 @@ export default async function BooksItem({ item }: any) {
 
         <Group justify="center">
           <Clear
-            session={session}
+            role={sessionUser.role}
             level={Clearance.LevelTwo}
-            one={
-              session && (
-                <CheckBookLiker bookId={id} likerId={session.user.id}>
-                  {(exists: boolean) => (
-                    <LikeButton
-                      bookId={id}
-                      likerId={session.user.id}
-                      likes={item.likes}
-                      exists={exists}
-                    />
-                  )}
-                </CheckBookLiker>
-              )
+            compOne={
+              <LikeButton
+                bookId={id}
+                likerId={sessionUser.id}
+                likes={item.likes}
+                like={like}
+              />
             }
-            two={<LikePublicButton likes={item.likes} />}
+            compTwo={<LikePublicButton likes={item.likes} />}
           />
 
-          <Self id={authorId.id} session={session}>
+          <Self idOne={sessionUser.id} idTwo={authorId.id}>
             <Button
               color="blue"
               component={Link}

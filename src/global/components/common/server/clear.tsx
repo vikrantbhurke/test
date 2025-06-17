@@ -1,28 +1,24 @@
 import { Role } from "@/features/user/enums";
-import { Session } from "next-auth";
 
 type ClearProps = {
-  session?: Session | null;
+  role: Role;
   level: Role[];
-  one: React.ReactNode;
-  two?: React.ReactNode;
+  compOne: React.ReactNode;
+  compTwo?: React.ReactNode;
 };
 
 export default async function Clear({
-  session,
+  role = Role.Public,
   level,
-  one,
-  two = null,
+  compOne,
+  compTwo = null,
 }: ClearProps) {
-  let role = Role.Public;
-
-  if (session) {
-    const r = session.user.role;
-    if (r === "Private") role = Role.Private;
-    if (r === "Paid") role = Role.Paid;
-    if (r === "Admin") role = Role.Admin;
-    if (r === "Root") role = Role.Root;
+  if (role) {
+    if (role === "Private") role = Role.Private;
+    if (role === "Paid") role = Role.Paid;
+    if (role === "Admin") role = Role.Admin;
+    if (role === "Root") role = Role.Root;
   }
 
-  return level.includes(role) ? one : two;
+  return level.includes(role) ? compOne : compTwo;
 }

@@ -7,5 +7,6 @@ type GetSessionProps = {
 
 export default async function GetSession({ children }: GetSessionProps) {
   const session = await auth();
+  console.log("GetSession", session);
   return children(session);
 }

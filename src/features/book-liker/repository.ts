@@ -11,6 +11,10 @@ export class BookLikerRepository extends Repository {
     return await this.checkDoc(BookLiker, bookLikerDTO);
   }
 
+  async checkBookLikers(bookLikersDTO: BookLikerDTO[]) {
+    return await this.checkDocs(BookLiker, bookLikersDTO);
+  }
+
   async dropBookLiker(bookLikerDTO: BookLikerDTO, session?: any) {
     await this.dropOne(BookLiker, bookLikerDTO, session);
   }

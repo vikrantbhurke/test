@@ -93,7 +93,7 @@ export default function BooksItem({ item }: BooksItemProps) {
                             bookId={id}
                             likerId={session.user.id}
                             likes={item.likes}
-                            exists={exists}
+                            like={exists}
                           />
                         )}
                       </CheckBookLiker>

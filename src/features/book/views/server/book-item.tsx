@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Anchor,
   Avatar,
@@ -14,13 +13,14 @@ import {
   userBooksRoute,
   bookCommentsRoute,
 } from "@/global/constants/routes";
-import { Clear, Self } from "@/global/components/common/server";
+import Link from "next/link";
 import { DropBookButton } from "../client";
 import { Clearance } from "@/features/user/enums";
+import { Clear, Self } from "@/global/components/common/server";
 import { CheckBookLiker } from "@/features/book-liker/queries/server";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-export default async function BookItem({ book, session }: any) {
+export default async function BookItem({ book, sessionUser }: any) {
   const { id, title, synopsis, authorId, genre } = book;
 
   const aid = authorId.id;
@@ -63,26 +63,26 @@ export default async function BookItem({ book, session }: any) {
 
       <Group justify="center">
         <Clear
-          session={session}
+          role={sessionUser.role}
           level={Clearance.LevelTwo}
-          one={
-            session && (
-              <CheckBookLiker bookId={id} likerId={session.user.id}>
+          compOne={
+            sessionUser.id && (
+              <CheckBookLiker bookId={id} likerId={sessionUser.id}>
                 {(exists: boolean) => (
                   <LikeButton
                     bookId={id}
-                    likerId={session.user.id}
+                    likerId={sessionUser.id}
                     likes={book.likes}
-                    exists={exists}
+                    like={exists}
                   />
                 )}
               </CheckBookLiker>
             )
           }
-          two={<LikePublicButton likes={book.likes} />}
+          compTwo={<LikePublicButton likes={book.likes} />}
         />
 
-        <Self id={authorId.id} session={session}>
+        <Self idOne={sessionUser.id} idTwo={authorId.id}>
           <Button
             color="blue"
             component={Link}

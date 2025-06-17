@@ -25,6 +25,10 @@ export class BookLikerService extends Service {
     return await this.bookLikerRepository.checkBookLiker(bookLikerDTO);
   }
 
+  async checkBookLikers(bookLikersDTO: BookLikerDTO[]) {
+    return await this.bookLikerRepository.checkBookLikers(bookLikersDTO);
+  }
+
   async dropBookLiker(bookLikerDTO: BookLikerDTO) {
     await this.runAtomic(async (session) => {
       await this.bookService.unlikeBook(bookLikerDTO.bookId, session);

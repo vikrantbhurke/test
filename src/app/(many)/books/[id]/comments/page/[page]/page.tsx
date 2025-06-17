@@ -32,7 +32,15 @@ export default async function Page({ params, searchParams }: PageProps) {
             <Stack p="xs">
               <Paper radius="md" p="xl">
                 <GetBookById params={params}>
-                  {(book) => <BookItem book={book} session={session} />}
+                  {(book) => (
+                    <BookItem
+                      book={book}
+                      sessionUser={{
+                        id: session?.user.id,
+                        role: session?.user.role,
+                      }}
+                    />
+                  )}
                 </GetBookById>
               </Paper>
 
@@ -57,7 +65,7 @@ export default async function Page({ params, searchParams }: PageProps) {
                       scrollWrapperProps={scrollWrapperProps}
                       listGridInnerProps={{
                         ...listGridInnerProps,
-                        session,
+                        sessionUser: { id: session?.user.id },
                         content: commentsPage.content,
                         DataItem: CommentsItem,
                         listGridProps: {

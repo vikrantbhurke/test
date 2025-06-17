@@ -8,7 +8,7 @@ import { GetBooksByAuthorId } from "@/features/book/queries";
 import { CollapsibleHeader } from "@/global/components/layouts";
 import { listGridDefaults } from "@/global/constants/client";
 import { ListGridOuter } from "@/global/components/list-grid/client";
-import { GetSession } from "@/features/user/queries/client";
+import { GetSession } from "@/features/user/queries/server";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;
@@ -34,13 +34,20 @@ export default async function Page({ params, searchParams }: PageProps) {
                   <CollapsibleHeader
                     Component={
                       <Paper radius="md" p="xl">
-                        <UserItem user={user} radius={0} session={session} />
+                        <UserItem
+                          user={user}
+                          radius={0}
+                          sessionUser={{ id: session?.user.id }}
+                        />
                       </Paper>
                     }
                   />
 
                   <Paper radius="md" p="xl">
-                    <UserItem user={user} session={session} />
+                    <UserItem
+                      user={user}
+                      sessionUser={{ id: session?.user.id }}
+                    />
                   </Paper>
                 </>
               )}
