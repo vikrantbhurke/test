@@ -16,20 +16,14 @@ import {
   userBooksRoute,
   bookCommentsRoute,
 } from "@/global/constants/routes";
-import { Self, Clear } from "@/global/components/common/client";
 import Link from "next/link";
 import DropBookButton from "./drop-book-button";
 import { Clearance } from "@/features/user/enums";
-import { GetSession } from "@/features/user/queries/client";
-import { CheckBookLiker } from "@/features/book-liker/queries/client";
+import { Self, Clear } from "@/global/components/common/client";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-type BooksItemProps = {
-  item: any;
-};
-
-export default function BooksItem({ item }: BooksItemProps) {
-  const { id, title, synopsis, authorId, genre } = item;
+export default function BooksItem({ item, sessionUser }: any) {
+  const { id, title, synopsis, authorId, genre, like } = item;
 
   const aid = authorId.id;
   const name = authorId.firstname + " " + authorId.lastname;
@@ -81,31 +75,20 @@ export default function BooksItem({ item }: BooksItemProps) {
 
         <Group justify="center">
           <Clear
+            role={sessionUser.role}
             level={Clearance.LevelTwo}
-            one={
-              <GetSession>
-                {(session) => (
-                  <>
-                    {session && (
-                      <CheckBookLiker bookId={id} likerId={session.user.id}>
-                        {(exists: boolean) => (
-                          <LikeButton
-                            bookId={id}
-                            likerId={session.user.id}
-                            likes={item.likes}
-                            like={exists}
-                          />
-                        )}
-                      </CheckBookLiker>
-                    )}
-                  </>
-                )}
-              </GetSession>
+            compOne={
+              <LikeButton
+                bookId={id}
+                likerId={sessionUser.id}
+                likes={item.likes}
+                like={like}
+              />
             }
-            two={<LikePublicButton likes={item.likes} />}
+            compTwo={<LikePublicButton likes={item.likes} />}
           />
 
-          <Self id={authorId.id}>
+          <Self idOne={sessionUser.id} idTwo={authorId.id}>
             <Button
               color="blue"
               component={Link}

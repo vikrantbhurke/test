@@ -29,7 +29,7 @@ ProvidersProps) {
         <ToastProvider>
           {/* <SessionProvider session={session}> */}
           <Notifications />
-          <NProgress />
+          <NProgress aria-label="Loading Indicator" />
           <RegisterServiceWorker />
           {children}
           {/* </SessionProvider> */}

@@ -69,6 +69,7 @@ export default function PaginationButtons({ paginationProps }: any) {
         {...rest}
         siblings={1}
         total={total}
+        aria-label="Pagination Navigation"
         onChange={handleOnChange}
         getItemProps={getItemProps}
         getControlProps={getControlProps}

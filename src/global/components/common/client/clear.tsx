@@ -1,25 +1,25 @@
 "use client";
 import { Role } from "@/features/user/enums";
-import { RootState } from "@/global/states/store";
-import { useSelector } from "react-redux";
 
 type ClearProps = {
+  role: Role;
   level: Role[];
-  one: React.ReactNode;
-  two?: React.ReactNode;
+  compOne: React.ReactNode;
+  compTwo?: React.ReactNode;
 };
 
-export default function Clear({ level, one, two = null }: ClearProps) {
-  const { session } = useSelector((state: RootState) => state.global);
-  let role = Role.Public;
-
-  if (session) {
-    const r = session.user.role;
-    if (r === "Private") role = Role.Private;
-    if (r === "Paid") role = Role.Paid;
-    if (r === "Admin") role = Role.Admin;
-    if (r === "Root") role = Role.Root;
+export default function Clear({
+  role = Role.Public,
+  level,
+  compOne,
+  compTwo = null,
+}: ClearProps) {
+  if (role) {
+    if (role === "Private") role = Role.Private;
+    if (role === "Paid") role = Role.Paid;
+    if (role === "Admin") role = Role.Admin;
+    if (role === "Root") role = Role.Root;
   }
 
-  return level.includes(role) ? one : two;
+  return level.includes(role) ? compOne : compTwo;
 }

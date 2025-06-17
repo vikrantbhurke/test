@@ -9,6 +9,7 @@ import { CollapsibleHeader } from "@/global/components/layouts";
 import { listGridDefaults } from "@/global/constants/client";
 import { ListGridOuter } from "@/global/components/list-grid/client";
 import { GetSession } from "@/features/user/queries/server";
+import { CheckBookLikers } from "@/features/book-liker/queries/server";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;
@@ -56,37 +57,58 @@ export default async function Page({ params, searchParams }: PageProps) {
         </GetSession>
       </Stack>
 
-      <GetBooksByAuthorId params={params} searchParams={searchParams}>
-        {(booksPage) => (
-          <>
-            {booksPage.content.length === 0 ? (
-              <></>
-            ) : (
+      <GetSession>
+        {(session) => (
+          <GetBooksByAuthorId params={params} searchParams={searchParams}>
+            {(booksPage) => (
               <>
-                <ListGridOuter
-                  getData={getBooks}
-                  initialDataPage={booksPage}
-                  DataDetails={BooksDetails}
-                  getDataArgs={{
-                    sort: booksPage.sort,
-                    order: booksPage.order,
-                    filter: booksPage.filter,
-                    search: booksPage.search,
-                  }}
-                  buttonProps={buttonProps}
-                  scrollButtonsProps={scrollButtonsProps}
-                  scrollWrapperProps={scrollWrapperProps}
-                  listGridInnerProps={{
-                    ...listGridClientProps,
-                    content: booksPage.content,
-                    DataItem: BooksItem,
-                  }}
-                />
+                {booksPage.content.length === 0 ? (
+                  <></>
+                ) : (
+                  <>
+                    <CheckBookLikers
+                      bookLikers={booksPage.content.map((book: any) => ({
+                        bookId: book.id,
+                        likerId: session?.user.id,
+                      }))}>
+                      {(existsArray) => (
+                        <ListGridOuter
+                          getData={getBooks}
+                          initialDataPage={booksPage}
+                          DataDetails={BooksDetails}
+                          getDataArgs={{
+                            sort: booksPage.sort,
+                            order: booksPage.order,
+                            filter: booksPage.filter,
+                            search: booksPage.search,
+                          }}
+                          buttonProps={buttonProps}
+                          scrollButtonsProps={scrollButtonsProps}
+                          scrollWrapperProps={scrollWrapperProps}
+                          listGridInnerProps={{
+                            ...listGridClientProps,
+                            sessionUser: {
+                              id: session?.user.id,
+                              role: session?.user.role,
+                            },
+                            content: booksPage.content.map(
+                              (book: any, index: number) => ({
+                                ...book,
+                                like: existsArray[index],
+                              })
+                            ),
+                            DataItem: BooksItem,
+                          }}
+                        />
+                      )}
+                    </CheckBookLikers>
+                  </>
+                )}
               </>
             )}
-          </>
+          </GetBooksByAuthorId>
         )}
-      </GetBooksByAuthorId>
+      </GetSession>
     </Stack>
   );
 }

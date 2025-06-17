@@ -9,21 +9,26 @@ import { Clear } from "@/global/components/common/client";
 
 type AddCommentButtonProps = {
   bookId: string;
+  sessionUser: any;
 };
 
-export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
+export default function AddCommentButton({
+  bookId,
+  sessionUser,
+}: AddCommentButtonProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
       <Clear
+        role={sessionUser?.role}
         level={Clearance.LevelTwo}
-        one={
+        compOne={
           <Button onClick={open} size="xs" fz="xs" aria-label="Add Comment">
             Add Comment
           </Button>
         }
-        two={
+        compTwo={
           <Button
             component={Link}
             href={signInRoute}

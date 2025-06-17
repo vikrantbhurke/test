@@ -27,7 +27,7 @@ export default async function BooksItem({ item, sessionUser }: any) {
   const aid = authorId.id;
   const name = authorId.firstname + " " + authorId.lastname;
   const image = authorId.avatar.secureUrl || undefined;
-  console.log("BooksItem", item);
+
   return (
     <Paper p="xl">
       <Stack gap="sm">

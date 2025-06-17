@@ -62,8 +62,8 @@ export default function Footer({ pathname }: FooterProps) {
 
       <Clear
         level={Clearance.LevelTwo}
-        one={<SignOutFooterButton />}
-        two={
+        compOne={<SignOutFooterButton />}
+        compTwo={
           <Button
             p={4}
             h="100%"

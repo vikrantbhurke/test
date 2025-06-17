@@ -44,7 +44,12 @@ export default async function Page({ params, searchParams }: PageProps) {
                 </GetBookById>
               </Paper>
 
-              <AddCommentButton bookId={id} />
+              <AddCommentButton
+                bookId={id}
+                sessionUser={{
+                  role: session?.user.role,
+                }}
+              />
             </Stack>
 
             <GetCommentsByBookId params={params} searchParams={searchParams}>

@@ -126,7 +126,7 @@ export default function Navbar({ pathname }: NavbarProps) {
 
       <Clear
         level={Clearance.LevelTwo}
-        one={
+        compOne={
           <GetSession>
             {(session) => (
               <>
@@ -144,7 +144,7 @@ export default function Navbar({ pathname }: NavbarProps) {
             )}
           </GetSession>
         }
-        two={
+        compTwo={
           <>
             <NavbarButton
               href={signUpRoute}
