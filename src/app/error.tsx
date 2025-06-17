@@ -16,7 +16,9 @@ export default function Error({ error, reset }: ErrorProps) {
     <Stack h="100vh" justify="center" align="center">
       <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
         <Title order={6}>{error.message}</Title>
-        <Button onClick={handleClick}>Try again</Button>
+        <Button onClick={handleClick} aria-label="Try Again">
+          Try again
+        </Button>
       </Stack>
     </Stack>
   );

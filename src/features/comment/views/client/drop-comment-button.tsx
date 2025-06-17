@@ -31,7 +31,12 @@ export default function DropCommentButton({ id }: DropCommentButtonProps) {
         message="Are you sure you want to delete this comment?"
       />
 
-      <Button color="red" onClick={open} size="xs" fz="xs">
+      <Button
+        color="red"
+        onClick={open}
+        size="xs"
+        fz="xs"
+        aria-label="Delete Comment">
         Delete
       </Button>
     </>

@@ -14,6 +14,7 @@ export default function SearchButton() {
     <Button
       p={4}
       h="100%"
+      aria-label="Search"
       style={stillButtonProps.style}
       onFocus={stillButtonProps.onFocus}
       onMouseDown={stillButtonProps.onMouseDown}

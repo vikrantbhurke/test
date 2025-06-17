@@ -9,7 +9,11 @@ export default function SearchIcon() {
   const handleToggleSearch = () => dispatch(toggleSearch());
 
   return (
-    <ActionIcon size="md" onClick={handleToggleSearch} hiddenFrom="sm">
+    <ActionIcon
+      size="md"
+      onClick={handleToggleSearch}
+      hiddenFrom="sm"
+      aria-label="Toggle Search">
       <IconSearch size={16} />
     </ActionIcon>
   );

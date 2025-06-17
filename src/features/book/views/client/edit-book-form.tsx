@@ -85,7 +85,7 @@ export default function EditBookForm({ book }: EditBookFormProps) {
             {...form.getInputProps("synopsis")}
           />
 
-          <Button type="submit" disabled={isMutating}>
+          <Button type="submit" disabled={isMutating} aria-label="Update Book">
             {isMutating ? "Updating..." : "Update"}
           </Button>
         </Stack>

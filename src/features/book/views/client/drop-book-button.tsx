@@ -29,7 +29,12 @@ export default function DropBookButton({ id }: DropBookButtonProps) {
         message="Are you sure you want to delete this book?"
       />
 
-      <Button color="red" onClick={open} size="xs" fz="xs">
+      <Button
+        color="red"
+        onClick={open}
+        aria-label="Delete Book"
+        size="xs"
+        fz="xs">
         Delete
       </Button>
     </>

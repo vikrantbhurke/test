@@ -75,6 +75,7 @@ export default function RequestEmailForm() {
           c="var(--bg-one)"
           color="var(--tx-one)"
           type="submit"
+          aria-label="Send Link"
           disabled={isMutating}
           loading={isMutating}
           loaderProps={{ type: "dots", color: "var(--bg-one)" }}>

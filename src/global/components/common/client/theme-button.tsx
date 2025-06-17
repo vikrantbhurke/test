@@ -7,11 +7,19 @@ export default function ThemeButton() {
 
   return (
     <>
-      <ActionIcon onClick={toggleColorScheme} visibleFrom="sm" size="input-sm">
+      <ActionIcon
+        onClick={toggleColorScheme}
+        visibleFrom="sm"
+        size="input-sm"
+        aria-label="Toggle Theme">
         <IconBulb size={16} />
       </ActionIcon>
 
-      <ActionIcon onClick={toggleColorScheme} hiddenFrom="sm" size="md">
+      <ActionIcon
+        onClick={toggleColorScheme}
+        hiddenFrom="sm"
+        size="md"
+        aria-label="Toggle Theme">
         <IconBulb size={16} />
       </ActionIcon>
     </>

@@ -31,6 +31,7 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
           p={0}
           c="var(--tx-one)"
           bg="transparent"
+          aria-label="Test App"
           leftSection={<IconAppsFilled size={32} color="var(--tx-one)" />}
           href={homeRoute}
           component={Link}
@@ -49,14 +50,16 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
             <Button
               visibleFrom="sm"
               onClick={handleInstallClick}
-              leftSection={<IconDownload size={16} />}>
+              leftSection={<IconDownload size={16} />}
+              aria-label="Install App">
               Install App
             </Button>
 
             <ActionIcon
               hiddenFrom="sm"
               onClick={handleInstallClick}
-              title="Install App">
+              title="Install App"
+              aria-label="Install App">
               <IconDownload size={16} />
             </ActionIcon>
           </>
@@ -73,6 +76,7 @@ export default function Header({ opened, toggle, pathname }: HeaderProps) {
             size="input-sm"
             href={homeRoute}
             component={Link}
+            aria-label="Home"
             style={stillButtonProps.style}
             onFocus={stillButtonProps.onFocus}
             onMouseDown={stillButtonProps.onMouseDown}

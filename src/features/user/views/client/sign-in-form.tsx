@@ -96,7 +96,7 @@ export default function SignInForm() {
 
   return (
     <Stack gap="md">
-      <Button href={homeRoute} component={Link}>
+      <Button href={homeRoute} component={Link} aria-label="Home">
         Home
       </Button>
 
@@ -135,6 +135,7 @@ export default function SignInForm() {
             c="var(--bg-one)"
             color="var(--tx-one)"
             type="submit"
+            aria-label="Sign In with Credentials"
             disabled={isMutating && provider === Provider.credentials}
             loading={isMutating && provider === Provider.credentials}
             loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
@@ -149,6 +150,7 @@ export default function SignInForm() {
         leftSection={<FcGoogle size={20} />}
         c="var(--bg-one)"
         color="var(--tx-one)"
+        aria-label="Sign In with Google"
         disabled={isMutating && provider === Provider.google}
         loading={isMutating && provider === Provider.google}
         loaderProps={{ type: "dots", color: "var(--bg-one)" }}
@@ -160,6 +162,7 @@ export default function SignInForm() {
         leftSection={<FaGithub size={20} />}
         c="var(--bg-one)"
         color="var(--tx-one)"
+        aria-label="Sign In with Github"
         disabled={isMutating && provider === Provider.github}
         loading={isMutating && provider === Provider.github}
         loaderProps={{ type: "dots", color: "var(--bg-one)" }}

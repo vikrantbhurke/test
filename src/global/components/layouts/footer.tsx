@@ -27,6 +27,7 @@ export default function Footer({ pathname }: FooterProps) {
         h="100%"
         href={homeRoute}
         component={Link}
+        aria-label="Home"
         style={stillButtonProps.style}
         onFocus={stillButtonProps.onFocus}
         onMouseDown={stillButtonProps.onMouseDown}
@@ -44,6 +45,7 @@ export default function Footer({ pathname }: FooterProps) {
       <Button
         p={4}
         h="100%"
+        aria-label="Books"
         href={booksServerWindowRoute}
         component={Link}
         style={stillButtonProps.style}
@@ -67,6 +69,7 @@ export default function Footer({ pathname }: FooterProps) {
             h="100%"
             href={signInRoute}
             component={Link}
+            aria-label="Sign In"
             style={stillButtonProps.style}
             onFocus={stillButtonProps.onFocus}
             onMouseDown={stillButtonProps.onMouseDown}

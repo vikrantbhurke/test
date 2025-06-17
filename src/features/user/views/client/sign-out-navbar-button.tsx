@@ -34,6 +34,7 @@ export default function SignOutNavbarButton() {
         h={40}
         onClick={open}
         visibleFrom="sm"
+        aria-label="Sign Out"
         style={stillButtonProps.style}
         onFocus={stillButtonProps.onFocus}
         onMouseDown={stillButtonProps.onMouseDown}
@@ -49,6 +50,7 @@ export default function SignOutNavbarButton() {
         h={60}
         onClick={open}
         hiddenFrom="sm"
+        aria-label="Sign Out"
         style={stillButtonProps.style}
         onFocus={stillButtonProps.onFocus}
         onMouseDown={stillButtonProps.onMouseDown}

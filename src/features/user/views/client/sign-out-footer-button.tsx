@@ -33,6 +33,7 @@ export default function SignOutFooterButton() {
         p={4}
         h="100%"
         onClick={open}
+        aria-label="Sign Out"
         style={stillButtonProps.style}
         onFocus={stillButtonProps.onFocus}
         onMouseDown={stillButtonProps.onMouseDown}

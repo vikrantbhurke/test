@@ -142,6 +142,7 @@ export default function PayPalButtons({
           c="black"
           bg="#F2BA36"
           onClick={handleCreate}
+          aria-label="Subscribe With PayPal"
           loaderProps={{ type: "dots", color: "black" }}>
           Subscribe With PayPal
         </Button>
@@ -152,6 +153,7 @@ export default function PayPalButtons({
           onClick={suspendOpen}
           bg="#F2BA36"
           c="black"
+          aria-label="Suspend Subscription"
           loaderProps={{ type: "dots", color: "black" }}>
           Suspend Subscription
         </Button>
@@ -161,6 +163,7 @@ export default function PayPalButtons({
         <Button
           bg="green"
           onClick={handleActivate}
+          aria-label="Activate Subscription"
           loaderProps={{ type: "dots", color: "white" }}>
           Activate Subscription
         </Button>
@@ -170,6 +173,7 @@ export default function PayPalButtons({
         <Button
           bg="red"
           onClick={cancelOpen}
+          aria-label="Cancel Subscription"
           loaderProps={{ type: "dots", color: "white" }}>
           Cancel Subscription
         </Button>

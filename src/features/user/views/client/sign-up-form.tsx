@@ -193,6 +193,7 @@ export default function SignUpForm() {
         <Grid>
           <Grid.Col span={6}>
             <Button
+              aria-label="Back"
               onClick={prevStep}
               w="100%"
               c="var(--bg-one)"
@@ -203,6 +204,7 @@ export default function SignUpForm() {
 
           <Grid.Col span={6}>
             <Button
+              aria-label="Next"
               onClick={nextStep}
               w="100%"
               c="var(--bg-one)"
@@ -214,6 +216,7 @@ export default function SignUpForm() {
 
         {active === 3 && (
           <Button
+            aria-label="Sign Up"
             w="100%"
             c="var(--bg-one)"
             color="var(--tx-one)"

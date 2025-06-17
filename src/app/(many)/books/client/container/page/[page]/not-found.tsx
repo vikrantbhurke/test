@@ -9,7 +9,7 @@ export default function NotFound() {
         <Title order={6}>Books Not Found.</Title>
         <Text>Please try refreshing the page.</Text>
       </Stack>
-      <Button component={Link} href={homeRoute}>
+      <Button component={Link} href={homeRoute} aria-label="Try Again">
         Homepage
       </Button>
     </Stack>

@@ -19,12 +19,17 @@ export default function AddCommentButton({ bookId }: AddCommentButtonProps) {
       <Clear
         level={Clearance.LevelTwo}
         one={
-          <Button onClick={open} size="xs" fz="xs">
+          <Button onClick={open} size="xs" fz="xs" aria-label="Add Comment">
             Add Comment
           </Button>
         }
         two={
-          <Button component={Link} href={signInRoute} size="xs" fz="xs">
+          <Button
+            component={Link}
+            href={signInRoute}
+            size="xs"
+            fz="xs"
+            aria-label="Add Comment">
             Add Comment
           </Button>
         }

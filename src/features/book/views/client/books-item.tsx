@@ -109,6 +109,7 @@ export default function BooksItem({ item }: BooksItemProps) {
             <Button
               color="blue"
               component={Link}
+              aria-label="Edit Book"
               href={editBookRoute(id)}
               size="xs"
               fz="xs">

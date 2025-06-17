@@ -26,6 +26,7 @@ export default async function UserItem({ user, sessionUser }: UserItemProps) {
         <Group justify="center">
           <Button
             component={Link}
+            aria-label="Edit User"
             href={editUserRoute(user.id)}
             size="xs"
             fz="xs">

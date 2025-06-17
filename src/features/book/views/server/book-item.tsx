@@ -86,6 +86,7 @@ export default async function BookItem({ book, sessionUser }: any) {
           <Button
             color="blue"
             component={Link}
+            aria-label="Edit Book"
             href={editBookRoute(id)}
             size="xs"
             fz="xs">

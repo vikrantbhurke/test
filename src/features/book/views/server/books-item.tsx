@@ -93,7 +93,8 @@ export default async function BooksItem({ item, sessionUser }: any) {
               component={Link}
               href={editBookRoute(id)}
               size="xs"
-              fz="xs">
+              fz="xs"
+              aria-label="Edit Book">
               Edit
             </Button>
 

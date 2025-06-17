@@ -160,7 +160,10 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
               }}>
               {({ open, isLoading }) => {
                 return (
-                  <Button onClick={() => open()} disabled={isLoading}>
+                  <Button
+                    onClick={() => open()}
+                    disabled={isLoading}
+                    aria-label="Upload Avatar">
                     Upload
                   </Button>
                 );
@@ -170,6 +173,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
             <Button
               disabled={!stateUser.avatar.secureUrl}
               onClick={handleDelete}
+              aria-label="Delete Avatar"
               color="red">
               Delete
             </Button>
@@ -194,7 +198,10 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
               {...form.getInputProps("lastname")}
             />
 
-            <Button type="submit">
+            <Button
+              type="submit"
+              aria-label="Update Profile"
+              disabled={isMutating}>
               {isMutating ? "Updating..." : "Update"}
             </Button>
           </Stack>

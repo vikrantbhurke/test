@@ -13,6 +13,7 @@ export default function LikePublicButton({ likes }: any) {
         variant="subtle"
         component={Link}
         href={signInRoute}
+        aria-label="Like Book Public"
         style={stillButtonProps.style}
         onFocus={stillButtonProps.onFocus}
         onMouseDown={stillButtonProps.onMouseDown}>

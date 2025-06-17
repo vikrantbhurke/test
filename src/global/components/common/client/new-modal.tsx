@@ -88,6 +88,7 @@ export default function NewModal({
         {loaderProps && (
           <Button
             {...rest}
+            aria-label={buttonLabel}
             loading={isMutating}
             disabled={isMutating}
             onClick={handleClick}
@@ -97,7 +98,7 @@ export default function NewModal({
         )}
 
         {loaderLabel && (
-          <Button {...rest} onClick={handleClick}>
+          <Button {...rest} onClick={handleClick} aria-label={buttonLabel}>
             {isMutating ? buttonLabel : loaderLabel}
           </Button>
         )}

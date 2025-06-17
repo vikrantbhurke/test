@@ -94,6 +94,7 @@ export default function ResetPassword({ token }: ResetPasswordProps) {
           c="var(--bg-one)"
           color="var(--tx-one)"
           type="submit"
+          aria-label="Save Password"
           disabled={isMutating}
           loading={isMutating}
           loaderProps={{ type: "dots", color: "var(--bg-one)" }}>

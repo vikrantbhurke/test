@@ -105,6 +105,7 @@ export default function LikeButton({
           c="crimson"
           variant="subtle"
           onClick={handleUnlike}
+          aria-label="Unlike Book"
           style={stillButtonProps.style}
           onFocus={stillButtonProps.onFocus}
           onMouseDown={stillButtonProps.onMouseDown}>
@@ -115,6 +116,7 @@ export default function LikeButton({
           c="crimson"
           variant="subtle"
           onClick={handleLike}
+          aria-label="Like Book"
           style={stillButtonProps.style}
           onFocus={stillButtonProps.onFocus}
           onMouseDown={stillButtonProps.onMouseDown}>

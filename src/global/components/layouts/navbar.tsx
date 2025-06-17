@@ -46,6 +46,7 @@ export default function Navbar({ pathname }: NavbarProps) {
           href={href}
           visibleFrom="sm"
           component={Link}
+          aria-label={label}
           style={stillButtonProps.style}
           onFocus={stillButtonProps.onFocus}
           onMouseDown={stillButtonProps.onMouseDown}
@@ -62,6 +63,7 @@ export default function Navbar({ pathname }: NavbarProps) {
           href={href}
           hiddenFrom="sm"
           component={Link}
+          aria-label={label}
           style={stillButtonProps.style}
           onFocus={stillButtonProps.onFocus}
           onMouseDown={stillButtonProps.onMouseDown}

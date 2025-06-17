@@ -165,6 +165,7 @@ export default function ListGridOuter({
       <Button
         {...rest}
         onClick={loadMore}
+        aria-label={buttonLabel}
         disabled={isFetching}
         loading={isFetching}
         onFocus={stillButtonProps.onFocus}

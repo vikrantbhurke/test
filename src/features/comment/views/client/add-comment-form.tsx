@@ -73,7 +73,7 @@ export default function AddCommentForm({ bookId, close }: AddCommentFormProps) {
           {...form.getInputProps("body")}
         />
 
-        <Button type="submit" disabled={isMutating}>
+        <Button type="submit" disabled={isMutating} aria-label="Save Comment">
           {isMutating ? "Saving..." : "Save"}
         </Button>
       </Stack>

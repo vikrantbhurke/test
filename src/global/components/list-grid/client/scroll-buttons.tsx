@@ -76,6 +76,7 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
         {(transitionStyles: any) => (
           <ActionIcon
             {...scrollProps}
+            aria-label="Scroll to top"
             style={transitionStyles}
             onClick={handleTopClick}>
             <IconArrowUp size={16} />
@@ -102,6 +103,7 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
         {(transitionStyles: any) => (
           <ActionIcon
             {...scrollProps}
+            aria-label="Scroll to bottom"
             style={transitionStyles}
             onClick={handleBottomClick}>
             <IconArrowDown size={16} />

@@ -109,15 +109,27 @@ export default function SaveBookForm() {
             <FileButton
               resetRef={resetRef}
               onChange={setFile}
-              accept="application/json">
-              {(props) => <Button {...props}>Upload JSON</Button>}
+              accept="application/json"
+              aria-label="Upload JSON File">
+              {(props) => (
+                <Button {...props} aria-label="Upload JSON File">
+                  Upload JSON
+                </Button>
+              )}
             </FileButton>
 
-            <Button onClick={handleSaveBooks} disabled={isMutating}>
+            <Button
+              onClick={handleSaveBooks}
+              disabled={isMutating}
+              aria-label="Save Book">
               {isMutating ? "Saving..." : "Save"}
             </Button>
 
-            <Button disabled={!file} color="yellow" onClick={clearFile}>
+            <Button
+              disabled={!file}
+              color="yellow"
+              onClick={clearFile}
+              aria-label="Reset File">
               Reset
             </Button>
           </Stack>
@@ -149,7 +161,10 @@ export default function SaveBookForm() {
                 {...form.getInputProps("genre")}
               />
 
-              <Button type="submit" disabled={isMutating}>
+              <Button
+                type="submit"
+                disabled={isMutating}
+                aria-label="Save Book">
                 {isMutating ? "Saving..." : "Save"}
               </Button>
             </Stack>

@@ -47,6 +47,7 @@ export default function PayPalSuspendModal({ opened, close, id }: any) {
           c="black"
           bg="#F2BA36"
           onClick={handleSuspend}
+          aria-label="Suspend Subscription"
           loaderProps={{ type: "dots", color: "white" }}>
           Suspend Subscription
         </Button>

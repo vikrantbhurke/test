@@ -55,7 +55,8 @@ export default function SearchInput({ placeholder }: SearchInputProps) {
             <ActionIcon
               onClick={handleClearSearch}
               c="var(--bg-one)"
-              bg="var(--tx-one)">
+              bg="var(--tx-one)"
+              aria-label="Clear Search">
               <IconX size={16} />
             </ActionIcon>
           }
@@ -81,7 +82,8 @@ export default function SearchInput({ placeholder }: SearchInputProps) {
               <ActionIcon
                 onClick={handleClearSearch}
                 c="var(--bg-one)"
-                bg="var(--tx-one)">
+                bg="var(--tx-one)"
+                aria-label="Clear Search">
                 <IconX size={16} />
               </ActionIcon>
             }
