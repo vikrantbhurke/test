@@ -1,18 +1,33 @@
 import { Stack } from "@mantine/core";
+import { notFound } from "next/navigation";
 import { dimensions } from "@/global/constants";
-import { GetBooks } from "@/features/book/queries";
-import { GetSession } from "@/features/user/queries/server";
+import { getAuth } from "@/features/user/action";
+import { getBooks } from "@/features/book/action";
 import { listGridDefaults } from "@/global/constants/server";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { BooksItem, BooksDetails } from "@/features/book/views/server";
-import { CheckBookLikers } from "@/features/book-liker/queries/server";
 
 type PageProps = {
   params: Promise<{ page: string }>;
-  searchParams?: Promise<{ [key: string]: string }>;
+  searchParams: Promise<{ [key: string]: string }>;
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
+  const { page } = await params;
+  const sp = await searchParams;
+  const dbPage = Number(page) - 1;
+  const { id, role } = await getAuth();
+  const auth = { id, role };
+
+  const getBooksDTO = {
+    ...sp,
+    page: dbPage,
+    filter: sp?.genre === "All" ? {} : { genre: sp?.genre },
+  };
+
+  const booksPage = await getBooks(getBooksDTO, auth);
+  if (!booksPage) return notFound();
+
   const {
     paginationProps,
     scrollButtonsProps,
@@ -22,47 +37,23 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <Stack h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
-      <GetSession>
-        {(session) => (
-          <GetBooks params={params} searchParams={searchParams}>
-            {(booksPage) => (
-              <CheckBookLikers
-                bookLikers={booksPage.content.map((book: any) => ({
-                  bookId: book.id,
-                  likerId: session?.user.id,
-                }))}>
-                {(existsArray) => (
-                  <ListGridOuter
-                    dataPage={booksPage}
-                    DataDetails={BooksDetails}
-                    paginationProps={{
-                      ...paginationProps,
-                      value: booksPage.page + 1,
-                      total: booksPage.totalPages,
-                    }}
-                    scrollButtonsProps={scrollButtonsProps}
-                    scrollWrapperProps={scrollWrapperProps}
-                    listGridInnerProps={{
-                      ...listGridInnerProps,
-                      sessionUser: {
-                        id: session?.user.id,
-                        role: session?.user.role,
-                      },
-                      content: booksPage.content.map(
-                        (book: any, index: number) => ({
-                          ...book,
-                          like: existsArray[index],
-                        })
-                      ),
-                      DataItem: BooksItem,
-                    }}
-                  />
-                )}
-              </CheckBookLikers>
-            )}
-          </GetBooks>
-        )}
-      </GetSession>
+      <ListGridOuter
+        dataPage={booksPage}
+        DataDetails={BooksDetails}
+        paginationProps={{
+          ...paginationProps,
+          value: booksPage.page + 1,
+          total: booksPage.totalPages,
+        }}
+        scrollButtonsProps={scrollButtonsProps}
+        scrollWrapperProps={scrollWrapperProps}
+        listGridInnerProps={{
+          ...listGridInnerProps,
+          auth,
+          content: booksPage.content,
+          DataItem: BooksItem,
+        }}
+      />
     </Stack>
   );
 }

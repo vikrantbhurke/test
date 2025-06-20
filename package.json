@@ -28,6 +28,7 @@
     "cloudinary": "^2.6.1",
     "dotenv": "^16.5.0",
     "handlebars": "^4.7.8",
+    "ioredis": "^5.6.1",
     "jose": "^6.0.11",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.510.0",
@@ -54,7 +55,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^20",
+    "@types/node": "^20.19.1",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",

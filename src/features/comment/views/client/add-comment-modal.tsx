@@ -7,12 +7,14 @@ type AddCommentModalProps = {
   bookId: string;
   opened: boolean;
   close: () => void;
+  auth: any;
 };
 
 export default function AddCommentModal({
   bookId,
   close,
   opened,
+  auth,
 }: AddCommentModalProps) {
   return (
     <Modal
@@ -20,7 +22,7 @@ export default function AddCommentModal({
       onClose={close}
       opened={opened}
       overlayProps={modalProps.overlayProps}>
-      <AddCommentForm bookId={bookId} close={close} />
+      <AddCommentForm bookId={bookId} close={close} auth={auth} />
     </Modal>
   );
 }

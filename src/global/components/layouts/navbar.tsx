@@ -9,14 +9,14 @@ import {
 } from "@tabler/icons-react";
 import {
   homeRoute,
-  booksServerWindowRoute,
   signInRoute,
   signUpRoute,
   saveBookRoute,
-  startsWithBooksServerWindow,
-  booksServerContainerRoute,
+  booksServerWindowRoute,
   booksClientWindowRoute,
   booksClientContainerRoute,
+  booksServerContainerRoute,
+  startsWithBooksServerWindow,
   startsWithBooksClientWindow,
   startsWithBooksServerContainer,
   startsWithBooksClientContainer,
@@ -28,15 +28,14 @@ import {
 import classes from "@/global/styles/app.module.css";
 import { stillButtonProps } from "@/global/constants";
 import { Button, Group, Stack, Text } from "@mantine/core";
-import { Clear } from "../common/client";
 import { Clearance } from "@/features/user/enums/clearance";
-import { GetSession } from "@/features/user/queries/client";
 
 type NavbarProps = {
+  auth: any;
   pathname: string;
 };
 
-export default function Navbar({ pathname }: NavbarProps) {
+export default function Navbar({ pathname, auth }: NavbarProps) {
   const NavbarButton = ({ href, className, Icon, label }: any) => {
     return (
       <>
@@ -124,44 +123,35 @@ export default function Navbar({ pathname }: NavbarProps) {
         label="Books Client Container"
       />
 
-      <Clear
-        level={Clearance.LevelTwo}
-        compOne={
-          <GetSession>
-            {(session) => (
-              <>
-                <NavbarButton
-                  href={saveBookRoute}
-                  className={pathname === saveBookRoute && classes.themeThree}
-                  Icon={<IconPencil size={16} />}
-                  label="Create Book"
-                />
+      {Clearance.LevelTwo.includes(auth.role) ? (
+        <>
+          <NavbarButton
+            href={saveBookRoute}
+            className={pathname === saveBookRoute && classes.themeThree}
+            Icon={<IconPencil size={16} />}
+            label="Create Book"
+          />
 
-                <SignOutNavbarButton />
+          <SignOutNavbarButton />
+          <DeleteAccountButton id={auth.id} />
+        </>
+      ) : (
+        <>
+          <NavbarButton
+            href={signUpRoute}
+            className={pathname.startsWith(signUpRoute) && classes.themeThree}
+            Icon={<IconAppWindow size={16} />}
+            label="Sign Up"
+          />
 
-                {session && <DeleteAccountButton id={session.user.id} />}
-              </>
-            )}
-          </GetSession>
-        }
-        compTwo={
-          <>
-            <NavbarButton
-              href={signUpRoute}
-              className={pathname.startsWith(signUpRoute) && classes.themeThree}
-              Icon={<IconAppWindow size={16} />}
-              label="Sign Up"
-            />
-
-            <NavbarButton
-              href={signInRoute}
-              className={pathname.startsWith(signInRoute) && classes.themeThree}
-              Icon={<IconLogin size={16} />}
-              label="Sign In"
-            />
-          </>
-        }
-      />
+          <NavbarButton
+            href={signInRoute}
+            className={pathname.startsWith(signInRoute) && classes.themeThree}
+            Icon={<IconLogin size={16} />}
+            label="Sign In"
+          />
+        </>
+      )}
     </Stack>
   );
 }

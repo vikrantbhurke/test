@@ -39,7 +39,7 @@ type ListGridProps = {
 
 type ListGridInnerProps = {
   content: any[];
-  sessionUser?: any | null;
+  auth?: any | null;
   DataItem: React.FC<{ item: any }> | React.ComponentType<{ item: any }>;
   listGridProps?: ListGridProps;
 };

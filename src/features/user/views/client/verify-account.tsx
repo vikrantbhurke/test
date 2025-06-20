@@ -1,6 +1,5 @@
 "use client";
 import { useSelector } from "react-redux";
-import { Action } from "@/global/classes";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/global/hooks";
@@ -25,23 +24,12 @@ export default function VerifyAccount({ token }: VerifyAccountProps) {
     const handleVerify = async () => {
       if (isVerified) return;
       try {
-        const response = await verifyAccount(token);
-
-        if (Action.isSuccess(response)) {
-          const alert = {
-            message: response.message,
-            status: "success" as const,
-          };
-
-          if (isMobile) showToast(alert);
-          else showNotification(alert);
-          router.push(signInRoute);
-          setIsVerified(true);
-        } else {
-          const alert = { message: response.error, status: "error" as const };
-          if (isMobile) showToast(alert);
-          else showNotification(alert);
-        }
+        const message = await verifyAccount(token);
+        const alert = { message, status: "success" as const };
+        if (isMobile) showToast(alert);
+        else showNotification(alert);
+        router.push(signInRoute);
+        setIsVerified(true);
       } catch (error: any) {
         const alert = { message: error.message, status: "error" as const };
         if (isMobile) showToast(alert);

@@ -54,23 +54,6 @@ export class UserRepository extends Repository {
     });
   }
 
-  async pushProviderById(id: string, provider: string) {
-    await this.editOne(User, {
-      filter: { _id: id },
-      mode: "push",
-      arrayField: "provider",
-      element: provider,
-    });
-  }
-  async pullProviderById(id: string, provider: string) {
-    await this.editOne(User, {
-      filter: { _id: id },
-      mode: "pull",
-      arrayField: "provider",
-      element: provider,
-    });
-  }
-
   async setFavBookIdById(id: string, favBookId: string) {
     await this.editOne(User, {
       filter: { _id: id },

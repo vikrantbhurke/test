@@ -3,17 +3,16 @@ import {
   createPayPalSubscription,
   activatePayPalSubscription,
 } from "@/features/payment/action";
-import { useDisclosure } from "@mantine/hooks";
-import { Button, Stack } from "@mantine/core";
-import { Status } from "@/features/user/enums";
-import { Payment } from "@/features/payment/enums";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/global/hooks";
-import { useNotification } from "@/global/hooks";
-import { useSelector } from "react-redux";
-import { RootState } from "@/global/states/store";
-import { Action } from "@/global/classes";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useToast } from "@/global/hooks";
+import { useRouter } from "next/navigation";
+import { Button, Stack } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Status } from "@/features/user/enums";
+import { useNotification } from "@/global/hooks";
+import { RootState } from "@/global/states/store";
+import { Payment } from "@/features/payment/enums";
 import { homeRoute } from "@/global/constants/routes";
 import PayPalSuspendModal from "./paypal-suspend-modal";
 import PayPalCancelModal from "./paypal-cancel-modal";
@@ -65,8 +64,8 @@ export default function PayPalButtons({
 
   const handleCreate = async () => {
     try {
-      const response = await createPayPalSubscription();
-      if (response.success) window.open(response.data, "_self");
+      const approveUrl = await createPayPalSubscription();
+      if (approveUrl) window.open(approveUrl, "_self");
     } catch (error: any) {
       const alert = {
         message: error.message,
@@ -81,18 +80,16 @@ export default function PayPalButtons({
 
   const handleActivate = async () => {
     try {
-      const response = await activatePayPalSubscription(subscription.id);
+      const message = await activatePayPalSubscription(subscription.id);
 
-      if (Action.isSuccess(response)) {
-        const alert = {
-          message: response.message,
-          status: "success" as const,
-          autoClose: 10000,
-        };
+      const alert = {
+        message,
+        status: "success" as const,
+        autoClose: 10000,
+      };
 
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);

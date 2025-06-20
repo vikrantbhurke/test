@@ -1,32 +1,25 @@
 import { Stack } from "@mantine/core";
 import { BookItem } from "@/features/book/views/server";
 import { NextModal } from "@/global/components/common/client";
-import { GetBookById } from "@/features/book/queries";
-import { GetSession } from "@/features/user/queries/server";
+import { getBookById } from "@/features/book/action";
+import { notFound } from "next/navigation";
+import { getAuth } from "@/features/user/action";
 
 type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default function Page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
+  const { id: uid, role } = await getAuth();
+  const { id } = await params;
+  const auth = { id: uid, role };
+  const book = await getBookById(id, auth);
+  if (!book) return notFound();
+
   return (
     <NextModal>
       <Stack p="xs" pt={0}>
-        <GetSession>
-          {(session) => (
-            <GetBookById params={params}>
-              {(book) => (
-                <BookItem
-                  book={book}
-                  sessionUser={{
-                    id: session?.user.id,
-                    role: session?.user.role,
-                  }}
-                />
-              )}
-            </GetBookById>
-          )}
-        </GetSession>
+        <BookItem book={book} auth={auth} />
       </Stack>
     </NextModal>
   );

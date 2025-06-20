@@ -57,7 +57,7 @@ export const createPayPalSubscription = async () => {
       (link: any) => link.rel === "approve"
     ).href;
 
-    return { success: true, data: approve_url };
+    return approve_url;
   } catch (error: any) {
     throw error;
   }
@@ -65,17 +65,14 @@ export const createPayPalSubscription = async () => {
 
 export const getPayPalSubscription = async (subscriptionId: string | null) => {
   try {
-    if (!subscriptionId) return { success: true, data: null };
+    if (!subscriptionId) return null;
 
     const subscription = await axios.get(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}`,
       await getHeader()
     );
 
-    return {
-      success: true,
-      data: subscription.data,
-    };
+    return subscription.data;
   } catch (error: any) {
     throw error;
   }
@@ -89,11 +86,7 @@ export const suspendPayPalSubscription = async (subscriptionId: string) => {
       await getHeader()
     );
 
-    return {
-      success: true,
-      message:
-        "Subscription suspended successfully. It may take few seconds to suspend your subscription.",
-    };
+    return "Subscription suspended successfully. It may take few seconds to suspend your subscription.";
   } catch (error: any) {
     throw error;
   }
@@ -109,11 +102,7 @@ export const activatePayPalSubscription = async (
       await getHeader()
     );
 
-    return {
-      success: true,
-      message:
-        "Subscription activated successfully. It may take few seconds to activate your subscription.",
-    };
+    return "Subscription activated successfully. It may take few seconds to activate your subscription.";
   } catch (error: any) {
     throw error;
   }
@@ -127,97 +116,8 @@ export const cancelPayPalSubscription = async (subscriptionId: string) => {
       await getHeader()
     );
 
-    return {
-      success: true,
-      message:
-        "Subscription canceled successfully. It may take few seconds to cancel your subscription.",
-    };
+    return "Subscription canceled successfully. It may take few seconds to cancel your subscription.";
   } catch (error: any) {
     throw error;
   }
 };
-
-// import Stripe from "stripe";
-
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-
-// export const createStripeSubscription = async () => {
-//   try {
-//     const session = await stripe.checkout.sessions.create({
-//       mode: "subscription",
-//       payment_method_types: ["card"],
-//       billing_address_collection: "auto",
-//       line_items: [
-//         {
-//           price: process.env.STRIPE_PRICE_ID as string,
-//           quantity: 1,
-//         },
-//       ],
-//       success_url: `${process.env.CLIENT_URL}/subscribe?subscribed=true&subscription=stripe&session_id={CHECKOUT_SESSION_ID}`,
-//       cancel_url: `${process.env.CLIENT_URL}/subscribe?subscribed=false`,
-//     });
-
-//     return { approve_url: session.url };
-//   } catch (error: any) {
-//     return { message: error.message };
-//   }
-// };
-
-// export const getStripeSubscriptionId = async (sessionId: string) => {
-//   try {
-//     const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-//     return { subscriptionId: session.subscription };
-//   } catch (error: any) {
-//     return { message: error.message };
-//   }
-// };
-
-// export const getStripeSubscription = async (subscriptionId: string) => {
-//   try {
-//     if (!subscriptionId) return { message: "User has no active subscription." };
-//     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-
-//     return {
-//       success: true,
-//       data: subscription,
-//       message: "Subscription retrieved successfully.",
-//     };
-//   } catch (error: any) {
-//     return { message: error.message };
-//   }
-// };
-
-// export const suspendStripeSubscription = async (subscriptionId: string) => {
-//   try {
-//     await stripe.subscriptions.update(subscriptionId, {
-//       pause_collection: { behavior: "mark_uncollectible" },
-//     });
-
-//     return { message: "Subscription suspended successfully." };
-//   } catch (error: any) {
-//     return { message: error.message };
-//   }
-// };
-
-// export const activateStripeSubscription = async (subscriptionId: string) => {
-//   try {
-//     await stripe.subscriptions.update(subscriptionId, {
-//       pause_collection: null,
-//     });
-
-//     return { message: "Subscription activated successfully." };
-//   } catch (error: any) {
-//     return { message: error.message };
-//   }
-// };
-
-// export const cancelStripeSubscription = async (subscriptionId: string) => {
-//   try {
-//     await stripe.subscriptions.cancel(subscriptionId);
-
-//     return { message: "Subscription canceled successfully." };
-//   } catch (error: any) {
-//     return { message: error.message };
-//   }
-// };

@@ -15,10 +15,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/global/states/store";
 
 type AppOneProps = {
+  auth: any;
   children: React.ReactNode;
 };
 
-export default function AppOne({ children }: AppOneProps) {
+export default function AppOne({ children, auth }: AppOneProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();
@@ -34,11 +35,16 @@ export default function AppOne({ children }: AppOneProps) {
       navbar={appShellProps.navbar(opened)}
       h="100vh">
       <AppShell.Header className={`${!isMobile && classes.blurBg}`}>
-        <Header opened={opened} toggle={toggle} pathname={pathname} />
+        <Header
+          opened={opened}
+          toggle={toggle}
+          pathname={pathname}
+          auth={auth}
+        />
       </AppShell.Header>
 
       <AppShell.Navbar>
-        <Navbar pathname={pathname} />
+        <Navbar pathname={pathname} auth={{ id: auth.id, role: auth.role }} />
       </AppShell.Navbar>
 
       <AppShell.Aside>
@@ -50,7 +56,7 @@ export default function AppOne({ children }: AppOneProps) {
       </AppShell.Main>
 
       <AppShell.Footer>
-        <Footer pathname={pathname} />
+        <Footer pathname={pathname} auth={{ role: auth.role }} />
       </AppShell.Footer>
     </AppShell>
   );

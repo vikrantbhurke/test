@@ -3,35 +3,29 @@ import {
   EditUserDTO,
   SignUpUserDTO,
   SignInUserDTO,
-  EditUserSchema,
-  SignUpUserSchema,
-  SignInUserSchema,
-  RequestEmailSchema,
   RequestEmailDTO,
   ResetPasswordDTO,
-  ResetPasswordSchema,
 } from "./schema";
 import { userService } from "..";
-import { Provider } from "./enums";
+import { Provider, Role } from "./enums";
 import { auth, signIn, signOut } from "@/auth";
-import { Exception } from "@/global/classes";
 import { TemplateVariables } from "mailtrap";
+import { Payment } from "../payment/enums";
+import "@/global/configurations/mongoose";
+import "@/global/configurations/cloudinary";
+import "@/global/configurations/nodemailer";
+import "@/global/configurations/redis";
 
-export const getSession = async () => {
-  try {
-    const session = await auth();
-
-    if (!session)
-      return { success: false, error: "Unauthorized", issues: undefined };
-
-    return { success: true, data: session };
-  } catch (error: any) {
-    return {
-      success: false,
-      error: error.message,
-      issues: undefined,
-    };
-  }
+export const getAuth = async () => {
+  const session = await auth();
+  const id = session ? session.user.id : null;
+  const subId = session ? session.user.subscriptionId : null;
+  const provider = session ? session.user.provider : [];
+  const name = session ? session.user.name : null;
+  const image = session ? session.user.image : null;
+  const payment = session ? (session.user.payment as Payment) : Payment.Free;
+  const role = session ? (session.user.role as Role) : Role.Public;
+  return { id, role, subId, payment, name, image, provider };
 };
 
 export const sendEmail = async (
@@ -41,7 +35,7 @@ export const sendEmail = async (
 ) => {
   try {
     await userService.sendEmail(recipient, template, variables);
-    return { success: true, message: "Email sent successfully." };
+    return "Email sent successfully.";
   } catch (error: any) {
     return {
       success: false,
@@ -52,22 +46,11 @@ export const sendEmail = async (
 };
 
 export const requestEmail = async (requestEmailDTO: RequestEmailDTO) => {
-  const result = RequestEmailSchema.safeParse(requestEmailDTO);
-  if (!result.success) return Exception.getZodError(result);
-
   try {
-    await userService.requestEmail(result.data);
-
-    return {
-      success: true,
-      message: "Check your email for password reset link.",
-    };
+    await userService.requestEmail(requestEmailDTO);
+    return "Check your email for password reset link.";
   } catch (error: any) {
-    return {
-      success: false,
-      error: error.message,
-      issues: undefined,
-    };
+    throw error;
   }
 };
 
@@ -75,25 +58,17 @@ export const resetPassword = async (
   token: string,
   resetPasswordDTO: ResetPasswordDTO
 ) => {
-  const result = ResetPasswordSchema.safeParse(resetPasswordDTO);
-  if (!result.success) return Exception.getZodError(result);
-
   try {
-    await userService.resetPassword(token, result.data);
-    return { success: true, message: "Password reset successfully." };
+    await userService.resetPassword(token, resetPasswordDTO);
+    return "Password reset successfully.";
   } catch (error: any) {
-    return {
-      success: false,
-      error: error.message,
-      issues: undefined,
-    };
+    throw error;
   }
 };
 
 export const generateToken = async (payload: any) => {
   try {
-    const token = await userService.generateToken(payload);
-    return { success: true, data: token };
+    return await userService.generateToken(payload);
   } catch (error: any) {
     throw error;
   }
@@ -102,23 +77,16 @@ export const generateToken = async (payload: any) => {
 export const verifyAccount = async (token: string) => {
   try {
     await userService.verifyAccount(token);
-    return { success: true, message: "Account verified successfully." };
+    return "Account verified successfully.";
   } catch (error: any) {
-    return {
-      success: false,
-      error: error.message,
-      issues: undefined,
-    };
+    throw error;
   }
 };
 
 export const signUpUsers = async (signUpUsersDTO: SignUpUserDTO[]) => {
-  const result = SignUpUserSchema.array().safeParse(signUpUsersDTO);
-  if (!result.success) return Exception.getZodError(result);
-
   try {
-    await userService.signUpUsers(result.data);
-    return { success: true, message: "Profiles created successfully." };
+    await userService.signUpUsers(signUpUsersDTO);
+    return "Profiles created successfully.";
   } catch (error: any) {
     throw error;
   }
@@ -128,63 +96,37 @@ export const signUpUser = async (
   provider: Provider,
   signUpUserDTO: SignUpUserDTO
 ) => {
-  const result = SignUpUserSchema.safeParse(signUpUserDTO);
-  if (!result.success) return Exception.getZodError(result);
-
   try {
-    await userService.signUpUser(provider, result.data);
-
-    return {
-      success: true,
-      message:
-        "Profile created successfully. Check your email for account verification link.",
-    };
+    await userService.signUpUser(provider, signUpUserDTO);
+    return "Profile created successfully. Check your email for account verification link.";
   } catch (error: any) {
     throw error;
   }
 };
 
 export const signInWithCreds = async (signInUserDTO: SignInUserDTO) => {
-  const result = SignInUserSchema.safeParse(signInUserDTO);
-  if (!result.success) return Exception.getZodError(result);
-
   try {
-    const response = await signIn("credentials", {
-      ...result.data,
+    await signIn("credentials", {
+      ...signInUserDTO,
       redirect: false,
     });
 
-    if (response?.error)
-      return { success: false, error: response.error, issues: undefined };
-
-    return { success: true, message: "Welcome back!" };
+    return "Welcome back!";
   } catch (error: any) {
-    if (error.type === "CredentialsSignin") {
-      return {
-        success: false,
-        error: "Something went wrong. Please try again later.",
-        issues: undefined,
-      };
-    }
-
-    if (error.type === "CallbackRouteError") {
-      return {
-        success: false,
-        error: error.cause.err.message,
-        issues: undefined,
-      };
-    }
-
+    const message = error?.cause?.err?.message || null;
+    if (message) throw new Error(message);
     throw error;
   }
 };
 
 export const signInWithOAuth = async (
-  provider: "google" | "github" | "apple" | "linkedin"
+  provider: "google" | "github" | "apple" | "linkedin" | "twitter"
 ) => {
   try {
     await signIn(provider);
   } catch (error: any) {
+    const message = error?.cause?.err?.message || null;
+    if (message) throw new Error(message);
     throw error;
   }
 };
@@ -192,14 +134,10 @@ export const signInWithOAuth = async (
 export const signOutUser = async () => {
   try {
     await signOut({ redirect: false });
-    return { success: true, message: "Logged out successfully." };
+    return "Logged out successfully.";
   } catch (error: any) {
     console.error("Sign out error:", error);
-    return {
-      success: false,
-      error: "Failed to log out.",
-      issues: undefined,
-    };
+    throw new Error("Failed to log out.");
   }
 };
 
@@ -208,12 +146,7 @@ export const validatePassword = async (
   hashedPassword: string
 ) => {
   try {
-    const isValid = await userService.validatePassword(
-      password,
-      hashedPassword
-    );
-
-    return { success: true, data: isValid };
+    return await userService.validatePassword(password, hashedPassword);
   } catch (error: any) {
     throw error;
   }
@@ -221,8 +154,7 @@ export const validatePassword = async (
 
 export const getUserById = async (id: string) => {
   try {
-    const user = await userService.getUserById(id);
-    return { success: true, data: user };
+    return await userService.getUserById(id);
   } catch (error: any) {
     throw error;
   }
@@ -230,8 +162,7 @@ export const getUserById = async (id: string) => {
 
 export const getUserByUsername = async (username: string) => {
   try {
-    const user = await userService.getUserByUsername(username);
-    return { success: true, data: user };
+    return await userService.getUserByUsername(username);
   } catch (error: any) {
     throw error;
   }
@@ -239,20 +170,16 @@ export const getUserByUsername = async (username: string) => {
 
 export const getUserByEmail = async (email: string) => {
   try {
-    const user = await userService.getUserByEmail(email);
-    return { success: true, data: user };
+    return await userService.getUserByEmail(email);
   } catch (error: any) {
     throw error;
   }
 };
 
 export const editUserById = async (id: string, editUserDTO: EditUserDTO) => {
-  const result = EditUserSchema.safeParse(editUserDTO);
-  if (!result.success) return Exception.getZodError(result);
-
   try {
-    await userService.editUserById(id, result.data);
-    return { success: true, message: "Profile updated successfully." };
+    await userService.editUserById(id, editUserDTO);
+    return "Profile updated successfully.";
   } catch (error: any) {
     throw error;
   }
@@ -262,12 +189,9 @@ export const editUserByEmail = async (
   email: string,
   editUserDTO: EditUserDTO
 ) => {
-  const result = EditUserSchema.safeParse(editUserDTO);
-  if (!result.success) return Exception.getZodError(result);
-
   try {
-    await userService.editUserByEmail(email, result.data);
-    return { success: true, message: "Profile updated successfully." };
+    await userService.editUserByEmail(email, editUserDTO);
+    return "Profile updated successfully.";
   } catch (error: any) {
     throw error;
   }
@@ -276,7 +200,7 @@ export const editUserByEmail = async (
 export const editEmailById = async (id: string, email: string) => {
   try {
     await userService.editEmailById(id, email);
-    return { success: true, message: "Email updated successfully." };
+    return "Email updated successfully.";
   } catch (error: any) {
     throw error;
   }
@@ -289,25 +213,7 @@ export const editAvatarById = async (
 ) => {
   try {
     await userService.editAvatarById(id, secure_url, public_id);
-    return { success: true, message: "Avatar updated successfully." };
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const pushProviderById = async (id: string, provider: string) => {
-  try {
-    await userService.pushProviderById(id, provider);
-    return { success: true, message: "Provider added successfully." };
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const pullProviderById = async (id: string, provider: string) => {
-  try {
-    await userService.pullProviderById(id, provider);
-    return { success: true, message: "Provider removed successfully." };
+    return "Avatar updated successfully.";
   } catch (error: any) {
     throw error;
   }
@@ -316,7 +222,7 @@ export const pullProviderById = async (id: string, provider: string) => {
 export const setFavBookIdById = async (id: string, favBookId: string) => {
   try {
     await userService.setFavBookIdById(id, favBookId);
-    return { success: true, message: "Book set as favorite successfully." };
+    return "Book set as favorite successfully.";
   } catch (error: any) {
     throw error;
   }
@@ -325,7 +231,7 @@ export const setFavBookIdById = async (id: string, favBookId: string) => {
 export const unsetFavBookIdById = async (id: string) => {
   try {
     await userService.unsetFavBookIdById(id);
-    return { success: true, message: "Favorite book unset successfully." };
+    return "Favorite book unset successfully.";
   } catch (error: any) {
     throw error;
   }
@@ -334,7 +240,7 @@ export const unsetFavBookIdById = async (id: string) => {
 export const dropUserById = async (id: string) => {
   try {
     await userService.dropUserById(id);
-    return { success: true, message: "Profile deleted successfully." };
+    return "Profile deleted successfully.";
   } catch (error: any) {
     throw error;
   }

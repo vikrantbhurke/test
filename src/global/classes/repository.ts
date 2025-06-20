@@ -117,7 +117,7 @@ export class Repository {
     conditions: object | undefined = {},
     session?: ClientSession
   ) => {
-    await Model.deleteMany(conditions, this.getSession(session)).exec();
+    return await Model.deleteMany(conditions, this.getSession(session)).exec();
   };
 
   dropOne = async (
@@ -125,7 +125,7 @@ export class Repository {
     conditions: object = {},
     session?: ClientSession
   ) => {
-    await Model.deleteOne(conditions, this.getSession(session)).exec();
+    return await Model.deleteOne(conditions, this.getSession(session)).exec();
   };
 
   editMany = async (
@@ -156,7 +156,7 @@ export class Repository {
       set: { $set: update },
     };
 
-    await Model.updateMany(
+    return await Model.updateMany(
       filter,
       opMap[mode],
       this.getSession(session)
@@ -193,7 +193,7 @@ export class Repository {
 
     const options: any = { new: true };
     if (session) options.session = session;
-    await Model.updateOne(filter, opMap[mode], options).exec();
+    return await Model.updateOne(filter, opMap[mode], options).exec();
   };
 
   getMany = async (

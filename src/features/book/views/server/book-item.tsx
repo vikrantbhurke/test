@@ -16,11 +16,14 @@ import {
 import Link from "next/link";
 import { DropBookButton } from "../client";
 import { Clearance } from "@/features/user/enums";
-import { Clear, Self } from "@/global/components/common/server";
-import { CheckBookLiker } from "@/features/book-liker/queries/server";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-export default async function BookItem({ book, sessionUser }: any) {
+type BookItemProps = {
+  book: any;
+  auth: any;
+};
+
+export default async function BookItem({ book, auth }: BookItemProps) {
   const { id, title, synopsis, authorId, genre } = book;
 
   const aid = authorId.id;
@@ -37,7 +40,9 @@ export default async function BookItem({ book, sessionUser }: any) {
         <Anchor component={Link} href={viewUserRoute(authorId.id)}>
           <Group gap="xs">
             {!aid && <Avatar src="" size={20} />}
+
             {aid && !image && <Avatar name={name} color="initials" size={20} />}
+
             {aid && image && (
               <Avatar
                 src={image}
@@ -62,39 +67,32 @@ export default async function BookItem({ book, sessionUser }: any) {
       </Stack>
 
       <Group justify="center">
-        <Clear
-          role={sessionUser.role}
-          level={Clearance.LevelTwo}
-          compOne={
-            sessionUser.id && (
-              <CheckBookLiker bookId={id} likerId={sessionUser.id}>
-                {(exists: boolean) => (
-                  <LikeButton
-                    bookId={id}
-                    likerId={sessionUser.id}
-                    likes={book.likes}
-                    like={exists}
-                  />
-                )}
-              </CheckBookLiker>
-            )
-          }
-          compTwo={<LikePublicButton likes={book.likes} />}
-        />
+        {Clearance.LevelTwo.includes(auth.role) ? (
+          <LikeButton
+            bookId={id}
+            likerId={auth.id}
+            likes={book.likes}
+            like={book.like}
+          />
+        ) : (
+          <LikePublicButton likes={book.likes} />
+        )}
 
-        <Self idOne={sessionUser.id} idTwo={authorId.id}>
-          <Button
-            color="blue"
-            component={Link}
-            aria-label="Edit Book"
-            href={editBookRoute(id)}
-            size="xs"
-            fz="xs">
-            Edit
-          </Button>
+        {auth.id === authorId.id && (
+          <>
+            <Button
+              color="blue"
+              component={Link}
+              aria-label="Edit Book"
+              href={editBookRoute(id)}
+              size="xs"
+              fz="xs">
+              Edit
+            </Button>
 
-          <DropBookButton id={id} />
-        </Self>
+            <DropBookButton id={id} />
+          </>
+        )}
       </Group>
     </Stack>
   );

@@ -31,7 +31,7 @@ type ListGridProps = {
 
 type ListGridInnerProps = {
   content: any[];
-  sessionUser?: any | null;
+  auth?: any | null;
   DataItem: React.FC<{ item: any }> | React.ComponentType<{ item: any }>;
   listGridProps?: ListGridProps;
 };
@@ -44,7 +44,7 @@ type ListGridOuterProps = {
   buttonProps?: any;
   initialDataPage: any;
   getDataArgs?: object;
-  getData: (args: any) => Promise<any>;
+  getData: (args: any, auth?: any) => Promise<any>;
   DataDetails?:
     | React.FC<{ dataPage?: any }>
     | React.ComponentType<{ dataPage?: any }>;
@@ -70,18 +70,20 @@ export default function ListGridOuter({
   const scrollRef = useRef<any>(null);
   const [page, setPage] = useState(0);
   const firstRender = useIsFirstRender();
-  const jsonDataArgs = JSON.stringify(getDataArgs);
   const [isFetching, setIsFetching] = useState(false);
   const [dataPage, setDataPage] = useState(initialDataPage);
   const [isLastPage, setIsLastPage] = useState(initialDataPage.lastPage);
   const [content, setContent] = useState<any[]>(initialDataPage.content);
+
+  const auth = listGridInnerProps?.auth;
+  const jsonDataArgs = JSON.stringify(getDataArgs);
 
   const loadMore = useCallback(async () => {
     if (isFetching) return;
     setIsFetching(true);
 
     try {
-      const response = await getData({ ...getDataArgs, page: page + 1 });
+      const response = await getData({ ...getDataArgs, page: page + 1 }, auth);
       setIsLastPage(response.data.lastPage);
       setDataPage(response.data);
       setPage((prevPage) => prevPage + 1);
@@ -91,14 +93,14 @@ export default function ListGridOuter({
     } finally {
       setIsFetching(false);
     }
-  }, [isFetching, getData, getDataArgs, page]);
+  }, [auth, isFetching, getData, getDataArgs, page]);
 
   const loadNew = useDebouncedCallback(async () => {
     if (isFetching) return;
     setIsFetching(true);
 
     try {
-      const response = await getData({ ...getDataArgs, page: 0 });
+      const response = await getData({ ...getDataArgs, page: 0 }, auth);
       setIsLastPage(response.data.lastPage);
       setPage(0);
       setDataPage(response.data);

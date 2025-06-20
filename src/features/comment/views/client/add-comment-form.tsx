@@ -10,27 +10,33 @@ import { useToast } from "@/global/hooks";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
-import { Action } from "@/global/classes";
 import { useRouter } from "next/navigation";
 
 type AddCommentFormProps = {
   bookId: string;
   close: () => void;
+  auth: {
+    id: string;
+  };
 };
 
-export default function AddCommentForm({ bookId, close }: AddCommentFormProps) {
+export default function AddCommentForm({
+  bookId,
+  close,
+  auth,
+}: AddCommentFormProps) {
   const router = useRouter();
   const [isMutating, setIsMutating] = useState(false);
   const { showToast } = useToast();
   const { showNotification } = useNotification();
-  const { isMobile, session } = useSelector((state: RootState) => state.global);
+  const { isMobile } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
     mode: "controlled",
     initialValues: {
       body: "",
       bookId: bookId,
-      commenterId: session?.user?.id,
+      commenterId: auth.id,
     },
 
     validate: zodResolver(SaveCommentSchema),
@@ -40,20 +46,12 @@ export default function AddCommentForm({ bookId, close }: AddCommentFormProps) {
     try {
       if (isMutating) return;
       setIsMutating(true);
-      const response = await saveComment(values);
-
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-
-        router.refresh();
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const message = await saveComment(values);
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
       close();
+      router.refresh();
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);

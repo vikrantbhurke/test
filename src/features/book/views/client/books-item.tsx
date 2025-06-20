@@ -19,10 +19,9 @@ import {
 import Link from "next/link";
 import DropBookButton from "./drop-book-button";
 import { Clearance } from "@/features/user/enums";
-import { Self, Clear } from "@/global/components/common/client";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-export default function BooksItem({ item, sessionUser }: any) {
+export default function BooksItem({ item, auth }: any) {
   const { id, title, synopsis, authorId, genre, like } = item;
 
   const aid = authorId.id;
@@ -74,33 +73,32 @@ export default function BooksItem({ item, sessionUser }: any) {
         </Stack>
 
         <Group justify="center">
-          <Clear
-            role={sessionUser.role}
-            level={Clearance.LevelTwo}
-            compOne={
-              <LikeButton
-                bookId={id}
-                likerId={sessionUser.id}
-                likes={item.likes}
-                like={like}
-              />
-            }
-            compTwo={<LikePublicButton likes={item.likes} />}
-          />
+          {Clearance.LevelTwo.includes(auth.role) ? (
+            <LikeButton
+              bookId={id}
+              likerId={auth.id}
+              likes={item.likes}
+              like={like}
+            />
+          ) : (
+            <LikePublicButton likes={item.likes} />
+          )}
 
-          <Self idOne={sessionUser.id} idTwo={authorId.id}>
-            <Button
-              color="blue"
-              component={Link}
-              aria-label="Edit Book"
-              href={editBookRoute(id)}
-              size="xs"
-              fz="xs">
-              Edit
-            </Button>
+          {auth.id === authorId.id && (
+            <>
+              <Button
+                color="blue"
+                component={Link}
+                aria-label="Edit Book"
+                href={editBookRoute(id)}
+                size="xs"
+                fz="xs">
+                Edit
+              </Button>
 
-            <DropBookButton id={id} />
-          </Self>
+              <DropBookButton id={id} />
+            </>
+          )}
         </Group>
       </Stack>
     </Paper>

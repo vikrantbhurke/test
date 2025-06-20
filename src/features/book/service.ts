@@ -4,6 +4,7 @@ import {
   BookRepository,
   BookLikerService,
 } from "..";
+import { Clearance } from "../user/enums";
 import { Genre } from "./enums";
 import { SaveBookDTO, EditBookDTO } from "./schema";
 import { Service, GetManyDTO } from "@/global/classes";
@@ -53,8 +54,20 @@ export class BookService extends Service {
     return await this.bookRepository.countBooksByAuthorId(authorId);
   }
 
-  async getBookById(id: string) {
-    return await this.bookRepository.getBookById(id);
+  async getBookById(id: string, auth?: any) {
+    let book = await this.bookRepository.getBookById(id);
+
+    if (auth && Clearance.LevelTwo.includes(auth.role)) {
+      const exists = await this.bookLikerService.checkBookLiker({
+        bookId: book.id,
+        likerId: auth.id,
+      });
+
+      book = { ...book, like: exists };
+    }
+
+    if (!book) throw new Error(`Book not found.`);
+    return book;
   }
 
   async getBookByTitle(title: string, session?: any) {
@@ -69,8 +82,29 @@ export class BookService extends Service {
     return await this.bookRepository.getAllBookIdsByAuthorId(authorId, session);
   }
 
-  async getBooks(getManyDTO: GetManyDTO) {
-    return await this.bookRepository.getBooks(getManyDTO);
+  async getBooks(getManyDTO: GetManyDTO, auth?: any) {
+    const booksPage = await this.bookRepository.getBooks(getManyDTO);
+
+    if (!booksPage.content) return booksPage;
+
+    if (auth && Clearance.LevelTwo.includes(auth.role)) {
+      const existsArray = await this.bookLikerService.checkBookLikers(
+        booksPage.content.map((book: any) => ({
+          bookId: book.id,
+          likerId: auth.id,
+        }))
+      );
+
+      return {
+        ...booksPage,
+        content: booksPage.content.map((book: any, index: number) => ({
+          ...book,
+          like: existsArray[index],
+        })),
+      };
+    }
+
+    return booksPage;
   }
 
   async getRandomBooks(getManyDTO: GetManyDTO) {

@@ -1,25 +1,25 @@
 "use client";
-import Link from "next/link";
-import { Clear } from "../common/client";
-import { SearchButton } from "../common/client";
-import { Button, Group, Stack, Text } from "@mantine/core";
-import classes from "@/global/styles/app.module.css";
-import { IconBook, IconHome, IconLogin } from "@tabler/icons-react";
 import {
   homeRoute,
-  booksServerWindowRoute,
   signInRoute,
+  booksServerWindowRoute,
   startsWithBooksServerWindow,
 } from "@/global/constants/routes";
+import Link from "next/link";
+import { SearchButton } from "../common/client";
+import classes from "@/global/styles/app.module.css";
 import { stillButtonProps } from "@/global/constants";
-import { SignOutFooterButton } from "@/features/user/views/client";
+import { Button, Group, Stack, Text } from "@mantine/core";
 import { Clearance } from "@/features/user/enums/clearance";
+import { IconBook, IconHome, IconLogin } from "@tabler/icons-react";
+import { SignOutFooterButton } from "@/features/user/views/client";
 
 type FooterProps = {
+  auth?: any;
   pathname: string;
 };
 
-export default function Footer({ pathname }: FooterProps) {
+export default function Footer({ pathname, auth }: FooterProps) {
   return (
     <Group grow h="100%" gap={4} p={4}>
       <Button
@@ -60,29 +60,27 @@ export default function Footer({ pathname }: FooterProps) {
         </Stack>
       </Button>
 
-      <Clear
-        level={Clearance.LevelTwo}
-        compOne={<SignOutFooterButton />}
-        compTwo={
-          <Button
-            p={4}
-            h="100%"
-            href={signInRoute}
-            component={Link}
-            aria-label="Sign In"
-            style={stillButtonProps.style}
-            onFocus={stillButtonProps.onFocus}
-            onMouseDown={stillButtonProps.onMouseDown}
-            className={`${classes.themeOneWithHover} ${
-              pathname === signInRoute && classes.themeThree
-            }`}>
-            <Stack align="center" justify="center" gap={0}>
-              <IconLogin size={16} />
-              <Text size="sm">Sign In</Text>
-            </Stack>
-          </Button>
-        }
-      />
+      {Clearance.LevelTwo.includes(auth.role) ? (
+        <SignOutFooterButton />
+      ) : (
+        <Button
+          p={4}
+          h="100%"
+          href={signInRoute}
+          component={Link}
+          aria-label="Sign In"
+          style={stillButtonProps.style}
+          onFocus={stillButtonProps.onFocus}
+          onMouseDown={stillButtonProps.onMouseDown}
+          className={`${classes.themeOneWithHover} ${
+            pathname === signInRoute && classes.themeThree
+          }`}>
+          <Stack align="center" justify="center" gap={0}>
+            <IconLogin size={16} />
+            <Text size="sm">Sign In</Text>
+          </Stack>
+        </Button>
+      )}
     </Group>
   );
 }

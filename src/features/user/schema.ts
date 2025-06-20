@@ -87,7 +87,7 @@ export const UserSchema = z.object({
     message: "Gender is required.",
   }),
   role: z.nativeEnum(Role).default(Role.Public),
-  provider: z.array(z.nativeEnum(Provider).default(Provider.credentials)),
+  provider: z.nativeEnum(Provider).default(Provider.credentials),
   payment: z.nativeEnum(Payment).default(Payment.Free),
   status: z.nativeEnum(Status).default(Status.Inactive),
   isVerified: z.boolean().default(false),

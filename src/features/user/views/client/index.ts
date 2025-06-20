@@ -2,7 +2,6 @@ import AvatarNew from "./avatar-new";
 import ProfilePic from "./profile-pic";
 import SignUpForm from "./sign-up-form";
 import SignInForm from "./sign-in-form";
-import AutoSignOut from "./auto-sign-out";
 import VerifyAccount from "./verify-account";
 import ResetPassword from "./reset-password";
 import EditProfileForm from "./edit-profile-form";
@@ -16,7 +15,6 @@ export {
   ProfilePic,
   SignUpForm,
   SignInForm,
-  AutoSignOut,
   VerifyAccount,
   ResetPassword,
   EditProfileForm,

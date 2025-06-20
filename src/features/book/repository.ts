@@ -2,6 +2,7 @@ import { Book } from "./model";
 import { Genre } from "./enums";
 import { EditBookDTO, SaveBookDTO } from "./schema";
 import { Repository, GetManyDTO } from "@/global/classes";
+import { redis } from "@/global/configurations/redis";
 
 const select = "title synopsis authorId likes votes voterIds tags genre";
 const populate = ["authorId"];
@@ -30,12 +31,19 @@ export class BookRepository extends Repository {
   }
 
   async getBookById(id: string) {
-    return await this.getOne(Book, {
+    const key = `book:${id}`;
+    const cachedBook = await redis.get(key);
+    if (cachedBook) return JSON.parse(cachedBook);
+
+    const dbBook = await this.getOne(Book, {
       conditions: { _id: id },
       select,
       populate,
       populateSelect,
     });
+
+    if (dbBook) await redis.set(key, JSON.stringify(dbBook), "EX", 86400);
+    return dbBook;
   }
 
   async getBookByTitle(title: string, session?: any) {
@@ -93,31 +101,43 @@ export class BookRepository extends Repository {
   }
 
   async editBookById(id: string, editBookDTO: EditBookDTO) {
-    await this.editOne(Book, {
+    const { modifiedCount } = await this.editOne(Book, {
       filter: { _id: id },
       mode: "set",
       update: editBookDTO,
     });
+
+    if (modifiedCount) await redis.del(`book:${id}`);
   }
 
   async editBookByTitle(title: string, editBookDTO: EditBookDTO) {
-    await this.editOne(Book, {
+    const { modifiedCount } = await this.editOne(Book, {
       filter: { title },
       mode: "set",
       update: editBookDTO,
     });
+
+    if (modifiedCount) {
+      const book = await this.getBookByTitle(title);
+      if (book) await redis.del(`book:${book.id}`);
+    }
   }
 
   async editBooksByGenre(genre: Genre, editBookDTO: EditBookDTO) {
-    await this.editMany(Book, {
+    const { modifiedCount } = await this.editMany(Book, {
       filter: { genre },
       mode: "set",
       update: editBookDTO,
     });
+
+    if (modifiedCount) {
+      const stream = redis.scanStream({ match: "book:*", count: 100 });
+      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
+    }
   }
 
   async likeBook(id: string, session?: any) {
-    await this.editOne(
+    const { modifiedCount } = await this.editOne(
       Book,
       {
         filter: { _id: id },
@@ -126,10 +146,12 @@ export class BookRepository extends Repository {
       },
       session
     );
+
+    if (modifiedCount) await redis.del(`book:${id}`);
   }
 
   async unlikeBook(id: string, session?: any) {
-    await this.editOne(
+    const { modifiedCount } = await this.editOne(
       Book,
       {
         filter: { _id: id },
@@ -138,48 +160,58 @@ export class BookRepository extends Repository {
       },
       session
     );
+
+    if (modifiedCount) await redis.del(`book:${id}`);
   }
 
   async addTag(id: string, tag: string) {
-    await this.editOne(Book, {
+    const { modifiedCount } = await this.editOne(Book, {
       filter: { _id: id },
       mode: "push",
       arrayField: "tags",
       element: tag,
     });
+
+    if (modifiedCount) await redis.del(`book:${id}`);
   }
 
   async removeTag(id: string, tag: string) {
-    await this.editOne(Book, {
+    const { modifiedCount } = await this.editOne(Book, {
       filter: { _id: id },
       mode: "pull",
       arrayField: "tags",
       element: tag,
     });
+
+    if (modifiedCount) await redis.del(`book:${id}`);
   }
 
   async upvoteBook(id: string, voterId: string) {
-    await this.editOne(Book, {
+    const { modifiedCount } = await this.editOne(Book, {
       filter: { _id: id },
       mode: "inc-push",
       numberField: "votes",
       arrayField: "voterIds",
       element: voterId,
     });
+
+    if (modifiedCount) await redis.del(`book:${id}`);
   }
 
   async downvoteBook(id: string, voterId: string) {
-    await this.editOne(Book, {
+    const { modifiedCount } = await this.editOne(Book, {
       filter: { _id: id },
       mode: "dec-pull",
       numberField: "votes",
       arrayField: "voterIds",
       element: voterId,
     });
+
+    if (modifiedCount) await redis.del(`book:${id}`);
   }
 
   async downvoteBooksByVoterId(voterId: string, session?: any) {
-    await this.editMany(
+    const { modifiedCount } = await this.editMany(
       Book,
       {
         filter: { voterIds: voterId },
@@ -190,21 +222,42 @@ export class BookRepository extends Repository {
       },
       session
     );
+
+    if (modifiedCount) {
+      const stream = redis.scanStream({ match: "book:*", count: 100 });
+      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
+    }
   }
 
   async dropBookById(id: string, session?: any) {
-    await this.dropOne(Book, { _id: id }, session);
+    const { deletedCount } = await this.dropOne(Book, { _id: id }, session);
+    if (deletedCount) await redis.del(`book:${id}`);
   }
 
   async dropBookByTitle(title: string, session?: any) {
-    await this.dropOne(Book, { title }, session);
+    const { deletedCount } = await this.dropOne(Book, { title }, session);
+
+    if (deletedCount) {
+      const book = await this.getBookByTitle(title, session);
+      if (book) await redis.del(`book:${book.id}`);
+    }
   }
 
   async dropBooksByAuthorId(authorId: string, session?: any) {
-    await this.dropMany(Book, { authorId }, session);
+    const { deletedCount } = await this.dropMany(Book, { authorId }, session);
+
+    if (deletedCount) {
+      const stream = redis.scanStream({ match: "book:*", count: 100 });
+      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
+    }
   }
 
   async dropBooks(session?: any) {
-    await this.dropMany(Book, session);
+    const { deletedCount } = await this.dropMany(Book, session);
+
+    if (deletedCount) {
+      const stream = redis.scanStream({ match: "book:*", count: 100 });
+      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
+    }
   }
 }

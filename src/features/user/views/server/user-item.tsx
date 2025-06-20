@@ -3,15 +3,14 @@ import { ProfilePic } from "../client";
 import { editUserRoute } from "@/global/constants/routes";
 import { DropBooksButton } from "@/features/book/views/client";
 import { Button, Group, Stack, Text, Title } from "@mantine/core";
-import { Self } from "@/global/components/common/server";
 
 type UserItemProps = {
   user: any;
-  sessionUser: any | null;
+  auth: any | null;
   radius?: string | number;
 };
 
-export default async function UserItem({ user, sessionUser }: UserItemProps) {
+export default async function UserItem({ user, auth }: UserItemProps) {
   return (
     <Stack gap={4} align="center">
       <ProfilePic user={user} />
@@ -22,7 +21,7 @@ export default async function UserItem({ user, sessionUser }: UserItemProps) {
 
       <Text>{user.username}</Text>
 
-      <Self idOne={sessionUser.id} idTwo={user.id}>
+      {auth.id === user.id && (
         <Group justify="center">
           <Button
             component={Link}
@@ -35,7 +34,7 @@ export default async function UserItem({ user, sessionUser }: UserItemProps) {
 
           <DropBooksButton authorId={user.id} />
         </Group>
-      </Self>
+      )}
     </Stack>
   );
 }

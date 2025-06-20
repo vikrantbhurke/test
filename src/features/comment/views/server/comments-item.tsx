@@ -1,8 +1,7 @@
 import { DropCommentButton } from "../client";
 import { Paper, Stack, Text, Title } from "@mantine/core";
-import { Self } from "@/global/components/common/server";
 
-export default async function CommentsItem({ item, sessionUser }: any) {
+export default async function CommentsItem({ item, auth }: any) {
   const { id, body, commenterId } = item;
 
   return (
@@ -11,11 +10,11 @@ export default async function CommentsItem({ item, sessionUser }: any) {
         <Title order={6}>{body}</Title>
         <Text>Comment By: {commenterId.username}</Text>
 
-        <Self idOne={sessionUser.id} idTwo={commenterId.id}>
+        {auth.id === commenterId.id && (
           <Stack gap="sm" align="start">
             <DropCommentButton id={id} />
           </Stack>
-        </Self>
+        )}
       </Stack>
     </Paper>
   );

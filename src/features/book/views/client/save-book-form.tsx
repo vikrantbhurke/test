@@ -13,23 +13,19 @@ import { useRef, useState } from "react";
 import { SaveBookSchema } from "@/features/book/schema";
 import { useRouter } from "next/navigation";
 import { saveBook, saveBooks } from "@/features/book/action";
-import { Action } from "@/global/classes/action";
 import { useNotification } from "@/global/hooks";
 import { booksServerWindowRoute } from "@/global/constants/routes";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { FormSelect, FloatingInput } from "@/global/components/common/client";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
-import { RootState } from "@/global/states/store";
-import { useSelector } from "react-redux";
 
-export default function SaveBookForm() {
+export default function SaveBookForm({ auth }: any) {
   const router = useRouter();
   const { showNotification } = useNotification();
   const [isMutating, setIsMutating] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const resetRef = useRef<() => void>(null);
   const { colorScheme } = useMantineColorScheme();
-  const { session } = useSelector((state: RootState) => state.global);
 
   const clearFile = () => {
     setFile(null);
@@ -42,7 +38,7 @@ export default function SaveBookForm() {
       title: "",
       genre: "",
       synopsis: "",
-      authorId: session?.user?.id,
+      authorId: auth.id,
     },
 
     validate: zodResolver(SaveBookSchema),
@@ -52,14 +48,9 @@ export default function SaveBookForm() {
     try {
       if (isMutating || !file) return;
       setIsMutating(true);
-      const response = await saveBooks(file);
-
-      if (Action.isSuccess(response)) {
-        showNotification({ message: response.message, status: "success" });
-        router.push(booksServerWindowRoute);
-      } else {
-        showNotification({ message: response.error, status: "error" });
-      }
+      const message = await saveBooks(file);
+      showNotification({ message, status: "success" });
+      router.push(booksServerWindowRoute);
     } catch (error: any) {
       showNotification({ message: error.message, status: "error" });
     } finally {
@@ -71,17 +62,14 @@ export default function SaveBookForm() {
     try {
       if (isMutating) return;
       setIsMutating(true);
-      const response = await saveBook({
+
+      const message = await saveBook({
         ...values,
-        authorId: session?.user?.id,
+        authorId: auth.id,
       });
 
-      if (Action.isSuccess(response)) {
-        showNotification({ message: response.message, status: "success" });
-        router.push(booksServerWindowRoute);
-      } else {
-        showNotification({ message: response.error, status: "error" });
-      }
+      showNotification({ message, status: "success" });
+      router.push(booksServerWindowRoute);
     } catch (error: any) {
       showNotification({ message: error.message, status: "error" });
     } finally {

@@ -5,42 +5,41 @@ import { useDisclosure } from "@mantine/hooks";
 import AddCommentModal from "./add-comment-modal";
 import { Clearance } from "@/features/user/enums";
 import { signInRoute } from "@/global/constants/routes";
-import { Clear } from "@/global/components/common/client";
 
 type AddCommentButtonProps = {
   bookId: string;
-  sessionUser: any;
+  auth: any;
 };
 
 export default function AddCommentButton({
   bookId,
-  sessionUser,
+  auth,
 }: AddCommentButtonProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <Clear
-        role={sessionUser?.role}
-        level={Clearance.LevelTwo}
-        compOne={
-          <Button onClick={open} size="xs" fz="xs" aria-label="Add Comment">
-            Add Comment
-          </Button>
-        }
-        compTwo={
-          <Button
-            component={Link}
-            href={signInRoute}
-            size="xs"
-            fz="xs"
-            aria-label="Add Comment">
-            Add Comment
-          </Button>
-        }
-      />
+      {Clearance.LevelTwo.includes(auth.role) ? (
+        <Button onClick={open} size="xs" fz="xs" aria-label="Add Comment">
+          Add Comment
+        </Button>
+      ) : (
+        <Button
+          component={Link}
+          href={signInRoute}
+          size="xs"
+          fz="xs"
+          aria-label="Add Comment">
+          Add Comment
+        </Button>
+      )}
 
-      <AddCommentModal bookId={bookId} opened={opened} close={close} />
+      <AddCommentModal
+        bookId={bookId}
+        opened={opened}
+        close={close}
+        auth={auth}
+      />
     </>
   );
 }

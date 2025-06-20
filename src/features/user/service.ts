@@ -8,10 +8,10 @@ import bcrypt from "bcryptjs";
 import { Provider } from "./enums";
 import jsonwebtoken from "jsonwebtoken";
 import { Service } from "@/global/classes";
-import { SignUpUserDTO, EditUserDTO, ResetPasswordDTO } from "./schema";
 import { TemplateVariables } from "mailtrap";
-// import { transport } from "@/global/configurations/nodemailer";
 import { Template } from "@/global/constants";
+import cloudinary from "@/global/configurations/cloudinary";
+import { SignUpUserDTO, EditUserDTO, ResetPasswordDTO } from "./schema";
 
 export class UserService extends Service {
   userRepository: UserRepository;
@@ -170,14 +170,6 @@ export class UserService extends Service {
     await this.userRepository.editAvatarById(id, secure_url, public_id);
   }
 
-  async pushProviderById(id: string, provider: string) {
-    await this.userRepository.pushProviderById(id, provider);
-  }
-
-  async pullProviderById(id: string, provider: string) {
-    await this.userRepository.pullProviderById(id, provider);
-  }
-
   async setFavBookIdById(id: string, favBookId: string) {
     await this.userRepository.setFavBookIdById(id, favBookId);
   }
@@ -195,6 +187,9 @@ export class UserService extends Service {
   }
 
   async dropUserById(id: string) {
+    const user = await this.getUserById(id);
+    if (!user) throw new Error("User not found.");
+
     await this.runAtomic(async (session) => {
       await this.userRepository.dropUserById(id, session);
       await this.bookService.dropBooksByAuthorId(id, session);
@@ -202,5 +197,7 @@ export class UserService extends Service {
       await this.commentService.dropCommentsByCommenterId(id, session);
       await this.bookLikerService.dropBookLikersByLikerId(id, session);
     });
+
+    await cloudinary.uploader.destroy(user.avatar.publicId);
   }
 }

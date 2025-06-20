@@ -1,12 +1,10 @@
 "use client";
 import { Avatar } from "@mantine/core";
 
-export default function AvatarNew({ session }: any) {
-  const id = session?.user?.id;
-  const name = session?.user?.name || undefined;
-  const image = session?.user?.image || undefined;
+export default function AvatarNew({ auth }: any) {
+  const { id, name, image } = auth;
 
-  if (!session) return <></>;
+  if (!auth) return <></>;
   if (id && !image) return <Avatar name={name} color="initials" size="sm" />;
   if (id && image) return <Avatar src={image} alt="Avatar" size="sm" />;
 }

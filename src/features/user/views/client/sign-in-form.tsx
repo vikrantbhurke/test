@@ -8,9 +8,8 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
-import { Action } from "@/global/classes";
 import { useSelector } from "react-redux";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -35,8 +34,20 @@ export default function SignInForm() {
   const { colorScheme } = useMantineColorScheme();
   const [isMutating, setIsMutating] = useState(false);
   const { isMobile } = useSelector((state: RootState) => state.global);
-
   const [provider, setProvider] = useState<Provider | null>(null);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get("error");
+    if (error === "AccessDenied") {
+      const alert = {
+        message: "Sign in with your original sign in method.",
+        status: "error" as const,
+      };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
+    }
+  }, [isMobile, showNotification, showToast]);
 
   const form = useForm({
     mode: "controlled",
@@ -53,19 +64,12 @@ export default function SignInForm() {
       if (isMutating) return;
       setIsMutating(true);
       setProvider(Provider.credentials);
-      const response = await signInWithCreds(values);
-
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-        router.replace(homeRoute);
-        router.refresh();
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const message = await signInWithCreds(values);
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
+      router.replace(homeRoute);
+      router.refresh();
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);
@@ -77,7 +81,7 @@ export default function SignInForm() {
   };
 
   const handleSignInWithOAuth = async (
-    provider: "apple" | "github" | "google" | "linkedin"
+    provider: "apple" | "github" | "google" | "linkedin" | "twitter"
   ) => {
     try {
       if (isMutating) return;

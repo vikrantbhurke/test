@@ -1,5 +1,4 @@
 "use client";
-import { Action } from "@/global/classes";
 import { useSelector } from "react-redux";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
@@ -14,19 +13,17 @@ export default function PayPalCancelModal({ opened, close, id }: any) {
 
   const handleCancel = async () => {
     try {
-      const response = await cancelPayPalSubscription(id);
+      const message = await cancelPayPalSubscription(id);
 
-      if (Action.isSuccess(response)) {
-        const alert = {
-          message: response.message,
-          status: "success" as const,
-          autoClose: 10000,
-        };
+      const alert = {
+        message,
+        status: "success" as const,
+        autoClose: 10000,
+      };
 
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-        close();
-      }
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
+      close();
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);

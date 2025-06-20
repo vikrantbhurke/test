@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useForm } from "@mantine/form";
-import { Action } from "@/global/classes";
 import { useSelector } from "react-redux";
 import { IconLogin } from "@tabler/icons-react";
 import { useNotification } from "@/global/hooks";
@@ -34,17 +33,10 @@ export default function RequestEmailForm() {
     try {
       if (isMutating) return;
       setIsMutating(true);
-      const response = await requestEmail(values);
-
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const message = await requestEmail(values);
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);

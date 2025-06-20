@@ -15,10 +15,11 @@ import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 
 type AppManyProps = {
+  auth: any;
   children: React.ReactNode;
 };
 
-export default function AppMany({ children }: AppManyProps) {
+export default function AppMany({ children, auth }: AppManyProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();
@@ -33,11 +34,16 @@ export default function AppMany({ children }: AppManyProps) {
       header={appShellProps.header}
       navbar={appShellProps.navbar(opened)}>
       <AppShell.Header className={`${!isMobile && classes.blurBg}`}>
-        <Header opened={opened} toggle={toggle} pathname={pathname} />
+        <Header
+          opened={opened}
+          toggle={toggle}
+          pathname={pathname}
+          auth={auth}
+        />
       </AppShell.Header>
 
       <AppShell.Navbar>
-        <Navbar pathname={pathname} />
+        <Navbar pathname={pathname} auth={{ id: auth.id, role: auth.role }} />
       </AppShell.Navbar>
 
       <AppShell.Aside>
@@ -49,7 +55,7 @@ export default function AppMany({ children }: AppManyProps) {
       </AppShell.Main>
 
       <AppShell.Footer>
-        <Footer pathname={pathname} />
+        <Footer pathname={pathname} auth={{ role: auth.role }} />
       </AppShell.Footer>
     </AppShell>
   );

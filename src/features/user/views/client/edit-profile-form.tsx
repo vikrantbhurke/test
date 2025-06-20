@@ -12,7 +12,6 @@ import {
   viewUserRoute,
 } from "@/global/constants/routes";
 import { useState } from "react";
-import { Action } from "@/global/classes";
 import { useSelector } from "react-redux";
 import { EditUserSchema } from "@/features/user/schema";
 import { useRouter } from "next/navigation";
@@ -55,18 +54,11 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
     setStateUser((prev: any) => ({ ...prev, ...values }));
 
     try {
-      const response = await editUserById(user.id, values);
-
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-        router.push(viewUserRoute(user.id));
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const message = await editUserById(user.id, values);
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
+      router.push(viewUserRoute(user.id));
     } catch (error: any) {
       setStateUser(previousBook);
       const alert = { message: error.message, status: "error" as const };
@@ -80,20 +72,20 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
   const handleUpload = async (result: any) => {
     const info = result?.info;
 
-    if (
-      typeof info === "object" &&
-      info !== null &&
-      "secure_url" in info &&
-      "public_id" in info
-    ) {
-      const response = await editAvatarById(
-        user.id,
-        info.secure_url,
-        info.public_id
-      );
+    try {
+      if (
+        typeof info === "object" &&
+        info !== null &&
+        "secure_url" in info &&
+        "public_id" in info
+      ) {
+        const message = await editAvatarById(
+          user.id,
+          info.secure_url,
+          info.public_id
+        );
 
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
+        const alert = { message, status: "success" as const };
         if (isMobile) showToast(alert);
         else showNotification(alert);
 
@@ -104,29 +96,34 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
 
         router.refresh();
       }
+    } catch (error: any) {
+      const message = error.message || "Failed to upload image.";
+      const alert = { message, status: "error" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
     }
   };
 
   const handleDelete = async () => {
     if (!stateUser.avatar.publicId) return;
 
-    const apiResponse = await fetch(deleteAvatarApiRoute, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ public_id: stateUser.avatar.publicId }),
-    });
+    try {
+      const apiResponse = await fetch(deleteAvatarApiRoute, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ public_id: stateUser.avatar.publicId }),
+      });
 
-    if (!apiResponse.ok) {
-      const message = "Failed to delete image.";
-      const alert = { message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-      return;
-    }
+      if (!apiResponse.ok) {
+        const message = "Failed to delete image.";
+        const alert = { message, status: "error" as const };
+        if (isMobile) showToast(alert);
+        else showNotification(alert);
+        return;
+      }
 
-    const response = await editAvatarById(user.id, "", "");
+      await editAvatarById(user.id, "", "");
 
-    if (Action.isSuccess(response)) {
       const alert = { message: "Avatar deleted.", status: "success" as const };
       if (isMobile) showToast(alert);
       else showNotification(alert);
@@ -140,6 +137,11 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
       }));
 
       router.refresh();
+    } catch (error: any) {
+      const message = error.message || "Failed to delete image.";
+      const alert = { message, status: "error" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
     }
   };
 

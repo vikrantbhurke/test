@@ -4,7 +4,7 @@ import { dimensions } from "@/global/constants";
 import { Ad } from "@/global/components/common/server";
 
 export default function ListGridInner({ props }: any) {
-  const { content, DataItem, listGridProps, sessionUser } = props;
+  const { content, DataItem, listGridProps, auth } = props;
   const { gutter, gap, layout, ...rest } = listGridProps;
 
   if (layout === "grid")
@@ -24,7 +24,7 @@ export default function ListGridInner({ props }: any) {
 
           cols.push(
             <Grid.Col span={dimensions.gridColSpan} key={item.id}>
-              <DataItem item={item} sessionUser={sessionUser} />
+              <DataItem item={item} auth={auth} />
             </Grid.Col>
           );
 
@@ -50,7 +50,7 @@ export default function ListGridInner({ props }: any) {
 
           rows.push(
             <Stack key={item.id}>
-              <DataItem item={item} sessionUser={sessionUser} />
+              <DataItem item={item} auth={auth} />
             </Stack>
           );
 

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { modalProps } from "@/global/constants";
 import { Button, Modal, Stack, Text } from "@mantine/core";
-import { Action } from "@/global/classes";
 import { useToast } from "@/global/hooks";
 import { useNotification } from "@/global/hooks";
 import { useSelector } from "react-redux";
@@ -45,21 +44,14 @@ export default function NewModal({
     try {
       if (isMutating) return;
       setIsMutating(true);
-      const response = await action();
-
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-        if (routeType === "push" && route) router.push(route);
-        if (routeType === "replace" && route) router.replace(route);
-        if (routeType === "back") router.back();
-        if (routeType === "refresh") router.refresh();
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const message = await action();
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
+      if (routeType === "push" && route) router.push(route);
+      if (routeType === "replace" && route) router.replace(route);
+      if (routeType === "back") router.back();
+      if (routeType === "refresh") router.refresh();
       close();
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };

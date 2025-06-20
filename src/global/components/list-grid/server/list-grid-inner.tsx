@@ -4,7 +4,7 @@ import { Grid, GridCol, Stack } from "@mantine/core";
 import { Ad } from "@/global/components/common/server";
 
 export default function ListGridInner({ props }: any) {
-  const { content, DataItem, listGridProps, sessionUser } = props;
+  const { content, DataItem, listGridProps, auth } = props;
   const { gutter, gap, layout, ...rest } = listGridProps;
 
   if (layout === "grid")
@@ -23,7 +23,7 @@ export default function ListGridInner({ props }: any) {
 
           cols.push(
             <GridCol span={dimensions.gridColSpan} key={item.id}>
-              <DataItem item={item} sessionUser={sessionUser} />
+              <DataItem item={item} auth={auth} />
             </GridCol>
           );
 
@@ -48,7 +48,7 @@ export default function ListGridInner({ props }: any) {
 
           rows.push(
             <Stack key={item.id}>
-              <DataItem item={item} sessionUser={sessionUser} />
+              <DataItem item={item} auth={auth} />
             </Stack>
           );
 

@@ -1,16 +1,15 @@
 import {
+  sendEmail,
   signUpUser,
+  generateToken,
   getUserByEmail,
-  pushProviderById,
   validatePassword,
   getUserByUsername,
-  sendEmail,
-  generateToken,
 } from "./features/user/action";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
-import LinkedIn from "next-auth/providers/linkedin";
+// import LinkedIn from "next-auth/providers/linkedin";
 import Credentials from "next-auth/providers/credentials";
 import { Gender, Provider } from "./features/user/enums";
 import { Template } from "./global/constants";
@@ -19,19 +18,12 @@ export const config = {
   providers: [
     GitHub,
     Google,
-    LinkedIn,
+    // LinkedIn,
     Credentials({
       authorize: async (credentials) => {
         if (!credentials) return null;
-
-        const response1 = await getUserByUsername(
-          credentials.username as string
-        );
-
-        if (!response1.data)
-          throw new Error("Account with this username not found.");
-
-        const user = response1.data;
+        const user = await getUserByUsername(credentials.username as string);
+        if (!user) throw new Error("Account with this username not found.");
 
         if (user.provider[0] !== "credentials") {
           const provider =
@@ -42,18 +34,18 @@ export const config = {
           throw new Error(errorMessage);
         }
 
-        const response2 = await validatePassword(
+        const isValid = await validatePassword(
           credentials.password as string,
           user.hashedPassword
         );
 
-        if (!response2.data) throw new Error("Invalid password.");
+        if (!isValid) throw new Error("Invalid password.");
 
         if (!user.isVerified) {
-          const { data } = await generateToken({ username: user.username });
+          const token = await generateToken({ username: user.username });
 
           await sendEmail(user.email, Template.Welcome, {
-            token: data,
+            token,
             name: user.firstname,
             url: process.env.APP_URL as string,
             app: process.env.APP_NAME as string,
@@ -68,16 +60,22 @@ export const config = {
       },
     }),
   ],
+  pages: {
+    error: "/sign-in",
+  },
   callbacks: {
     async signIn({ user, account }: any) {
       if (account.provider === "credentials") return true;
-      const response = await getUserByEmail(user.email);
-      const dbUser = response.data;
+      const dbUser = await getUserByEmail(user.email);
 
       if (!dbUser) {
         let provider;
         if (account.provider === "google") provider = Provider.google;
+        else if (account.provider === "apple") provider = Provider.apple;
         else if (account.provider === "github") provider = Provider.github;
+        else if (account.provider === "linkedin") provider = Provider.linkedin;
+        else if (account.provider === "twitter") provider = Provider.twitter;
+        else if (account.provider === "x") provider = Provider.x;
         else provider = Provider.credentials;
 
         await signUpUser(provider, {
@@ -94,8 +92,7 @@ export const config = {
           },
         });
       } else {
-        if (!dbUser.provider.includes(account.provider))
-          await pushProviderById(dbUser.id, account.provider);
+        if (dbUser.provider !== account.provider) return false;
       }
 
       return true;
@@ -104,8 +101,8 @@ export const config = {
       return baseUrl;
     },
     async session({ session }: any) {
-      const response = await getUserByEmail(session.user.email);
-      const user = response.data;
+      const user = await getUserByEmail(session.user.email);
+
       session.user.id = user.id;
       session.user.name =
         session.user.name || user.firstname + " " + user.lastname;
@@ -117,6 +114,7 @@ export const config = {
       session.user.publicId = user.avatar.publicId;
       session.user.payment = user.payment;
       session.user.subscriptionId = user.subscriptionId;
+
       return session;
     },
   },

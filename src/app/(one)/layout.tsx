@@ -3,12 +3,15 @@ import { Stack } from "@mantine/core";
 import { AppOne } from "@/global/components/layouts";
 import { IconAppsFilled } from "@tabler/icons-react";
 import classes from "@/global/styles/app.module.css";
+import { getAuth } from "@/features/user/action";
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
 export default async function Layout({ children }: LayoutProps) {
+  const { id, role, name, image } = await getAuth();
+
   return (
     <Suspense
       fallback={
@@ -20,7 +23,7 @@ export default async function Layout({ children }: LayoutProps) {
           />
         </Stack>
       }>
-      <AppOne>{children}</AppOne>
+      <AppOne auth={{ id, role, name, image }}>{children}</AppOne>
     </Suspense>
   );
 }

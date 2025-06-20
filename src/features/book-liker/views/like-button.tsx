@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Action } from "@/global/classes";
 import { useToast } from "@/global/hooks";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
@@ -33,29 +32,23 @@ export default function LikeButton({
   const handleLike = async () => {
     if (isMutating) return;
     setIsMutating(true);
-    const previousExists = stateLike;
-    const previousLike = stateLikes;
+    const prevStateLike = stateLike;
+    const prevLikes = stateLikes;
     setStateLike(true);
     setStateLikes((prev: any) => prev + 1);
 
     try {
-      const response = await saveBookLiker({
+      const message = await saveBookLiker({
         bookId,
         likerId,
       });
 
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
     } catch (error: any) {
-      setStateLike(previousExists);
-      setStateLikes(previousLike);
+      setStateLike(prevStateLike);
+      setStateLikes(prevLikes);
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);
       else showNotification(alert);
@@ -67,29 +60,23 @@ export default function LikeButton({
   const handleUnlike = async () => {
     if (isMutating) return;
     setIsMutating(true);
-    const previousExists = stateLike;
-    const previousLike = stateLikes;
+    const prevStateLike = stateLike;
+    const prevLikes = stateLikes;
     setStateLike(false);
     setStateLikes((prev: any) => prev - 1);
 
     try {
-      const response = await dropBookLiker({
+      const message = await dropBookLiker({
         bookId,
         likerId,
       });
 
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
     } catch (error: any) {
-      setStateLike(previousExists);
-      setStateLikes(previousLike);
+      setStateLike(prevStateLike);
+      setStateLikes(prevLikes);
       const alert = { message: error.message, status: "error" as const };
       if (isMobile) showToast(alert);
       else showNotification(alert);

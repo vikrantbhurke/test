@@ -1,11 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Action } from "@/global/classes";
 import { useSelector } from "react-redux";
+import { useToast } from "@/global/hooks";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
-import { useToast } from "@/global/hooks";
 import { useForm, zodResolver } from "@mantine/form";
 import { editBookById } from "@/features/book/action";
 import { EditBookSchema } from "@/features/book/schema";
@@ -43,18 +42,11 @@ export default function EditBookForm({ book }: EditBookFormProps) {
     setStateBook((prevBook: any) => ({ ...prevBook, ...values }));
 
     try {
-      const response = await editBookById(book.id, values);
-
-      if (Action.isSuccess(response)) {
-        const alert = { message: response.message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-        router.push(viewBookRoute(book.id));
-      } else {
-        const alert = { message: response.error, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const message = await editBookById(book.id, values);
+      const alert = { message, status: "success" as const };
+      if (isMobile) showToast(alert);
+      else showNotification(alert);
+      router.push(viewBookRoute(book.id));
     } catch (error: any) {
       setStateBook(previousBook);
       const alert = { message: error.message, status: "error" as const };

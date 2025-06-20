@@ -1,5 +1,3 @@
-import Self from "./self";
-import Clear from "./clear";
 import NewModal from "./new-modal";
 import NProgress from "./nprogress";
 import Providers from "./providers";
@@ -12,13 +10,10 @@ import ThemeButton from "./theme-button";
 import SearchButton from "./search-button";
 import BurgerButton from "./burger-button";
 import FloatingInput from "./floating-input";
-import SessionProvider from "./session-provider";
 import RegisterServiceWorker from "./register-service-worker";
 import ToastProvider, { ToastContext } from "./toast-provider";
 
 export {
-  Self,
-  Clear,
   NewModal,
   NProgress,
   NextModal,
@@ -33,6 +28,5 @@ export {
   ToastContext,
   ToastProvider,
   FloatingInput,
-  SessionProvider,
   RegisterServiceWorker,
 };
