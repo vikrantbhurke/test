@@ -1,13 +1,13 @@
 import { Comment } from "./model";
 import { SaveCommentDTO, EditCommentDTO } from "./schema";
-import { Repository, GetManyDTO } from "@/global/classes";
+import { Repo, GetManyDTO } from "@/global/classes";
 
 const select = "body bookId commenterId";
 const searchFields = ["body"];
 const populate = ["bookId", "commenterId"];
 const populateSelect = ["title", "username"];
 
-export class CommentRepository extends Repository {
+export class CommentRepository extends Repo {
   async saveComment(saveCommentDTO: SaveCommentDTO) {
     await this.saveOne(Comment, saveCommentDTO);
   }

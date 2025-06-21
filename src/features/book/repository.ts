@@ -1,15 +1,15 @@
 import { Book } from "./model";
 import { Genre } from "./enums";
 import { EditBookDTO, SaveBookDTO } from "./schema";
-import { Repository, GetManyDTO } from "@/global/classes";
-import redis from "@/global/configurations/redis";
+import { Repo, GetManyDTO } from "@/global/classes";
+import { performance } from "perf_hooks";
 
 const select = "title synopsis authorId likes votes voterIds tags genre";
 const populate = ["authorId"];
 const populateSelect = ["firstname lastname username avatar"];
 const searchFields = ["title", "synopsis"];
 
-export class BookRepository extends Repository {
+export class BookRepository extends Repo {
   async saveBooks(saveBooksDTO: SaveBookDTO[]) {
     await this.saveMany(Book, saveBooksDTO);
   }
@@ -31,15 +31,20 @@ export class BookRepository extends Repository {
   }
 
   async getBookById(id: string) {
-    const keys = await redis.keys("*");
-    console.log("getBookById Cache keys:", keys);
-
     const key = `book:${id}`;
-    const cachedBook = await redis.get(key);
+    const cacheStart = performance.now();
+    const cachedBook = await this.getCache(key);
+    const cacheEnd = performance.now();
+
     if (cachedBook) {
       console.log("CACHE HIT:", id);
+      console.log(
+        `⏱ Cache lookup time: ${(cacheEnd - cacheStart).toFixed(2)} ms`
+      );
       return JSON.parse(cachedBook);
     }
+
+    const dbStart = performance.now();
 
     const dbBook = await this.getOne(Book, {
       conditions: { _id: id },
@@ -48,10 +53,11 @@ export class BookRepository extends Repository {
       populateSelect,
     });
 
-    if (dbBook) {
-      console.log("CACHE MISS:", id);
-      await redis.set(key, JSON.stringify(dbBook), "EX", 86400);
-    }
+    const dbEnd = performance.now();
+    console.log(`📚 CACHE MISS: ${id}`);
+    console.log(`⏱ DB fetch time: ${(dbEnd - dbStart).toFixed(2)} ms`);
+
+    if (dbBook) await this.setCache(key, JSON.stringify(dbBook));
     return dbBook;
   }
 
@@ -90,10 +96,6 @@ export class BookRepository extends Repository {
   }
 
   async getBooks(getManyDTO: GetManyDTO) {
-    await redis.flushall();
-    const keys = await redis.keys("*");
-    console.log("getBooks Cache keys:", keys);
-
     return await this.getMany(Book, {
       ...getManyDTO,
       select,
@@ -120,7 +122,7 @@ export class BookRepository extends Repository {
       update: editBookDTO,
     });
 
-    if (modifiedCount) await redis.del(`book:${id}`);
+    if (modifiedCount) await this.dropCache(`book:${id}`);
   }
 
   async editBookByTitle(title: string, editBookDTO: EditBookDTO) {
@@ -132,7 +134,7 @@ export class BookRepository extends Repository {
 
     if (modifiedCount) {
       const book = await this.getBookByTitle(title);
-      if (book) await redis.del(`book:${book.id}`);
+      if (book) await this.dropCache(`book:${book.id}`);
     }
   }
 
@@ -143,10 +145,7 @@ export class BookRepository extends Repository {
       update: editBookDTO,
     });
 
-    if (modifiedCount) {
-      const stream = redis.scanStream({ match: "book:*", count: 100 });
-      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
-    }
+    if (modifiedCount) await this.dropCacheByPrefix("book");
   }
 
   async likeBook(id: string, session?: any) {
@@ -160,7 +159,7 @@ export class BookRepository extends Repository {
       session
     );
 
-    if (modifiedCount) await redis.del(`book:${id}`);
+    if (modifiedCount) await this.dropCache(`book:${id}`);
   }
 
   async unlikeBook(id: string, session?: any) {
@@ -174,7 +173,7 @@ export class BookRepository extends Repository {
       session
     );
 
-    if (modifiedCount) await redis.del(`book:${id}`);
+    if (modifiedCount) await this.dropCache(`book:${id}`);
   }
 
   async addTag(id: string, tag: string) {
@@ -185,7 +184,7 @@ export class BookRepository extends Repository {
       element: tag,
     });
 
-    if (modifiedCount) await redis.del(`book:${id}`);
+    if (modifiedCount) await this.dropCache(`book:${id}`);
   }
 
   async removeTag(id: string, tag: string) {
@@ -196,7 +195,7 @@ export class BookRepository extends Repository {
       element: tag,
     });
 
-    if (modifiedCount) await redis.del(`book:${id}`);
+    if (modifiedCount) await this.dropCache(`book:${id}`);
   }
 
   async upvoteBook(id: string, voterId: string) {
@@ -208,7 +207,7 @@ export class BookRepository extends Repository {
       element: voterId,
     });
 
-    if (modifiedCount) await redis.del(`book:${id}`);
+    if (modifiedCount) await this.dropCache(`book:${id}`);
   }
 
   async downvoteBook(id: string, voterId: string) {
@@ -220,7 +219,7 @@ export class BookRepository extends Repository {
       element: voterId,
     });
 
-    if (modifiedCount) await redis.del(`book:${id}`);
+    if (modifiedCount) await this.dropCache(`book:${id}`);
   }
 
   async downvoteBooksByVoterId(voterId: string, session?: any) {
@@ -236,15 +235,12 @@ export class BookRepository extends Repository {
       session
     );
 
-    if (modifiedCount) {
-      const stream = redis.scanStream({ match: "book:*", count: 100 });
-      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
-    }
+    if (modifiedCount) await this.dropCacheByPrefix("book");
   }
 
   async dropBookById(id: string, session?: any) {
     const { deletedCount } = await this.dropOne(Book, { _id: id }, session);
-    if (deletedCount) await redis.del(`book:${id}`);
+    if (deletedCount) await this.dropCache(`book:${id}`);
   }
 
   async dropBookByTitle(title: string, session?: any) {
@@ -252,25 +248,17 @@ export class BookRepository extends Repository {
 
     if (deletedCount) {
       const book = await this.getBookByTitle(title, session);
-      if (book) await redis.del(`book:${book.id}`);
+      if (book) await this.dropCache(`book:${book.id}`);
     }
   }
 
   async dropBooksByAuthorId(authorId: string, session?: any) {
     const { deletedCount } = await this.dropMany(Book, { authorId }, session);
-
-    if (deletedCount) {
-      const stream = redis.scanStream({ match: "book:*", count: 100 });
-      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
-    }
+    if (deletedCount) await this.dropCacheByPrefix("book");
   }
 
   async dropBooks(session?: any) {
     const { deletedCount } = await this.dropMany(Book, session);
-
-    if (deletedCount) {
-      const stream = redis.scanStream({ match: "book:*", count: 100 });
-      stream.on("data", (keys: string[]) => keys.length && redis.del(...keys));
-    }
+    if (deletedCount) await this.dropCacheByPrefix("book");
   }
 }

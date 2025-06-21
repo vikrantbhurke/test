@@ -1,11 +1,11 @@
 import { User } from "./model";
-import { Repository } from "@/global/classes";
+import { Repo } from "@/global/classes";
 import { SignUpUserDTO, EditUserDTO } from "./schema";
 
 const select =
   "firstname lastname username email role provider avatar hashedPassword isVerified payment subscriptionId";
 
-export class UserRepository extends Repository {
+export class UserRepository extends Repo {
   async signUpUser(signUpUserDTO: SignUpUserDTO) {
     await this.saveOne(User, signUpUserDTO);
   }

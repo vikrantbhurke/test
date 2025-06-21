@@ -1,8 +1,8 @@
 import { BookLiker } from "./model";
 import { BookLikerDTO } from "./schema";
-import { Repository } from "@/global/classes";
+import { Repo } from "@/global/classes";
 
-export class BookLikerRepository extends Repository {
+export class BookLikerRepository extends Repo {
   async saveBookLiker(bookLikerDTO: BookLikerDTO, session?: any) {
     await this.saveOne(BookLiker, bookLikerDTO, session);
   }
