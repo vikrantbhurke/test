@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActionIcon, Affix, Transition } from "@mantine/core";
 import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
-import { useMounted, useWindowScroll } from "@mantine/hooks";
+import { useIsFirstRender, useMounted, useWindowScroll } from "@mantine/hooks";
 import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 import { dimensions } from "@/global/constants";
@@ -11,6 +11,8 @@ import { dimensions } from "@/global/constants";
 // ScrollButtons are visible in ListGridFinite (Window) & ListGridInfinite (Window & Container)
 
 export default function ScrollButtons({ scrollButtonsProps }: any) {
+  const firstRender = useIsFirstRender();
+
   const { scrollRef, scrollbar, scrollProps, scrollbuttons, positions } =
     scrollButtonsProps;
 
@@ -28,9 +30,9 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
     }
   };
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     if (scrollRef) scrollRef.current!.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  }, [scrollRef]);
 
   useEffect(() => {
     const handleScroll = () =>
@@ -45,8 +47,6 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
         scrollElement.removeEventListener("scroll", handleScroll);
     };
   }, [scrollRef]);
-
-  if (!mounted) return null;
 
   const { inner, outer } = positions;
   const { footerHeight } = dimensions;
@@ -64,10 +64,10 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
   const topMounted =
     scrollbar === "window" ? scroll.y > 0 : scrollTopPosition > 0;
 
-  const handleTopClick = () => {
+  const handleTopClick = useCallback(() => {
     if (scrollbar === "window") scrollTo({ y: 0 });
     else scrollToTop();
-  };
+  }, [scrollbar, scrollTo, scrollToTop]);
 
   const scrollToTopButton = (
     // If only top is visible, shift its position to corner
@@ -113,6 +113,13 @@ export default function ScrollButtons({ scrollButtonsProps }: any) {
     </Affix>
   );
 
+  // If first render, scroll to top
+  // This is to ensure that the scroll position is reset when the component mounts
+  useEffect(() => {
+    if (firstRender) handleTopClick();
+  }, [firstRender, handleTopClick]);
+
+  if (!mounted) return null;
   if (scrollbuttons === "none") return null;
   if (scrollbuttons === "top") return scrollToTopButton;
   if (scrollbuttons === "bottom") return scrollToBottomButton;

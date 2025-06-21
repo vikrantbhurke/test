@@ -5,9 +5,6 @@ import { getBooks } from "@/features/book/action";
 import { UserItem } from "@/features/user/views/server";
 import { getAuth, getUserById } from "@/features/user/action";
 import { CollapsibleHeader } from "@/global/components/layouts";
-// import { listGridDefaults } from "@/global/constants/client";
-// import { ListGridOuter } from "@/global/components/list-grid/client";
-// import { BooksDetails, BooksItem } from "@/features/book/views/client";
 import { listGridDefaults } from "@/global/constants/server";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { BooksItem, BooksDetails } from "@/features/book/views/server";
@@ -36,13 +33,6 @@ export default async function Page({ params, searchParams }: PageProps) {
   const booksPage = await getBooks(getBooksDTO, auth);
   if (!booksPage) return notFound();
 
-  // const {
-  //   buttonProps,
-  //   scrollButtonsProps,
-  //   scrollWrapperProps,
-  //   listGridInnerProps,
-  // } = listGridDefaults;
-
   const {
     paginationProps,
     scrollButtonsProps,
@@ -65,28 +55,6 @@ export default async function Page({ params, searchParams }: PageProps) {
           <UserItem user={user} auth={{ id: uid }} />
         </Paper>
       </Stack>
-
-      {/* 
-      <ListGridOuter
-        getData={getBooks}
-        initialDataPage={booksPage}
-        DataDetails={BooksDetails}
-        getDataArgs={{
-          sort: booksPage.sort,
-          order: booksPage.order,
-          filter: booksPage.filter,
-          search: booksPage.search,
-        }}
-        buttonProps={buttonProps}
-        scrollButtonsProps={scrollButtonsProps}
-        scrollWrapperProps={scrollWrapperProps}
-        listGridInnerProps={{
-          ...listGridInnerProps,
-          auth,
-          content: booksPage.content,
-          DataItem: BooksItem,
-        }}
-      /> */}
 
       <ListGridOuter
         dataPage={booksPage}
