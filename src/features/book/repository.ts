@@ -36,17 +36,28 @@ export class BookRepository extends Repo {
 
   async getBookById(id: string) {
     const key = `book:${id}`;
-    const cacheStart = performance.now();
-    // const cachedBook = await this.getCache(key);
-    const cachedBook = await redis.get(key);
-    const cacheEnd = performance.now();
 
-    if (cachedBook) {
+    const mongoCachedStart = performance.now();
+    await this.getCache(key);
+    const mongoCachedEnd = performance.now();
+
+    const redisCacheStart = performance.now();
+    const redisCachedBook = await redis.get(key);
+    const redisCacheEnd = performance.now();
+
+    if (redisCachedBook) {
       console.log("CACHE HIT:", id);
       console.log(
-        `⏱ Cache lookup time: ${(cacheEnd - cacheStart).toFixed(2)} ms`
+        `⏱ Cache lookup time: ${(redisCacheEnd - redisCacheStart).toFixed(
+          2
+        )} ms`
       );
-      return JSON.parse(cachedBook);
+      console.log(
+        `⏱ MongoDB cache lookup time: ${(
+          mongoCachedEnd - mongoCachedStart
+        ).toFixed(2)} ms`
+      );
+      return JSON.parse(redisCachedBook);
     }
 
     const dbStart = performance.now();
@@ -62,7 +73,7 @@ export class BookRepository extends Repo {
     console.log(`📚 CACHE MISS: ${id}`);
     console.log(`⏱ DB fetch time: ${(dbEnd - dbStart).toFixed(2)} ms`);
 
-    // if (dbBook) await this.setCache(key, JSON.stringify(dbBook));
+    if (dbBook) await this.setCache(key, JSON.stringify(dbBook));
     if (dbBook) await redis.set(key, JSON.stringify(dbBook), "EX", 86400); // Cache for 24 hours
     return dbBook;
   }
