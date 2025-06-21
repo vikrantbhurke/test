@@ -1,4 +1,4 @@
-import { transport } from "@/global/configurations/nodemailer";
+import transport from "@/global/configurations/nodemailer";
 import { TemplateVariables } from "mailtrap";
 
 export const sendEmailDev = async (

@@ -3,11 +3,14 @@ import { Paper, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { getBooks } from "@/features/book/action";
 import { UserItem } from "@/features/user/views/server";
-import { listGridDefaults } from "@/global/constants/client";
 import { getAuth, getUserById } from "@/features/user/action";
 import { CollapsibleHeader } from "@/global/components/layouts";
-import { ListGridOuter } from "@/global/components/list-grid/client";
-import { BooksDetails, BooksItem } from "@/features/book/views/client";
+// import { listGridDefaults } from "@/global/constants/client";
+// import { ListGridOuter } from "@/global/components/list-grid/client";
+// import { BooksDetails, BooksItem } from "@/features/book/views/client";
+import { listGridDefaults } from "@/global/constants/server";
+import { ListGridOuter } from "@/global/components/list-grid/server";
+import { BooksItem, BooksDetails } from "@/features/book/views/server";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;
@@ -33,8 +36,15 @@ export default async function Page({ params, searchParams }: PageProps) {
   const booksPage = await getBooks(getBooksDTO, auth);
   if (!booksPage) return notFound();
 
+  // const {
+  //   buttonProps,
+  //   scrollButtonsProps,
+  //   scrollWrapperProps,
+  //   listGridInnerProps,
+  // } = listGridDefaults;
+
   const {
-    buttonProps,
+    paginationProps,
     scrollButtonsProps,
     scrollWrapperProps,
     listGridInnerProps,
@@ -45,8 +55,8 @@ export default async function Page({ params, searchParams }: PageProps) {
       <Stack p="xs">
         <CollapsibleHeader
           Component={
-            <Paper radius="md" p="xl">
-              <UserItem user={user} radius={0} auth={{ id: uid }} />
+            <Paper radius={0} p="xl">
+              <UserItem user={user} auth={{ id: uid }} />
             </Paper>
           }
         />
@@ -56,6 +66,7 @@ export default async function Page({ params, searchParams }: PageProps) {
         </Paper>
       </Stack>
 
+      {/* 
       <ListGridOuter
         getData={getBooks}
         initialDataPage={booksPage}
@@ -67,6 +78,24 @@ export default async function Page({ params, searchParams }: PageProps) {
           search: booksPage.search,
         }}
         buttonProps={buttonProps}
+        scrollButtonsProps={scrollButtonsProps}
+        scrollWrapperProps={scrollWrapperProps}
+        listGridInnerProps={{
+          ...listGridInnerProps,
+          auth,
+          content: booksPage.content,
+          DataItem: BooksItem,
+        }}
+      /> */}
+
+      <ListGridOuter
+        dataPage={booksPage}
+        DataDetails={BooksDetails}
+        paginationProps={{
+          ...paginationProps,
+          value: booksPage.page + 1,
+          total: booksPage.totalPages,
+        }}
         scrollButtonsProps={scrollButtonsProps}
         scrollWrapperProps={scrollWrapperProps}
         listGridInnerProps={{

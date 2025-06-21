@@ -2,7 +2,7 @@ import { Book } from "./model";
 import { Genre } from "./enums";
 import { EditBookDTO, SaveBookDTO } from "./schema";
 import { Repository, GetManyDTO } from "@/global/classes";
-import { redis } from "@/global/configurations/redis";
+import redis from "@/global/configurations/redis";
 
 const select = "title synopsis authorId likes votes voterIds tags genre";
 const populate = ["authorId"];

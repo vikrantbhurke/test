@@ -83,11 +83,11 @@ export default function ListGridOuter({
     setIsFetching(true);
 
     try {
-      const response = await getData({ ...getDataArgs, page: page + 1 }, auth);
-      setIsLastPage(response.data.lastPage);
-      setDataPage(response.data);
+      const dataPage = await getData({ ...getDataArgs, page: page + 1 }, auth);
+      setIsLastPage(dataPage.lastPage);
+      setDataPage(dataPage);
       setPage((prevPage) => prevPage + 1);
-      setContent((prevData) => [...prevData, ...response.data.content]);
+      setContent((prevData) => [...prevData, ...dataPage.content]);
     } catch (error) {
       console.error("Error loading more data:", error);
     } finally {
@@ -100,11 +100,11 @@ export default function ListGridOuter({
     setIsFetching(true);
 
     try {
-      const response = await getData({ ...getDataArgs, page: 0 }, auth);
-      setIsLastPage(response.data.lastPage);
+      const dataPage = await getData({ ...getDataArgs, page: 0 }, auth);
+      setIsLastPage(dataPage.lastPage);
       setPage(0);
-      setDataPage(response.data);
-      setContent(response.data.content);
+      setDataPage(dataPage);
+      setContent(dataPage.content);
     } catch (error) {
       console.error("Error loading new data:", error);
     } finally {

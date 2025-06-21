@@ -4,24 +4,22 @@ import { User } from "@/features/user/model";
 import { Comment } from "@/features/comment/model";
 import { BookLiker } from "@/features/book-liker/model";
 
-const connectDB = async () => {
-  try {
-    const mongoDBUri = process.env.MONGODB_URI as string;
-    if (!mongoDBUri) throw new Error("MONGODB_URI is not defined");
-    if (mongoose.connection.readyState >= 1) return;
-    await mongoose.connect(mongoDBUri);
-    Book;
-    User;
-    Comment;
-    BookLiker;
-    console.log("Database connection successful");
-  } catch (error) {
-    console.error("Database connection failed");
-    console.error(error);
-    process.exit(1);
+let connection: typeof mongoose | null = null;
+
+const connectMongoose = async () => {
+  if (connection) return connection;
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error("MONGODB_URI is not defined");
+
+  if (mongoose.connection.readyState >= 1) {
+    connection = mongoose;
+    return connection;
   }
+
+  connection = await mongoose.connect(uri);
+  [Book, User, Comment, BookLiker]; // Ensure models are registered
+  console.log("✅ Mongoose connected");
+  return connection;
 };
 
-connectDB();
-
-export default connectDB;
+export default await connectMongoose();
