@@ -53,7 +53,7 @@ export default function Header({
         {!isInstalled && installPrompt && (
           <>
             <Button
-              visibleFrom="sm"
+              visibleFrom="md"
               onClick={handleInstallClick}
               leftSection={<IconDownload size={16} />}
               aria-label="Install App">
@@ -61,7 +61,7 @@ export default function Header({
             </Button>
 
             <ActionIcon
-              hiddenFrom="sm"
+              hiddenFrom="md"
               onClick={handleInstallClick}
               title="Install App"
               aria-label="Install App">
@@ -76,7 +76,7 @@ export default function Header({
 
         <BurgerButton opened={opened} toggle={toggle} />
 
-        <Group visibleFrom="sm">
+        <Group visibleFrom="md">
           <Button
             size="input-sm"
             href={homeRoute}

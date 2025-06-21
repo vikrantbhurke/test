@@ -36,7 +36,7 @@ export default function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
         p={4}
         h={40}
         onClick={open}
-        visibleFrom="sm"
+        visibleFrom="md"
         aria-label="Delete Account"
         style={stillButtonProps.style}
         onFocus={stillButtonProps.onFocus}
@@ -52,7 +52,7 @@ export default function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
         p={4}
         h={60}
         onClick={open}
-        hiddenFrom="sm"
+        hiddenFrom="md"
         aria-label="Delete Account"
         style={stillButtonProps.style}
         onFocus={stillButtonProps.onFocus}

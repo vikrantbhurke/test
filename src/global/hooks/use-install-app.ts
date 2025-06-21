@@ -31,7 +31,7 @@ export const useInstallApp = () => {
       installPrompt.prompt(); // Show the install prompt.
       const { outcome } = await installPrompt.userChoice;
       if (outcome === "accepted") {
-        console.log("User accepted the install prompt");
+        console.log("✅ User accepted the install prompt");
         setInstallPrompt(null); // Clear prompt after use.
       }
     }

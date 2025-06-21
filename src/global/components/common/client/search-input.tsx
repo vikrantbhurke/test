@@ -45,7 +45,7 @@ export default function SearchInput({ placeholder }: SearchInputProps) {
 
   return (
     <>
-      <Box component="div" visibleFrom="sm">
+      <Box component="div" visibleFrom="md">
         <TextInput
           ref={desktopRef}
           onChange={handleSearch}
@@ -69,7 +69,7 @@ export default function SearchInput({ placeholder }: SearchInputProps) {
           h="100%"
           w="100vw"
           component="div"
-          hiddenFrom="sm"
+          hiddenFrom="md"
           style={searchInputProps.style}>
           <TextInput
             w="100%"

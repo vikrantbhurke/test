@@ -61,7 +61,7 @@ export class UserService extends Service {
     try {
       return jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY as string);
     } catch (err) {
-      console.error("Token Verification Error:", err);
+      console.error("⛔ Token Verification Error:", err);
       return null;
     }
   }

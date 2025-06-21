@@ -10,7 +10,7 @@ export const saveBooks = async (file: File) => {
   const result = SaveBookSchema.array().safeParse(saveBooksDTO);
 
   if (!result.success) {
-    console.log("Validation Result:", result);
+    console.log("⛔ Validation Result:", result);
     return "Invalid data format. Please ensure the file contains an array of books in the correct format.";
   }
 

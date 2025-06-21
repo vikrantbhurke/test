@@ -136,8 +136,8 @@ export const signOutUser = async () => {
     await signOut({ redirect: false });
     return "Logged out successfully.";
   } catch (error: any) {
-    console.error("Sign out error:", error);
-    throw new Error("Failed to log out.");
+    console.error("⛔ Sign out error:", error);
+    throw new Error("⛔ Failed to log out.");
   }
 };
 

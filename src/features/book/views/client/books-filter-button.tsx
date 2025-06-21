@@ -15,14 +15,14 @@ export default function BooksFilterButton() {
   return (
     <>
       <ActionIcon
-        hiddenFrom="sm"
+        hiddenFrom="md"
         onClick={drawerOpen}
         aria-label="Filter Books">
         <IconFilter size={16} stroke={1.5} />
       </ActionIcon>
 
       <ActionIcon
-        visibleFrom="sm"
+        visibleFrom="md"
         onClick={modalOpen}
         size="input-sm"
         aria-label="Filter Books">

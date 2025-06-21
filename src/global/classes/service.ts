@@ -27,7 +27,7 @@ export class Service {
       await session.commitTransaction();
     } catch (error) {
       await session.abortTransaction();
-      console.error("Transaction aborted:", error);
+      console.error("⛔ Transaction aborted:", error);
       throw error;
     } finally {
       session.endSession();

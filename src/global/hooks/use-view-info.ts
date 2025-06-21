@@ -11,7 +11,7 @@ export const useViewInfo = () => {
   const theme = useMantineTheme();
 
   useLayoutEffect(() => {
-    if (width <= Number(theme.breakpoints.sm.split("em")[0]) * 16)
+    if (width <= Number(theme.breakpoints.md.split("em")[0]) * 16)
       dispatch(setIsMobile(true));
     else dispatch(setIsMobile(false));
   }, [width, dispatch, theme]);

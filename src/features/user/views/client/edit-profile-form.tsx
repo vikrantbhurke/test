@@ -150,7 +150,7 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
       <Stack gap="md">
         <ProfilePic user={user} />
 
-        {stateUser.provider[0] === "credentials" && (
+        {stateUser.provider === "credentials" && (
           <Group justify="center">
             <CldUploadWidget
               signatureEndpoint={cloudinarySignatureApiRoute}

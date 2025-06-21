@@ -25,10 +25,10 @@ export const config = {
         const user = await getUserByUsername(credentials.username as string);
         if (!user) throw new Error("Account with this username not found.");
 
-        if (user.provider[0] !== "credentials") {
+        if (user.provider !== "credentials") {
           const provider =
-            user.provider[0].charAt(0).toUpperCase() +
-            user.provider[0].slice(1);
+            user.provider.charAt(0).toUpperCase() +
+            user.provider.slice(1);
 
           const errorMessage = `Account associated with ${provider} found. Sign in with ${provider} instead.`;
           throw new Error(errorMessage);

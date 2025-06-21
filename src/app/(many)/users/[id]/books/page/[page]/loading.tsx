@@ -4,7 +4,7 @@ import { NewSkeleton } from "@/global/components/common/server";
 
 export default function Loading() {
   const gridDesktop = (
-    <Grid visibleFrom="sm">
+    <Grid visibleFrom="md">
       {Array.from({ length: 12 }, (_, index) => (
         <GridCol key={index} span={dimensions.gridColSpan}>
           <NewSkeleton h={300} w="100%" a="pulse" v="rounded" r="xs" />
@@ -14,7 +14,7 @@ export default function Loading() {
   );
 
   const gridMobile = (
-    <Grid hiddenFrom="sm">
+    <Grid hiddenFrom="md">
       {Array.from({ length: 2 }, (_, index) => (
         <GridCol key={index} span={dimensions.gridColSpan}>
           <NewSkeleton h={300} w="100%" a="pulse" v="rounded" r="xs" />

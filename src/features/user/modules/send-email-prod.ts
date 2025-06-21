@@ -25,8 +25,8 @@ export const sendEmailProd = async (
 
   try {
     await client.send(mailOptions);
-    console.log("Email sent successfully");
+    console.log("✅ Email sent successfully");
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("⛔ Error sending email:", error);
   }
 };

@@ -31,9 +31,15 @@ export class BookRepository extends Repository {
   }
 
   async getBookById(id: string) {
+    const keys = await redis.keys("*");
+    console.log("getBookById Cache keys:", keys);
+
     const key = `book:${id}`;
     const cachedBook = await redis.get(key);
-    if (cachedBook) return JSON.parse(cachedBook);
+    if (cachedBook) {
+      console.log("CACHE HIT:", id);
+      return JSON.parse(cachedBook);
+    }
 
     const dbBook = await this.getOne(Book, {
       conditions: { _id: id },
@@ -42,7 +48,10 @@ export class BookRepository extends Repository {
       populateSelect,
     });
 
-    if (dbBook) await redis.set(key, JSON.stringify(dbBook), "EX", 86400);
+    if (dbBook) {
+      console.log("CACHE MISS:", id);
+      await redis.set(key, JSON.stringify(dbBook), "EX", 86400);
+    }
     return dbBook;
   }
 
@@ -81,6 +90,10 @@ export class BookRepository extends Repository {
   }
 
   async getBooks(getManyDTO: GetManyDTO) {
+    await redis.flushall();
+    const keys = await redis.keys("*");
+    console.log("getBooks Cache keys:", keys);
+
     return await this.getMany(Book, {
       ...getManyDTO,
       select,

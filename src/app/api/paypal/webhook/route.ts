@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
     const email = event.resource.subscriber.email_address;
 
     console.log(
+      "ℹ️ ",
       "Event:",
       eventType,
       "| Id:",
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ message: "Webhook received." }, { status: 200 });
   } catch (error: any) {
-    console.error("PayPal Webhook Error:", error);
+    console.error("⛔ PayPal Webhook Error:", error);
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

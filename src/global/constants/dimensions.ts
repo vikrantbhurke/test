@@ -8,5 +8,5 @@ export const dimensions = {
   mawSm: 700,
   mawMd: 1000,
   mawLg: 1400,
-  gridColSpan: { base: 12, md: 6, lg: 4, xl: 3 },
+  gridColSpan: { base: 12, lg: 6, xl: 4, xxl: 3 },
 };

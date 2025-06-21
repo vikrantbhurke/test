@@ -89,7 +89,7 @@ export default function ListGridOuter({
       setPage((prevPage) => prevPage + 1);
       setContent((prevData) => [...prevData, ...dataPage.content]);
     } catch (error) {
-      console.error("Error loading more data:", error);
+      console.error("⛔ Error loading more data:", error);
     } finally {
       setIsFetching(false);
     }
@@ -106,7 +106,7 @@ export default function ListGridOuter({
       setDataPage(dataPage);
       setContent(dataPage.content);
     } catch (error) {
-      console.error("Error loading new data:", error);
+      console.error("⛔ Error loading new data:", error);
     } finally {
       setIsFetching(false);
     }

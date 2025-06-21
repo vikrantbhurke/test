@@ -43,7 +43,7 @@ export default function Navbar({ pathname, auth }: NavbarProps) {
           p={4}
           h={40}
           href={href}
-          visibleFrom="sm"
+          visibleFrom="md"
           component={Link}
           aria-label={label}
           style={stillButtonProps.style}
@@ -60,7 +60,7 @@ export default function Navbar({ pathname, auth }: NavbarProps) {
           p={4}
           h={60}
           href={href}
-          hiddenFrom="sm"
+          hiddenFrom="md"
           component={Link}
           aria-label={label}
           style={stillButtonProps.style}
