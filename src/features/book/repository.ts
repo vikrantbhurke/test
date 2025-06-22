@@ -3,10 +3,7 @@ import { Genre } from "./enums";
 import { EditBookDTO, SaveBookDTO } from "./schema";
 import { Repo, GetManyDTO } from "@/global/classes";
 import { performance } from "perf_hooks";
-// import redis from "@/global/configurations/redis";
-
-import { Redis } from "ioredis";
-const redis = new Redis(process.env.REDIS_URL as string);
+import redis from "@/global/configurations/redis";
 
 const select = "title synopsis authorId likes votes voterIds tags genre";
 const populate = ["authorId"];
@@ -37,27 +34,15 @@ export class BookRepository extends Repo {
   async getBookById(id: string) {
     const key = `book:${id}`;
 
-    const mongoCachedStart = performance.now();
-    await this.getCache(key);
-    const mongoCachedEnd = performance.now();
+    const getStart = performance.now();
+    const cachedBook = await redis.get(key);
+    const getEnd = performance.now();
 
-    const redisCacheStart = performance.now();
-    const redisCachedBook = await redis.get(key);
-    const redisCacheEnd = performance.now();
-
-    if (redisCachedBook) {
-      console.log("CACHE HIT:", id);
+    if (cachedBook) {
       console.log(
-        `⏱ Cache lookup time: ${(redisCacheEnd - redisCacheStart).toFixed(
-          2
-        )} ms`
+        `📚 CACHE HIT: ${id} | In ${(getEnd - getStart).toFixed(2)} ms`
       );
-      console.log(
-        `⏱ MongoDB cache lookup time: ${(
-          mongoCachedEnd - mongoCachedStart
-        ).toFixed(2)} ms`
-      );
-      return JSON.parse(redisCachedBook);
+      return JSON.parse(cachedBook);
     }
 
     const dbStart = performance.now();
@@ -70,11 +55,17 @@ export class BookRepository extends Repo {
     });
 
     const dbEnd = performance.now();
-    console.log(`📚 CACHE MISS: ${id}`);
-    console.log(`⏱ DB fetch time: ${(dbEnd - dbStart).toFixed(2)} ms`);
+    console.log(`📚 CACHE MISS: ${id} | In ${(dbEnd - dbStart).toFixed(2)} ms`);
 
-    if (dbBook) await this.setCache(key, JSON.stringify(dbBook));
-    if (dbBook) await redis.set(key, JSON.stringify(dbBook), "EX", 86400); // Cache for 24 hours
+    if (dbBook) {
+      const setStart = performance.now();
+      await redis.set(key, JSON.stringify(dbBook), "EX", 86400);
+      const setEnd = performance.now();
+      console.log(
+        `📦 CACHE SET: ${id} | In ${(setEnd - setStart).toFixed(2)} ms`
+      );
+    }
+
     return dbBook;
   }
 
@@ -139,7 +130,6 @@ export class BookRepository extends Repo {
       update: editBookDTO,
     });
 
-    // if (modifiedCount) await this.dropCache(`book:${id}`);
     if (modifiedCount) await redis.del(`book:${id}`);
   }
 
@@ -152,7 +142,6 @@ export class BookRepository extends Repo {
 
     if (modifiedCount) {
       const book = await this.getBookByTitle(title);
-      // if (book) await this.dropCache(`book:${book.id}`);
       if (book) await redis.del(`book:${book.id}`);
     }
   }
@@ -164,7 +153,10 @@ export class BookRepository extends Repo {
       update: editBookDTO,
     });
 
-    if (modifiedCount) await this.dropCacheByPrefix("book");
+    if (modifiedCount) {
+      const keys = await redis.keys("book:*");
+      keys.forEach(async (key) => await redis.del(key));
+    }
   }
 
   async likeBook(id: string, session?: any) {
@@ -178,7 +170,6 @@ export class BookRepository extends Repo {
       session
     );
 
-    // if (modifiedCount) await this.dropCache(`book:${id}`);
     if (modifiedCount) await redis.del(`book:${id}`);
   }
 
@@ -193,7 +184,6 @@ export class BookRepository extends Repo {
       session
     );
 
-    // if (modifiedCount) await this.dropCache(`book:${id}`);
     if (modifiedCount) await redis.del(`book:${id}`);
   }
 
@@ -205,7 +195,6 @@ export class BookRepository extends Repo {
       element: tag,
     });
 
-    // if (modifiedCount) await this.dropCache(`book:${id}`);
     if (modifiedCount) await redis.del(`book:${id}`);
   }
 
@@ -217,7 +206,6 @@ export class BookRepository extends Repo {
       element: tag,
     });
 
-    // if (modifiedCount) await this.dropCache(`book:${id}`);
     if (modifiedCount) await redis.del(`book:${id}`);
   }
 
@@ -230,7 +218,6 @@ export class BookRepository extends Repo {
       element: voterId,
     });
 
-    // if (modifiedCount) await this.dropCache(`book:${id}`);
     if (modifiedCount) await redis.del(`book:${id}`);
   }
 
@@ -243,7 +230,6 @@ export class BookRepository extends Repo {
       element: voterId,
     });
 
-    // if (modifiedCount) await this.dropCache(`book:${id}`);
     if (modifiedCount) await redis.del(`book:${id}`);
   }
 
@@ -260,12 +246,14 @@ export class BookRepository extends Repo {
       session
     );
 
-    if (modifiedCount) await this.dropCacheByPrefix("book");
+    if (modifiedCount) {
+      const keys = await redis.keys("book:*");
+      keys.forEach(async (key) => await redis.del(key));
+    }
   }
 
   async dropBookById(id: string, session?: any) {
     const { deletedCount } = await this.dropOne(Book, { _id: id }, session);
-    // if (deletedCount) await this.dropCache(`book:${id}`);
     if (deletedCount) await redis.del(`book:${id}`);
   }
 
@@ -274,18 +262,25 @@ export class BookRepository extends Repo {
 
     if (deletedCount) {
       const book = await this.getBookByTitle(title, session);
-      // if (book) await this.dropCache(`book:${book.id}`);
       if (book) await redis.del(`book:${book.id}`);
     }
   }
 
   async dropBooksByAuthorId(authorId: string, session?: any) {
     const { deletedCount } = await this.dropMany(Book, { authorId }, session);
-    if (deletedCount) await this.dropCacheByPrefix("book");
+
+    if (deletedCount) {
+      const keys = await redis.keys("book:*");
+      keys.forEach(async (key) => await redis.del(key));
+    }
   }
 
   async dropBooks(session?: any) {
     const { deletedCount } = await this.dropMany(Book, session);
-    if (deletedCount) await this.dropCacheByPrefix("book");
+
+    if (deletedCount) {
+      const keys = await redis.keys("book:*");
+      keys.forEach(async (key) => await redis.del(key));
+    }
   }
 }

@@ -1,6 +1,5 @@
 import { ClientSession, InsertManyOptions, Model } from "mongoose";
 import { Order } from "../enums";
-import { Cache } from "./cache";
 
 type EditDTO = {
   filter?: object;
@@ -35,40 +34,6 @@ export type GetOneDTO = {
 };
 
 export class Repo {
-  getCache = async (key: string) => {
-    const document = await Cache.findOne({ key });
-    return document ? document.value : null;
-  };
-
-  setCache = async (key: string, value: string) => {
-    try {
-      await Cache.findOneAndUpdate(
-        { key },
-        { value, createdAt: new Date() },
-        { upsert: true, new: true, setDefaultsOnInsert: true }
-      );
-    } catch (error: any) {
-      console.error("⛔ Cache write error:", error.message);
-    }
-  };
-
-  dropCache = async (key: string) => {
-    await Cache.deleteOne({ key });
-  };
-
-  dropCacheByPrefix = async (prefix: string) => {
-    const regex = new RegExp(`^${prefix}`);
-    const keys = await Cache.find({ key: { $regex: regex } }).select("key");
-
-    if (keys.length) {
-      const deletePromises = keys.map((document) =>
-        Cache.deleteOne({ key: document.key })
-      );
-
-      await Promise.all(deletePromises);
-    }
-  };
-
   getSession = (session?: ClientSession) => {
     return session ? { session } : undefined;
   };
