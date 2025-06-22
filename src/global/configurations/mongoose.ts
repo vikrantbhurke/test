@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { Cache } from "@/global/classes";
 import { Book } from "@/features/book/model";
 import { User } from "@/features/user/model";
 import { Comment } from "@/features/comment/model";
@@ -18,7 +17,7 @@ const connectMongoose = async () => {
   }
 
   connection = await mongoose.connect(uri);
-  [Cache, Book, User, Comment, BookLiker]; // Ensure models are registered
+  [Book, User, Comment, BookLiker]; // Ensure models are registered
   console.log("✅ Mongoose connected");
   return connection;
 };
