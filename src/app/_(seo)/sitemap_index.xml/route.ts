@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const r2Url = `${process.env.APP_URL}/cdn/sitemaps/sitemap_index.xml`;
+    const r2Url = `${process.env.APP_URL}/sitemap_index.xml`;
     const response = await fetch(r2Url);
     if (!response.ok) throw new Error("Failed to fetch sitemap index");
     const xml = await response.text();
