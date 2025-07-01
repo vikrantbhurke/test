@@ -2,7 +2,7 @@
 import { useViewportSize } from "@mantine/hooks";
 import { useLayoutEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setIsMobile } from "../states/global.slice";
+import { setIsMobile } from "../states/global-slice";
 import { useMantineTheme } from "@mantine/core";
 
 export const useViewInfo = () => {

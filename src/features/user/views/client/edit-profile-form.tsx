@@ -23,13 +23,13 @@ import { useForm, zodResolver } from "@mantine/form";
 import { editAvatarById, editUserById } from "@/features/user/action";
 import { FloatingInput } from "@/global/components/common/client";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
-import ProfilePic from "./profile-pic";
+import { ProfilePic } from "./profile-pic";
 
 type EditProfileFormProps = {
   user: any;
 };
 
-export default function EditProfileForm({ user }: EditProfileFormProps) {
+export function EditProfileForm({ user }: EditProfileFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();

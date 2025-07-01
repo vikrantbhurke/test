@@ -1,3 +1,4 @@
+"use server";
 import nodemailer from "nodemailer";
 
 let transport: nodemailer.Transporter | null = null;
@@ -25,4 +26,4 @@ const connectNodemailer = async (): Promise<nodemailer.Transporter> => {
   }
 };
 
-export default await connectNodemailer();
+export default connectNodemailer;

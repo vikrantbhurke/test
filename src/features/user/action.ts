@@ -11,10 +11,6 @@ import { Provider, Role } from "./enums";
 import { auth, signIn, signOut } from "@/auth";
 import { TemplateVariables } from "mailtrap";
 import { Payment } from "../payment/enums";
-import "@/global/configurations/mongoose";
-import "@/global/configurations/cloudinary";
-import "@/global/configurations/nodemailer";
-import "@/global/configurations/redis";
 
 export const getAuth = async () => {
   const session = await auth();

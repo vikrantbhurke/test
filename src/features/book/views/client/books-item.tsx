@@ -17,11 +17,11 @@ import {
   bookCommentsRoute,
 } from "@/global/constants/routes";
 import Link from "next/link";
-import DropBookButton from "./drop-book-button";
+import { DropBookButton } from "./drop-book-button";
 import { Clearance } from "@/features/user/enums";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-export default function BooksItem({ item, auth }: any) {
+export function BooksItem({ item, auth }: any) {
   const { id, title, synopsis, authorId, genre, like } = item;
 
   const aid = authorId.id;

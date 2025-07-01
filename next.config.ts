@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
       "@mantine/form",
       "@mantine/hooks",
       "@mantine/modals",
-      "@mantine/notifications",
       "@mantine/nprogress",
       "@mui/material",
       "@radix-ui/react-icons",

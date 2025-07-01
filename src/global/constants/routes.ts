@@ -1,8 +1,8 @@
 export const homeRoute = "/";
 
-export const signUpRoute = "/sign-up"; // Tab
+export const signUpRoute = "/sign-up";
 
-export const signInRoute = "/sign-in"; // After Auth.js
+export const signInRoute = "/sign-in";
 
 export const requestEmailRoute = "/request-email";
 

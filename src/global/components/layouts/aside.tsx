@@ -1,3 +1,3 @@
-export default function Aside() {
+export function Aside() {
   return <></>;
 }

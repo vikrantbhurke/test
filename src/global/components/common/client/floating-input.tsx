@@ -16,7 +16,7 @@ type FloatingInputProps = {
   value?: string;
 } & Partial<TextInputProps & PasswordInputProps & TextareaProps>;
 
-export default function FloatingInput({
+export function FloatingInput({
   type = "text-input",
   variant = "form",
   value: formValue,

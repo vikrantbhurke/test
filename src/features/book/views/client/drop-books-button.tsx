@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { dropBooksByAuthorId } from "@/features/book/action";
+import { dropBooksByAuthorId } from "@/features";
 import { NewModal } from "@/global/components/common/client";
 import { booksServerWindowRoute } from "@/global/constants/routes";
 
@@ -9,7 +9,7 @@ type DropBooksButtonProps = {
   authorId: string;
 };
 
-export default function DropBooksButton({ authorId }: DropBooksButtonProps) {
+export function DropBooksButton({ authorId }: DropBooksButtonProps) {
   const [opened, { open, close }] = useDisclosure();
 
   return (

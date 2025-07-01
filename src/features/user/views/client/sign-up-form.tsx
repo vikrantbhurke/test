@@ -25,7 +25,7 @@ import { Gender, Provider } from "@/features/user/enums";
 import { FloatingInput, FormSelect } from "@/global/components/common/client";
 import { IconCircleCheckFilled, IconCircleXFilled } from "@tabler/icons-react";
 
-export default function SignUpForm() {
+export function SignUpForm() {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();

@@ -1,4 +1,2 @@
-import { Genre } from "./genre";
-import { Sort } from "./sort";
-
-export { Genre, Sort };
+export * from "./genre";
+export * from "./sort";

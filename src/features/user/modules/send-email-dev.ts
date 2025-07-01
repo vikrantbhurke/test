@@ -1,4 +1,5 @@
-import transport from "@/global/configurations/nodemailer";
+"use server";
+import connectNodemailer from "@/global/configurations/nodemailer";
 import { TemplateVariables } from "mailtrap";
 
 export const sendEmailDev = async (
@@ -19,6 +20,7 @@ export const sendEmailDev = async (
   };
 
   try {
+    const transport = await connectNodemailer();
     await transport.sendMail(mailOptions);
     console.log("✅ Email sent successfully");
   } catch (error) {

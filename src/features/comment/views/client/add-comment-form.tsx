@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "@mantine/form";
 import { SaveCommentSchema } from "@/features/comment/schema";
 import { Button, Stack } from "@mantine/core";
-import { saveComment } from "@/features/comment/action";
+import { saveComment } from "@/features";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { FloatingInput } from "@/global/components/common/client";
 import { useToast } from "@/global/hooks";
@@ -20,11 +20,7 @@ type AddCommentFormProps = {
   };
 };
 
-export default function AddCommentForm({
-  bookId,
-  close,
-  auth,
-}: AddCommentFormProps) {
+export function AddCommentForm({ bookId, close, auth }: AddCommentFormProps) {
   const router = useRouter();
   const [isMutating, setIsMutating] = useState(false);
   const { showToast } = useToast();

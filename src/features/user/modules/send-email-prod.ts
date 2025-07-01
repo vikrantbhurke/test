@@ -1,3 +1,4 @@
+"use server";
 import { MailtrapClient, TemplateVariables } from "mailtrap";
 
 export const sendEmailProd = async (

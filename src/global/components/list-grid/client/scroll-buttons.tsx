@@ -10,7 +10,7 @@ import { dimensions } from "@/global/constants";
 // Currently ScrollButtons are not visible for ListGridFinite (Container) since useRef can't be used in RSC
 // ScrollButtons are visible in ListGridFinite (Window) & ListGridInfinite (Window & Container)
 
-export default function ScrollButtons({ scrollButtonsProps }: any) {
+export function ScrollButtons({ scrollButtonsProps }: any) {
   const firstRender = useIsFirstRender();
 
   const { scrollRef, scrollbar, scrollProps, scrollbuttons, positions } =

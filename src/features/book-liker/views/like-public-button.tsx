@@ -5,7 +5,7 @@ import { signInRoute } from "@/global/constants/routes";
 import { ActionIcon, Group, Text } from "@mantine/core";
 import { IconHeartFilled } from "@tabler/icons-react";
 
-export default function LikePublicButton({ likes }: any) {
+export function LikePublicButton({ likes }: any) {
   return (
     <Group gap={0}>
       <ActionIcon

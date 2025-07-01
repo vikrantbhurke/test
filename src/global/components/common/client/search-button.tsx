@@ -2,11 +2,11 @@
 import { useDispatch } from "react-redux";
 import { Button, Stack, Text } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
-import { toggleSearch } from "@/global/states/global.slice";
+import { toggleSearch } from "@/global/states/global-slice";
 import classes from "@/global/styles/app.module.css";
 import { stillButtonProps } from "@/global/constants";
 
-export default function SearchButton() {
+export function SearchButton() {
   const dispatch = useDispatch();
   const handleToggleSearch = () => dispatch(toggleSearch());
 

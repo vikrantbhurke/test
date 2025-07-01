@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { dimensions } from "@/global/constants";
 import { Box, Transition } from "@mantine/core";
 
-export default function CollapsibleHeader({ Component }: any) {
+export function CollapsibleHeader({ Component }: any) {
   const [showHeader, setShowHeader] = useState(false);
 
   useEffect(() => {

@@ -1,8 +1,9 @@
+"use server";
 import { v2 as cloudinary } from "cloudinary";
 
 let isConfigured = false;
 
-const connectCloudinary = () => {
+const connectCloudinary = async () => {
   if (isConfigured) return cloudinary;
 
   if (
@@ -24,4 +25,4 @@ const connectCloudinary = () => {
   return cloudinary;
 };
 
-export default connectCloudinary();
+export default connectCloudinary;

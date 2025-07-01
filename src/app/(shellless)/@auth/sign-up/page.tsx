@@ -1,4 +1,5 @@
 import { SignUpForm } from "@/features/user/views/client";
+export { metadata } from "./metadata";
 
 export default async function Page() {
   return <SignUpForm />;

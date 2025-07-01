@@ -1,15 +1,17 @@
 import { notFound } from "next/navigation";
 import { Paper, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
-import { getBooks } from "@/features/book/action";
+import { getBooks } from "@/features";
 import { UserItem } from "@/features/user/views/server";
-import { getAuth, getUserById } from "@/features/user/action";
-import { CollapsibleHeader } from "@/global/components/layouts";
 import { listGridDefaults } from "@/global/constants/server";
+import { getAuth, getUserById } from "@/features";
+import { CollapsibleHeader } from "@/global/components/layouts";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { BooksItem, BooksDetails } from "@/features/book/views/server";
+import { Order } from "@/global/enums";
+export { generateMetadata } from "./metadata";
 
-type PageProps = {
+export type PageProps = {
   params: Promise<{ id: string; page: string }>;
   searchParams: Promise<{ [key: string]: string }>;
 };
@@ -17,13 +19,14 @@ type PageProps = {
 export default async function Page({ params, searchParams }: PageProps) {
   const { id: uid, role } = await getAuth();
   const { id, page } = await params;
-  const sp = await searchParams;
+  const { sort, order } = await searchParams;
   const dbPage = Number(page) - 1;
   const auth = { id: uid, role };
 
   const getBooksDTO = {
-    ...sp,
+    sort,
     page: dbPage,
+    order: order as Order,
     filter: { authorId: id },
   };
 

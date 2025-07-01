@@ -1,6 +1,7 @@
 import { RequestEmailForm } from "@/features/user/views/client";
 import { dimensions } from "@/global/constants";
 import { Paper, Stack } from "@mantine/core";
+export { metadata } from "./metadata";
 
 export default async function Page() {
   return (

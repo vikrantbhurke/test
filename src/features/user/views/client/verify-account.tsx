@@ -13,7 +13,7 @@ type VerifyAccountProps = {
   token: string;
 };
 
-export default function VerifyAccount({ token }: VerifyAccountProps) {
+export function VerifyAccount({ token }: VerifyAccountProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();

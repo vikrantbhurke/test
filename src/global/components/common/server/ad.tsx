@@ -1,6 +1,6 @@
 import { Paper, Stack } from "@mantine/core";
 
-export default function Ad() {
+export function Ad() {
   return (
     <Paper p="xl" h="100%">
       <Stack align="center" justify="center" h="100%">

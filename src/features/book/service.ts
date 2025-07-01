@@ -1,3 +1,4 @@
+import { Type } from "@/global/enums";
 import {
   UserService,
   CommentService,
@@ -78,10 +79,6 @@ export class BookService extends Service {
     return await this.bookRepository.getBookByIndex(index);
   }
 
-  async getAllBookIdsByAuthorId(authorId: string, session?: any) {
-    return await this.bookRepository.getAllBookIdsByAuthorId(authorId, session);
-  }
-
   async getBooks(getManyDTO: GetManyDTO, auth?: any) {
     const booksPage = await this.bookRepository.getBooks(getManyDTO);
 
@@ -106,11 +103,6 @@ export class BookService extends Service {
 
     return booksPage;
   }
-
-  async getRandomBooks(getManyDTO: GetManyDTO) {
-    return await this.bookRepository.getRandomBooks(getManyDTO);
-  }
-
   async editBookById(id: string, editBookDTO: EditBookDTO) {
     await this.bookRepository.editBookById(id, editBookDTO);
   }
@@ -172,10 +164,13 @@ export class BookService extends Service {
   }
 
   async dropBooksByAuthorId(authorId: string, session?: any) {
-    const bookIdsPage = await this.getAllBookIdsByAuthorId(authorId, session);
-    if (!bookIdsPage.content) return;
+    const booksPage = await this.getBooks(
+      { filter: { authorId }, select: "_id", populate: [], type: Type.All },
+      session
+    );
+    if (!booksPage.content) return;
     await this.bookRepository.dropBooksByAuthorId(authorId, session);
-    for (const book of bookIdsPage.content) {
+    for (const book of booksPage.content) {
       await this.commentService.dropCommentsByBookId(book.id, session);
       await this.userService.unsetFavBookIdByFavBookId(book.id, session);
       await this.bookLikerService.dropBookLikersByBookId(book.id, session);

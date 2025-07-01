@@ -1,25 +1,11 @@
-import AvatarNew from "./avatar-new";
-import ProfilePic from "./profile-pic";
-import SignUpForm from "./sign-up-form";
-import SignInForm from "./sign-in-form";
-import VerifyAccount from "./verify-account";
-import ResetPassword from "./reset-password";
-import EditProfileForm from "./edit-profile-form";
-import RequestEmailForm from "./request-email-form";
-import SignOutNavbarButton from "./sign-out-navbar-button";
-import SignOutFooterButton from "./sign-out-footer-button";
-import DeleteAccountButton from "./delete-account-button";
-
-export {
-  AvatarNew,
-  ProfilePic,
-  SignUpForm,
-  SignInForm,
-  VerifyAccount,
-  ResetPassword,
-  EditProfileForm,
-  RequestEmailForm,
-  SignOutNavbarButton,
-  SignOutFooterButton,
-  DeleteAccountButton,
-};
+export * from "./avatar-new";
+export * from "./profile-pic";
+export * from "./sign-up-form";
+export * from "./sign-in-form";
+export * from "./verify-account";
+export * from "./reset-password";
+export * from "./edit-profile-form";
+export * from "./request-email-form";
+export * from "./sign-out-navbar-button";
+export * from "./sign-out-footer-button";
+export * from "./delete-account-button";

@@ -14,7 +14,7 @@ type BooksFilterDrawerProps = {
   close: () => void;
 };
 
-export default function BooksFilterDrawer({
+export function BooksFilterDrawer({
   size = "xs",
   title,
   radius,

@@ -1,8 +1,10 @@
 import { Stack } from "@mantine/core";
+import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
+export { generateMetadata } from "./metadata";
 import { dimensions } from "@/global/constants";
-import { getAuth } from "@/features/user/action";
-import { getBooks } from "@/features/book/action";
+import { getAuth } from "@/features";
+import { getBooks } from "@/features";
 import { listGridDefaults } from "@/global/constants/server";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { BooksItem, BooksDetails } from "@/features/book/views/server";
@@ -14,15 +16,16 @@ type PageProps = {
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { page } = await params;
-  const sp = await searchParams;
+  const { sort, order, genre } = await searchParams;
   const dbPage = Number(page) - 1;
   const { id, role } = await getAuth();
   const auth = { id, role };
 
   const getBooksDTO = {
-    ...sp,
+    sort,
     page: dbPage,
-    filter: sp?.genre === "All" ? {} : { genre: sp?.genre },
+    order: order as Order,
+    filter: !genre || genre === "All" ? undefined : { genre },
   };
 
   const booksPage = await getBooks(getBooksDTO, auth);
@@ -50,8 +53,9 @@ export default async function Page({ params, searchParams }: PageProps) {
         listGridInnerProps={{
           ...listGridInnerProps,
           auth,
-          content: booksPage.content,
+          ad: true,
           DataItem: BooksItem,
+          content: booksPage.content,
         }}
       />
     </Stack>

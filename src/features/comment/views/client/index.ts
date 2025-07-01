@@ -1,13 +1,5 @@
-import CommentsItem from "./comments-item";
-import AddCommentForm from "./add-comment-form";
-import AddCommentButton from "./add-comment-button";
-import AddCommentModal from "./add-comment-modal";
-import DropCommentButton from "./drop-comment-button";
-
-export {
-  CommentsItem,
-  AddCommentForm,
-  AddCommentButton,
-  AddCommentModal,
-  DropCommentButton,
-};
+export * from "./comments-item";
+export * from "./add-comment-form";
+export * from "./add-comment-button";
+export * from "./add-comment-modal";
+export * from "./drop-comment-button";

@@ -1,3 +1,1 @@
-import { Payment } from "./payment";
-
-export { Payment };
+export * from "./payment";

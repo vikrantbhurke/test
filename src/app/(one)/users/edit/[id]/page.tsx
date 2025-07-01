@@ -1,9 +1,10 @@
 import { Stack } from "@mantine/core";
 import { notFound, redirect } from "next/navigation";
 import { dimensions } from "@/global/constants";
-import { getAuth, getUserById } from "@/features/user/action";
+import { getAuth, getUserById } from "@/features";
 import { EditProfileForm } from "@/features/user/views/client";
 import { signInRoute } from "@/global/constants/routes";
+export { metadata } from "./metadata";
 
 type PageProps = {
   params: Promise<{ id: string }>;

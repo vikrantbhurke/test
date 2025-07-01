@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 
-export default function NProgress() {
+export function NProgress() {
   const pathname = usePathname();
 
   useEffect(() => {

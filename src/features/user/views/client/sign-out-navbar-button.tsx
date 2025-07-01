@@ -8,7 +8,7 @@ import { signInRoute } from "@/global/constants/routes";
 import { stillButtonProps } from "@/global/constants";
 import { NewModal } from "@/global/components/common/client";
 
-export default function SignOutNavbarButton() {
+export function SignOutNavbarButton() {
   const [opened, { open, close }] = useDisclosure();
 
   return (

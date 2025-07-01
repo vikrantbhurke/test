@@ -1,7 +1,7 @@
 import { DropCommentButton } from "../client";
 import { Paper, Stack, Text, Title } from "@mantine/core";
 
-export default async function CommentsItem({ item, auth }: any) {
+export async function CommentsItem({ item, auth }: any) {
   const { id, body, commenterId } = item;
 
   return (

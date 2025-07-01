@@ -1,9 +1,10 @@
 import { Paper, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { BookItem } from "@/features/book/views/server";
-import { getBookById } from "@/features/book/action";
+import { getBookById } from "@/features";
 import { notFound } from "next/navigation";
-import { getAuth } from "@/features/user/action";
+import { getAuth } from "@/features";
+export { generateMetadata } from "./metadata";
 
 type PageProps = {
   params: Promise<{ id: string }>;

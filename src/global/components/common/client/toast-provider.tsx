@@ -23,7 +23,7 @@ type ToastProviderProps = {
   children: ReactNode;
 };
 
-export default function ToastProvider({ children }: ToastProviderProps) {
+export function ToastProvider({ children }: ToastProviderProps) {
   const [opened, setOpened] = useState(false);
   const [toast, setToast] = useState<ToastProps>({
     title: "",

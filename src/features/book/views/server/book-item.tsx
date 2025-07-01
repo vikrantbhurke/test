@@ -23,7 +23,7 @@ type BookItemProps = {
   auth: any;
 };
 
-export default async function BookItem({ book, auth }: BookItemProps) {
+export async function BookItem({ book, auth }: BookItemProps) {
   const { id, title, synopsis, authorId, genre } = book;
 
   const aid = authorId.id;

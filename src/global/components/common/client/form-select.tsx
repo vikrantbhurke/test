@@ -26,7 +26,7 @@ type FormSelectProps = {
   onChange: (value: OptionValue) => void;
 } & Partial<InputBaseProps>;
 
-export default function FormSelect({
+export function FormSelect({
   value,
   options,
   onChange,

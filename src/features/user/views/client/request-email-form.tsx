@@ -13,7 +13,7 @@ import { RequestEmailSchema } from "@/features/user/schema";
 import { FloatingInput } from "@/global/components/common/client";
 import { Button, Stack, Text, useMantineColorScheme } from "@mantine/core";
 
-export default function RequestEmailForm() {
+export function RequestEmailForm() {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const { colorScheme } = useMantineColorScheme();

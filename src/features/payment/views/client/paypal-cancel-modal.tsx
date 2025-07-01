@@ -4,9 +4,9 @@ import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { useToast } from "@/global/hooks";
 import { Button, Modal, Stack, Text } from "@mantine/core";
-import { cancelPayPalSubscription } from "@/features/payment/action";
+import { cancelPayPalSubscription } from "@/features";
 
-export default function PayPalCancelModal({ opened, close, id }: any) {
+export function PayPalCancelModal({ opened, close, id }: any) {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const { isMobile } = useSelector((state: RootState) => state.global);

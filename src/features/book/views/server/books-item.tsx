@@ -20,7 +20,7 @@ import { DropBookButton } from "../client";
 import { Clearance } from "@/features/user/enums";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
-export default async function BooksItem({ item, auth }: any) {
+export async function BooksItem({ item, auth }: any) {
   const { id, title, synopsis, authorId, genre, like } = item;
 
   const aid = authorId.id;

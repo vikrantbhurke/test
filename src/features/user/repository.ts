@@ -1,32 +1,43 @@
 import { User } from "./model";
-import { Repo } from "@/global/classes";
+import { Repository } from "@/global/classes";
 import { SignUpUserDTO, EditUserDTO } from "./schema";
+import { EditMode, Type } from "@/global/enums";
 
-const select =
-  "firstname lastname username email role provider avatar hashedPassword isVerified payment subscriptionId";
+export class UserRepository extends Repository {
+  type = Type.All;
+  select =
+    "firstname lastname username email role provider avatar hashedPassword isVerified payment subscriptionId";
 
-export class UserRepository extends Repo {
   async signUpUser(signUpUserDTO: SignUpUserDTO) {
     await this.saveOne(User, signUpUserDTO);
   }
 
   async getUserById(id: string) {
-    return await this.getOne(User, { conditions: { _id: id }, select });
+    return await this.getOne(User, {
+      conditions: { _id: id },
+      select: this.select,
+    });
   }
 
   async getUserByUsername(username: string) {
-    return await this.getOne(User, { conditions: { username }, select });
+    return await this.getOne(User, {
+      conditions: { username },
+      select: this.select,
+    });
   }
 
   async getUserByEmail(email: string) {
-    return await this.getOne(User, { conditions: { email }, select });
+    return await this.getOne(User, {
+      conditions: { email },
+      select: this.select,
+    });
   }
 
   async editUserById(id: string, editUserDTO: EditUserDTO) {
     await this.editOne(User, {
       filter: { _id: id },
       update: editUserDTO,
-      mode: "set",
+      mode: EditMode.Set,
     });
   }
 
@@ -34,7 +45,7 @@ export class UserRepository extends Repo {
     await this.editOne(User, {
       filter: { email },
       update: editUserDTO,
-      mode: "set",
+      mode: EditMode.Set,
     });
   }
 
@@ -42,7 +53,7 @@ export class UserRepository extends Repo {
     await this.editOne(User, {
       filter: { _id: id },
       update: { email },
-      mode: "set",
+      mode: EditMode.Set,
     });
   }
 
@@ -50,7 +61,7 @@ export class UserRepository extends Repo {
     await this.editOne(User, {
       filter: { _id: id },
       update: { avatar: { secureUrl: secure_url, publicId: public_id } },
-      mode: "set",
+      mode: EditMode.Set,
     });
   }
 
@@ -58,7 +69,7 @@ export class UserRepository extends Repo {
     await this.editOne(User, {
       filter: { _id: id },
       update: { favBookId },
-      mode: "set",
+      mode: EditMode.Set,
     });
   }
 
@@ -66,7 +77,7 @@ export class UserRepository extends Repo {
     await this.editOne(User, {
       filter: { _id: id },
       update: { favBookId: null },
-      mode: "set",
+      mode: EditMode.Set,
     });
   }
 
@@ -76,7 +87,7 @@ export class UserRepository extends Repo {
       {
         filter: { favBookId },
         update: { favBookId: null },
-        mode: "set",
+        mode: EditMode.Set,
       },
       session
     );
@@ -87,7 +98,7 @@ export class UserRepository extends Repo {
       User,
       {
         update: { favBookId: null },
-        mode: "set",
+        mode: EditMode.Set,
       },
       session
     );

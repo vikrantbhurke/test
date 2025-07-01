@@ -1,9 +1,9 @@
 "use client";
 import { Group, Text } from "@mantine/core";
 import { dimensions } from "@/global/constants";
-import BooksFilterButton from "./books-filter-button";
+import { BooksFilterButton } from "./books-filter-button";
 
-export default function BooksDetails({ dataPage }: any) {
+export function BooksDetails({ dataPage }: any) {
   const { page, totalPages, totalElements, search } = dataPage;
   const uiPage = page + 1;
 

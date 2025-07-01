@@ -12,7 +12,7 @@ type DeleteAccountButtonProps = {
   id: string;
 };
 
-export default function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
+export function DeleteAccountButton({ id }: DeleteAccountButtonProps) {
   const [opened, { open, close }] = useDisclosure();
 
   return (

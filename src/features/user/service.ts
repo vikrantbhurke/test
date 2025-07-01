@@ -10,7 +10,7 @@ import jsonwebtoken from "jsonwebtoken";
 import { Service } from "@/global/classes";
 import { TemplateVariables } from "mailtrap";
 import { Template } from "@/global/constants";
-import cloudinary from "@/global/configurations/cloudinary";
+import connectCloudinary from "@/global/configurations/cloudinary";
 import { SignUpUserDTO, EditUserDTO, ResetPasswordDTO } from "./schema";
 
 export class UserService extends Service {
@@ -198,6 +198,7 @@ export class UserService extends Service {
       await this.bookLikerService.dropBookLikersByLikerId(id, session);
     });
 
+    const cloudinary = await connectCloudinary();
     await cloudinary.uploader.destroy(user.avatar.publicId);
   }
 }

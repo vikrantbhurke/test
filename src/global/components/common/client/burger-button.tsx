@@ -6,6 +6,6 @@ type BurgerButtonProps = {
   toggle: () => void;
 };
 
-export default function BurgerButton({ opened, toggle }: BurgerButtonProps) {
+export function BurgerButton({ opened, toggle }: BurgerButtonProps) {
   return <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="sm" />;
 }

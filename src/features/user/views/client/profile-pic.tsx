@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import { useDisclosure } from "@mantine/hooks";
 
-export default function ProfilePic({ user }: any) {
+export function ProfilePic({ user }: any) {
   const [opened, { open, close }] = useDisclosure(false);
 
   const id = user.id;

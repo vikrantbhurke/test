@@ -3,7 +3,7 @@ import { Stack } from "@mantine/core";
 import { AppMany } from "@/global/components/layouts";
 import { IconAppsFilled } from "@tabler/icons-react";
 import classes from "@/global/styles/app.module.css";
-import { getAuth } from "@/features/user/action";
+import { getAuth } from "@/features";
 
 type LayoutProps = {
   children: React.ReactNode;

@@ -19,7 +19,7 @@ type ResetPasswordProps = {
   token: string;
 };
 
-export default function ResetPassword({ token }: ResetPasswordProps) {
+export function ResetPassword({ token }: ResetPasswordProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();

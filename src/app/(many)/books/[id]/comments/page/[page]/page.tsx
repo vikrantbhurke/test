@@ -1,10 +1,12 @@
+import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
 import { Paper, Stack } from "@mantine/core";
+export { generateMetadata } from "./metadata";
 import { dimensions } from "@/global/constants";
-import { getAuth } from "@/features/user/action";
-import { getBookById } from "@/features/book/action";
+import { getAuth } from "@/features";
+import { getBookById } from "@/features";
 import { BookItem } from "@/features/book/views/server";
-import { getComments } from "@/features/comment/action";
+import { getComments } from "@/features";
 import { listGridDefaults } from "@/global/constants/server";
 import { AddCommentButton } from "@/features/comment/views/client";
 import { ListGridOuter } from "@/global/components/list-grid/server";
@@ -18,14 +20,15 @@ type PageProps = {
 export default async function Page({ params, searchParams }: PageProps) {
   const { id: uid, role } = await getAuth();
   const { id, page } = await params;
-  const sp = await searchParams;
+  const { sort, order } = await searchParams;
   const dbPage = Number(page) - 1;
   const auth = { id: uid, role };
 
   const getCommentsDTO = {
+    sort,
     page: dbPage,
+    order: order as Order,
     filter: { bookId: id },
-    ...sp,
   };
 
   const book = await getBookById(id, auth);
@@ -64,13 +67,10 @@ export default async function Page({ params, searchParams }: PageProps) {
           scrollWrapperProps={scrollWrapperProps}
           listGridInnerProps={{
             ...listGridInnerProps,
+            layout: "list",
             auth: { id: uid },
             content: commentsPage.content,
             DataItem: CommentsItem,
-            listGridProps: {
-              ...listGridInnerProps.listGridProps,
-              layout: "list",
-            },
           }}
         />
       )}

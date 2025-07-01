@@ -87,14 +87,6 @@ export const getBooks = async (getManyDTO: GetManyDTO, auth?: any) => {
   }
 };
 
-export const getRandomBooks = async (getManyDTO: GetManyDTO) => {
-  try {
-    return await bookService.getRandomBooks(getManyDTO);
-  } catch (error: any) {
-    throw error;
-  }
-};
-
 export const editBookById = async (id: string, editBookDTO: EditBookDTO) => {
   try {
     await bookService.editBookById(id, editBookDTO);

@@ -2,9 +2,9 @@
 import { useDispatch } from "react-redux";
 import { ActionIcon } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
-import { toggleSearch } from "@/global/states/global.slice";
+import { toggleSearch } from "@/global/states/global-slice";
 
-export default function SearchIcon() {
+export function SearchIcon() {
   const dispatch = useDispatch();
   const handleToggleSearch = () => dispatch(toggleSearch());
 

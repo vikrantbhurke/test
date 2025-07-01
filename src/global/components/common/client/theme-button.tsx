@@ -2,7 +2,7 @@
 import { IconBulb } from "@tabler/icons-react";
 import { ActionIcon, useMantineColorScheme } from "@mantine/core";
 
-export default function ThemeButton() {
+export function ThemeButton() {
   const { toggleColorScheme } = useMantineColorScheme();
 
   return (

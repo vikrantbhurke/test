@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import AddCommentModal from "./add-comment-modal";
+import { AddCommentModal } from "./add-comment-modal";
 import { Clearance } from "@/features/user/enums";
 import { signInRoute } from "@/global/constants/routes";
 
@@ -11,10 +11,7 @@ type AddCommentButtonProps = {
   auth: any;
 };
 
-export default function AddCommentButton({
-  bookId,
-  auth,
-}: AddCommentButtonProps) {
+export function AddCommentButton({ bookId, auth }: AddCommentButtonProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (

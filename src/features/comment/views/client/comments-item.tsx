@@ -1,8 +1,8 @@
 "use client";
-import DropCommentButton from "./drop-comment-button";
+import { DropCommentButton } from "./drop-comment-button";
 import { Paper, Stack, Text, Title } from "@mantine/core";
 
-export default function CommentsItem({ item, auth }: any) {
+export function CommentsItem({ item, auth }: any) {
   const { id, body, commenterId } = item;
 
   return (

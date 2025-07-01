@@ -1,5 +1,3 @@
-import PayPalButtons from "./paypal-buttons";
-import PayPalCancelModal from "./paypal-cancel-modal";
-import PayPalSuspendModal from "./paypal-suspend-modal";
-
-export { PayPalButtons, PayPalCancelModal, PayPalSuspendModal };
+export * from "./paypal-buttons";
+export * from "./paypal-cancel-modal";
+export * from "./paypal-suspend-modal";

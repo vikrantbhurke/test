@@ -1,14 +1,14 @@
 "use client";
 import { Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { dropCommentById } from "@/features/comment/action";
+import { dropCommentById } from "@/features";
 import { NewModal } from "@/global/components/common/client";
 
 type DropCommentButtonProps = {
   id: string;
 };
 
-export default function DropCommentButton({ id }: DropCommentButtonProps) {
+export function DropCommentButton({ id }: DropCommentButtonProps) {
   const [opened, { open, close }] = useDisclosure();
 
   const handleDropComment = async () => {

@@ -1,10 +1,10 @@
 "use client";
 import { useSelector } from "react-redux";
 import { ScrollArea } from "@mantine/core";
-import ScrollButtons from "./scroll-buttons";
+import { ScrollButtons } from "./scroll-buttons";
 import { RootState } from "@/global/states/store";
 
-export default function ScrollWrapper({
+export function ScrollWrapper({
   children,
   scrollButtonsProps,
   scrollWrapperProps,

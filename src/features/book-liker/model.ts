@@ -10,10 +10,7 @@ const BookLikerSchema = new Schema(
       required: true,
     },
   },
-  {
-    collection: "BookLiker",
-    timestamps: true,
-  }
+  { collection: "BookLiker", timestamps: true }
 );
 
 export const BookLiker =

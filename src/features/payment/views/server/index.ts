@@ -1,3 +1,1 @@
-import PaymentInfo from "./payment-info";
-
-export { PaymentInfo };
+export * from "./payment-info";

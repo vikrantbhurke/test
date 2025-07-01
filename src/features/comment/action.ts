@@ -24,6 +24,14 @@ export const editCommentById = async (
   }
 };
 
+export const countComments = async (filter: any) => {
+  try {
+    return await commentService.countComments(filter);
+  } catch (error: any) {
+    throw error;
+  }
+};
+
 export const getComments = async (getManyDTO: GetManyDTO) => {
   try {
     return await commentService.getComments(getManyDTO);

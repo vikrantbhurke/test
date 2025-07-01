@@ -2,10 +2,10 @@
 import { ActionIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFilter } from "@tabler/icons-react";
-import BooksFiltersModal from "./books-filter-modal";
-import BooksFiltersDrawer from "./books-filter-drawer";
+import { BooksFilterModal } from "./books-filter-modal";
+import { BooksFilterDrawer } from "./books-filter-drawer";
 
-export default function BooksFilterButton() {
+export function BooksFilterButton() {
   const [drawerOpened, { open: drawerOpen, close: drawerClose }] =
     useDisclosure(false);
 
@@ -29,12 +29,12 @@ export default function BooksFilterButton() {
         <IconFilter size={16} stroke={1.5} />
       </ActionIcon>
 
-      <BooksFiltersModal
+      <BooksFilterModal
         title="Books Filter"
         opened={modalOpened}
         close={modalClose}
       />
-      <BooksFiltersDrawer
+      <BooksFilterDrawer
         title="Books Filter"
         opened={drawerOpened}
         close={drawerClose}

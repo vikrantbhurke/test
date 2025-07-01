@@ -35,7 +35,7 @@ type NavbarProps = {
   pathname: string;
 };
 
-export default function Navbar({ pathname, auth }: NavbarProps) {
+export function Navbar({ pathname, auth }: NavbarProps) {
   const NavbarButton = ({ href, className, Icon, label }: any) => {
     return (
       <>

@@ -12,7 +12,7 @@
 //   subscriptionId: string;
 // };
 
-// export default function StripeButtons({ subscriptionId }: StripeButtonsProps) {
+// export function StripeButtons({ subscriptionId }: StripeButtonsProps) {
 //   const [suspendOpened, { open: suspendOpen, close: suspendClose }] =
 //     useDisclosure();
 

@@ -2,7 +2,7 @@ import { Group, Text } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { BooksFilterButton } from "../client";
 
-export default async function BooksDetails({ dataPage }: any) {
+export async function BooksDetails({ dataPage }: any) {
   const { page, totalPages, totalElements, search } = dataPage;
   const uiPage = page + 1;
 

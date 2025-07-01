@@ -27,7 +27,7 @@ import { FloatingInput } from "@/global/components/common/client";
 import { homeRoute, requestEmailRoute } from "@/global/constants/routes";
 import { signInWithCreds, signInWithOAuth } from "@/features/user/action";
 
-export default function SignInForm() {
+export function SignInForm() {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();

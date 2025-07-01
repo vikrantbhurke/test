@@ -8,7 +8,7 @@ import { stillButtonProps } from "@/global/constants";
 import classes from "@/global/styles/app.module.css";
 import { NewModal } from "@/global/components/common/client";
 
-export default function SignOutFooterButton() {
+export function SignOutFooterButton() {
   const [opened, { open, close }] = useDisclosure();
 
   return (

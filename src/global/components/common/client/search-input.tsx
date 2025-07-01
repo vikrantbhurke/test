@@ -5,7 +5,7 @@ import { RootState } from "@/global/states/store";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useSelector, useDispatch } from "react-redux";
 import { ActionIcon, Box, TextInput } from "@mantine/core";
-import { toggleSearch } from "@/global/states/global.slice";
+import { toggleSearch } from "@/global/states/global-slice";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { searchInputProps } from "@/global/constants";
 import { useRef } from "react";
@@ -14,7 +14,7 @@ type SearchInputProps = {
   placeholder: string;
 };
 
-export default function SearchInput({ placeholder }: SearchInputProps) {
+export function SearchInput({ placeholder }: SearchInputProps) {
   const dispatch = useDispatch();
   const pathname = usePathname();
   const { replace } = useRouter();

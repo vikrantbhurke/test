@@ -23,7 +23,7 @@ type NewModalProps = {
   buttonProps?: any;
 };
 
-export default function NewModal({
+export function NewModal({
   route,
   routeType,
   close,

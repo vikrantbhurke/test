@@ -2,7 +2,7 @@
 import {
   createPayPalSubscription,
   activatePayPalSubscription,
-} from "@/features/payment/action";
+} from "@/features";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useToast } from "@/global/hooks";
@@ -14,18 +14,15 @@ import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { Payment } from "@/features/payment/enums";
 import { homeRoute } from "@/global/constants/routes";
-import PayPalSuspendModal from "./paypal-suspend-modal";
-import PayPalCancelModal from "./paypal-cancel-modal";
+import { PayPalSuspendModal } from "./paypal-suspend-modal";
+import { PayPalCancelModal } from "./paypal-cancel-modal";
 
 type PayPalButtonsProps = {
   subscription: any;
   payment: Payment;
 };
 
-export default function PayPalButtons({
-  subscription,
-  payment,
-}: PayPalButtonsProps) {
+export function PayPalButtons({ subscription, payment }: PayPalButtonsProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();

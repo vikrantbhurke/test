@@ -13,7 +13,7 @@ const UserSchema = new Schema(
     avatar: { type: Object, default: { secureUrl: "", publicId: "" } },
     favBookId: { type: ObjectId, ref: "Book", default: null },
     gender: { type: String, enum: Object.values(Gender), required: true },
-    role: { type: String, enum: Object.values(Role), default: Role.Public },
+    role: { type: String, enum: Object.values(Role), default: Role.Private },
     provider: {
       type: String,
       enum: Object.values(Provider),

@@ -19,7 +19,7 @@ type FooterProps = {
   pathname: string;
 };
 
-export default function Footer({ pathname, auth }: FooterProps) {
+export function Footer({ pathname, auth }: FooterProps) {
   return (
     <Group grow h="100%" gap={4} p={4}>
       <Button

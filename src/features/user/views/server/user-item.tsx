@@ -10,7 +10,7 @@ type UserItemProps = {
   radius?: string | number;
 };
 
-export default async function UserItem({ user, auth }: UserItemProps) {
+export async function UserItem({ user, auth }: UserItemProps) {
   return (
     <Stack gap={4} align="center">
       <ProfilePic user={user} />

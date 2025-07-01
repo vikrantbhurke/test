@@ -1,4 +1,5 @@
 import mongoose, { ClientSession } from "mongoose";
+import connectMongoose from "@/global/configurations/mongoose";
 
 export class Service {
   ids: Set<string>;
@@ -20,7 +21,9 @@ export class Service {
   }
 
   async runAtomic(callback: (session: ClientSession) => Promise<void>) {
+    await connectMongoose();
     const session = await mongoose.startSession();
+
     try {
       session.startTransaction();
       await callback(session);

@@ -3,9 +3,9 @@ import { dimensions } from "@/global/constants";
 import { Grid, GridCol, Stack } from "@mantine/core";
 import { Ad } from "@/global/components/common/server";
 
-export default function ListGridInner({ props }: any) {
-  const { content, DataItem, listGridProps, auth } = props;
-  const { gutter, gap, layout, ...rest } = listGridProps;
+export function ListGridInner({ props }: any) {
+  const { layout, ad, content, DataItem, listGridProps, auth } = props;
+  const { gutter, gap, ...rest } = listGridProps;
 
   if (layout === "grid")
     return (
@@ -13,7 +13,7 @@ export default function ListGridInner({ props }: any) {
         {content.map((item: any, index: number) => {
           const cols = [];
 
-          if (index > 0 && index % 5 === 0) {
+          if (ad && index > 0 && index % 5 === 0) {
             cols.push(
               <GridCol span={dimensions.gridColSpan} key={index}>
                 <Ad />
@@ -38,7 +38,7 @@ export default function ListGridInner({ props }: any) {
         {content.map((item: any, index: number) => {
           const rows = [];
 
-          if (index > 0 && index % 5 === 0) {
+          if (ad && index > 0 && index % 5 === 0) {
             rows.push(
               <Fragment key={index}>
                 <Ad />

@@ -17,10 +17,7 @@ const BookSchema = new Schema(
     voterIds: [{ type: ObjectId, ref: "User", default: [] }],
     genre: { type: String, enum: Object.values(Genre), required: true },
   },
-  {
-    collection: "Book",
-    timestamps: true,
-  }
+  { collection: "Book", timestamps: true }
 );
 
 export const Book = models.Book || model("Book", BookSchema);

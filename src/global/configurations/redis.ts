@@ -1,3 +1,4 @@
+"use server";
 import { Redis } from "ioredis";
 
 let redis: Redis | null = null;
@@ -18,4 +19,4 @@ const connectRedis = async (): Promise<Redis> => {
   }
 };
 
-export default await connectRedis();
+export default connectRedis;

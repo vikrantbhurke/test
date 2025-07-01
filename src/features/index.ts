@@ -1,3 +1,11 @@
+export * from "./sitemap/action";
+export * from "./book/action";
+export * from "./user/action";
+export * from "./comment/action";
+export * from "./payment/action";
+export * from "./book-liker/action";
+import { SitemapService } from "./sitemap/service";
+import { SitemapRepository } from "./sitemap/repository";
 import { PaymentService } from "./payment/service";
 import { UserService } from "./user/service";
 import { UserRepository } from "./user/repository";
@@ -8,6 +16,8 @@ import { CommentRepository } from "./comment/repository";
 import { BookLikerService } from "./book-liker/service";
 import { BookLikerRepository } from "./book-liker/repository";
 
+const sitemapService = new SitemapService();
+const sitemapRepository = new SitemapRepository();
 const paymentService = new PaymentService();
 const userService = new UserService();
 const userRepository = new UserRepository();
@@ -18,6 +28,7 @@ const commentRepository = new CommentRepository();
 const bookLikerService = new BookLikerService();
 const bookLikerRepository = new BookLikerRepository();
 
+sitemapService.setSitemapRepository(sitemapRepository);
 userService.setUserRepository(userRepository);
 userService.setBookService(bookService);
 userService.setCommentService(commentService);
@@ -31,15 +42,18 @@ bookLikerService.setBookLikerRepository(bookLikerRepository);
 bookLikerService.setBookService(bookService);
 
 export {
+  sitemapService,
   paymentService,
   userService,
   bookService,
   commentService,
   bookLikerService,
+  SitemapService,
   UserService,
   BookService,
   CommentService,
   BookLikerService,
+  SitemapRepository,
   UserRepository,
   BookRepository,
   CommentRepository,

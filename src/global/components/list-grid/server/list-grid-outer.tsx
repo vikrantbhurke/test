@@ -1,5 +1,5 @@
 import { Stack } from "@mantine/core";
-import ListGridInner from "./list-grid-inner";
+import { ListGridInner } from "./list-grid-inner";
 import { ScrollButtons, ScrollWrapper } from "../client";
 import { PaginationButtons } from "@/global/components/list-grid/client";
 
@@ -31,17 +31,18 @@ type ScrollWrapperProps = {
 
 type ListGridProps = {
   className?: string;
-  layout?: "grid" | "list";
   p?: "xs" | "sm" | "md" | "lg" | "xl" | number;
   gap?: "xs" | "sm" | "md" | "lg" | "xl" | number;
   gutter?: object;
 };
 
 type ListGridInnerProps = {
+  ad?: boolean;
   content: any[];
   auth?: any | null;
-  DataItem: React.FC<{ item: any }> | React.ComponentType<{ item: any }>;
+  layout?: "grid" | "list";
   listGridProps?: ListGridProps;
+  DataItem: React.FC<{ item: any }> | React.ComponentType<{ item: any }>;
 };
 
 type ListGridOuterProps = {
@@ -55,7 +56,7 @@ type ListGridOuterProps = {
   listGridInnerProps?: ListGridInnerProps;
 };
 
-export default function ListGridOuter({
+export function ListGridOuter({
   dataPage,
   DataDetails = () => <></>,
   paginationProps,

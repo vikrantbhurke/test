@@ -1,7 +1,10 @@
-# Block all crawlers for /accounts
-User-agent: *
-Disallow: /accounts
- 
-# Allow all crawlers
-User-agent: *
+User-Agent: *
 Allow: /
+Disallow: /reset-password
+Disallow: /verify-account
+Disallow: /request-email
+Disallow: /books/save
+Disallow: /books/edit/
+Disallow: /users/edit/
+
+Sitemap: https://test-app-5woj.onrender.com/sitemap_index.xml

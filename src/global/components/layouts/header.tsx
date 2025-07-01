@@ -21,12 +21,7 @@ type HeaderProps = {
   pathname: string;
 };
 
-export default function Header({
-  auth,
-  opened,
-  toggle,
-  pathname,
-}: HeaderProps) {
+export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
   const { installPrompt, isInstalled, handleInstallClick } = useInstallApp();
 
   return (

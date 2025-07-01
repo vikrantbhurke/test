@@ -1,5 +1,6 @@
 import { VerifyAccount } from "@/features/user/views/client";
 import { Stack } from "@mantine/core";
+export { metadata } from "./metadata";
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string }>;

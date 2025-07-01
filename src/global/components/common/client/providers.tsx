@@ -1,7 +1,7 @@
 "use client";
-import NProgress from "./nprogress";
+import { NProgress } from "./nprogress";
 import { Provider } from "react-redux";
-import ToastProvider from "./toast-provider";
+import { ToastProvider } from "./toast-provider";
 import { store } from "@/global/states/store";
 import { theme } from "@/global/styles/theme";
 import { MantineProvider } from "@mantine/core";
@@ -13,7 +13,7 @@ type ProvidersProps = {
   children: React.ReactNode;
 };
 
-export default function Providers({ children }: ProvidersProps) {
+export function Providers({ children }: ProvidersProps) {
   return (
     <Provider store={store}>
       <MantineProvider

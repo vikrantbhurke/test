@@ -1,6 +1,7 @@
 import { ResetPassword } from "@/features/user/views/client";
 import { dimensions } from "@/global/constants";
 import { Loader, Paper, Stack } from "@mantine/core";
+export { metadata } from "./metadata";
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string }>;

@@ -1,3 +1,4 @@
+"use server";
 import mongoose from "mongoose";
 import { Book } from "@/features/book/model";
 import { User } from "@/features/user/model";
@@ -8,6 +9,7 @@ let connection: typeof mongoose | null = null;
 
 const connectMongoose = async () => {
   if (connection) return connection;
+
   const uri = process.env.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI is not defined");
 
@@ -22,4 +24,4 @@ const connectMongoose = async () => {
   return connection;
 };
 
-export default await connectMongoose();
+export default connectMongoose;

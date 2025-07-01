@@ -8,10 +8,7 @@ type PaymentInfoProps = {
   payment: Payment;
 };
 
-export default async function PaymentInfo({
-  subscription,
-  payment,
-}: PaymentInfoProps) {
+export async function PaymentInfo({ subscription, payment }: PaymentInfoProps) {
   const list = [
     `⭐ Remove all advertisements.`,
     `⭐ Remove playlist count & size limit.`,

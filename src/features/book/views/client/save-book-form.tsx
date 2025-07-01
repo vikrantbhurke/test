@@ -12,14 +12,14 @@ import { useForm } from "@mantine/form";
 import { useRef, useState } from "react";
 import { SaveBookSchema } from "@/features/book/schema";
 import { useRouter } from "next/navigation";
-import { saveBook, saveBooks } from "@/features/book/action";
+import { saveBook, saveBooks } from "@/features";
 import { useNotification } from "@/global/hooks";
 import { booksServerWindowRoute } from "@/global/constants/routes";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { FormSelect, FloatingInput } from "@/global/components/common/client";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
 
-export default function SaveBookForm({ auth }: any) {
+export function SaveBookForm({ auth }: any) {
   const router = useRouter();
   const { showNotification } = useNotification();
   const [isMutating, setIsMutating] = useState(false);

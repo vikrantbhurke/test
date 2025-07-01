@@ -1,5 +1,8 @@
 import { ClientSession, InsertManyOptions, Model } from "mongoose";
-import { Order } from "../enums";
+import { Order, Type, SearchMode, EditMode, Size } from "../enums";
+import connectMongoose from "@/global/configurations/mongoose";
+import connectRedis from "@/global/configurations/redis";
+import { Sort } from "@/features/book/enums";
 
 type EditDTO = {
   filter?: object;
@@ -7,22 +10,22 @@ type EditDTO = {
   numberField?: string;
   arrayField?: string;
   element?: string;
-  mode: "set" | "inc" | "dec" | "push" | "pull" | "inc-push" | "dec-pull";
+  mode: EditMode;
 };
 
 export type GetManyDTO = {
   page?: number;
-  pageSize?: number;
   search?: string;
-  sort?: string;
-  order?: string;
+  sort?: Sort | string;
+  order?: Order;
+  size?: Size;
   searchFields?: string[];
-  searchMode?: "and" | "or";
+  mode?: SearchMode;
   select?: string;
   populate?: string[];
   populateSelect?: string[];
   filter?: object;
-  type?: "paged" | "random" | "all";
+  type?: Type;
 };
 
 export type GetOneDTO = {
@@ -33,7 +36,7 @@ export type GetOneDTO = {
   populateSelect?: string[];
 };
 
-export class Repo {
+export class Repository {
   getSession = (session?: ClientSession) => {
     return session ? { session } : undefined;
   };
@@ -65,11 +68,39 @@ export class Repo {
     return current;
   };
 
+  getCache = async (key: string) => {
+    const redis = await connectRedis();
+    return await redis.get(key);
+  };
+
+  setCache = async (
+    key: string,
+    data: any,
+    ex: any = "EX",
+    ttl: number = 86400
+  ) => {
+    const redis = await connectRedis();
+    await redis.set(key, JSON.stringify(data), ex, ttl);
+  };
+
+  delCache = async (key: string) => {
+    const redis = await connectRedis();
+    await redis.del(key);
+  };
+
+  delPrefixCache = async (key: string) => {
+    const redis = await connectRedis();
+    const keys = await redis.keys(key);
+    keys.forEach(async (key) => await redis.del(key));
+  };
+
   checkDoc = async (
     Model: Model<any>,
     filter: object,
     session?: ClientSession
   ) => {
+    await connectMongoose();
+
     return !!(await Model.exists(filter)
       .session(session ?? null)
       .exec());
@@ -80,6 +111,8 @@ export class Repo {
     filters: object[],
     session?: ClientSession
   ): Promise<boolean[]> => {
+    await connectMongoose();
+
     const docs = await Model.find({ $or: filters })
       .session(session ?? null)
       .select("_id")
@@ -99,6 +132,7 @@ export class Repo {
     filter: object = {},
     session?: ClientSession
   ) => {
+    await connectMongoose();
     const filterLength = Object.keys(filter).length;
 
     if (!filterLength) {
@@ -117,6 +151,7 @@ export class Repo {
     conditions: object | undefined = {},
     session?: ClientSession
   ) => {
+    await connectMongoose();
     return await Model.deleteMany(conditions, this.getSession(session)).exec();
   };
 
@@ -125,6 +160,7 @@ export class Repo {
     conditions: object = {},
     session?: ClientSession
   ) => {
+    await connectMongoose();
     return await Model.deleteOne(conditions, this.getSession(session)).exec();
   };
 
@@ -140,6 +176,8 @@ export class Repo {
     }: EditDTO,
     session?: ClientSession
   ) => {
+    await connectMongoose();
+
     const opMap: Record<string, object> = {
       inc: { $inc: { [numberField]: 1 } },
       dec: { $inc: { [numberField]: -1 } },
@@ -175,6 +213,8 @@ export class Repo {
     }: EditDTO,
     session?: ClientSession
   ) => {
+    await connectMongoose();
+
     const opMap: Record<string, object> = {
       inc: { $inc: { [numberField]: 1 } },
       dec: { $inc: { [numberField]: -1 } },
@@ -201,19 +241,21 @@ export class Repo {
     getManyDTO: GetManyDTO,
     session?: ClientSession
   ) => {
+    await connectMongoose();
+
     const {
       page = 0,
-      pageSize = 12,
       search = "",
-      sort = "createdAt",
-      order = Order.Descending,
-      searchFields = [],
-      searchMode = "or",
       select = "",
-      populate = [],
-      populateSelect = [],
       filter = {},
-      type = "paged",
+      populate = [],
+      searchFields = [],
+      populateSelect = [],
+      size = Size.Large,
+      type = Type.Paged,
+      sort = Sort.Created,
+      mode = SearchMode.Or,
+      order = Order.Descending,
     } = getManyDTO;
 
     let searchQuery = {};
@@ -228,7 +270,7 @@ export class Repo {
         [field]: { $regex: regex },
       }));
 
-      searchQuery = searchMode === "and" ? { $and: fields } : { $or: fields };
+      searchQuery = mode === "and" ? { $and: fields } : { $or: fields };
     }
 
     let totalElements = 0;
@@ -249,18 +291,18 @@ export class Repo {
 
     if (type === "random") {
       // Works only when totalElements - pageSize > 0
-      const max = Math.max(totalElements - pageSize, 1);
+      const max = Math.max(totalElements - size, 1);
       const randomSkip = Math.max(0, Math.floor(Math.random() * max));
 
       query = Model.find(queryFilter, null, { session })
         .session(session ?? null)
         .skip(randomSkip)
-        .limit(pageSize);
+        .limit(size);
     } else if (type === "paged") {
       query = Model.find(queryFilter, null, { session })
         .session(session ?? null)
-        .skip(page * pageSize)
-        .limit(pageSize)
+        .skip(page * size)
+        .limit(size)
         .sort({
           [sort]: order === Order.Ascending ? 1 : -1,
           _id: order === Order.Ascending ? 1 : -1,
@@ -280,24 +322,24 @@ export class Repo {
 
     let documents = await query.exec();
     documents = documents.map((document: any) => this.convertId(document));
+    const pages = Math.ceil(totalElements / size);
 
     return {
-      content: documents,
       totalElements,
-      totalPages: Math.ceil(totalElements / pageSize),
-      pageSize,
+      totalPages: pages,
+      content: documents,
+      type,
+      mode,
+      size,
       page,
       sort,
       order,
       filter,
       search,
-      searchFields,
-      searchMode,
+      select,
       firstPage: page === 0,
-      lastPage: totalElements
-        ? page === Math.ceil(totalElements / pageSize) - 1
-        : true,
       emptyPage: documents.length === 0,
+      lastPage: totalElements ? page === pages - 1 : true,
     };
   };
 
@@ -306,6 +348,8 @@ export class Repo {
     getOneDTO: GetOneDTO,
     session?: ClientSession
   ) => {
+    await connectMongoose();
+
     const {
       conditions = {},
       index = null,
@@ -349,6 +393,7 @@ export class Repo {
     documents: object[],
     session?: ClientSession
   ) => {
+    await connectMongoose();
     const options: InsertManyOptions = { ordered: false };
     if (session) options.session = session;
     await Model.insertMany(documents, options);
@@ -359,6 +404,7 @@ export class Repo {
     document: object,
     session?: ClientSession
   ) => {
+    await connectMongoose();
     await Model.create([document], this.getSession(session));
   };
 }

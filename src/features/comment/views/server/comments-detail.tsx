@@ -1,7 +1,7 @@
 import { Group, Text } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 
-export default async function CommentsDetails({ dataPage }: any) {
+export async function CommentsDetails({ dataPage }: any) {
   const { page, totalPages, totalElements } = dataPage;
   const uiPage = page + 1;
 

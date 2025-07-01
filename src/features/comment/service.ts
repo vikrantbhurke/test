@@ -17,6 +17,10 @@ export class CommentService extends Service {
     await this.commentRepository.editCommentById(id, editCommentDTO);
   }
 
+  async countComments(filter: any) {
+    return await this.commentRepository.countComments(filter);
+  }
+
   async getComments(getManyDTO: GetManyDTO) {
     return await this.commentRepository.getComments(getManyDTO);
   }

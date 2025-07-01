@@ -7,7 +7,7 @@ import { RootState } from "@/global/states/store";
 import { stillButtonProps } from "@/global/constants";
 import { ActionIcon, Group, Text } from "@mantine/core";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
-import { dropBookLiker, saveBookLiker } from "@/features/book-liker/action";
+import { dropBookLiker, saveBookLiker } from "@/features";
 
 type LikeButtonProps = {
   bookId: string;
@@ -16,12 +16,7 @@ type LikeButtonProps = {
   like: boolean;
 };
 
-export default function LikeButton({
-  bookId,
-  likerId,
-  likes,
-  like,
-}: LikeButtonProps) {
+export function LikeButton({ bookId, likerId, likes, like }: LikeButtonProps) {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const [isMutating, setIsMutating] = useState(false);

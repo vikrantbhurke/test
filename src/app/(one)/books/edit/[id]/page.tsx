@@ -1,10 +1,11 @@
 import { Stack } from "@mantine/core";
 import { notFound, redirect } from "next/navigation";
 import { dimensions } from "@/global/constants";
-import { getBookById } from "@/features/book/action";
+import { getBookById } from "@/features";
 import { EditBookForm } from "@/features/book/views/client";
-import { getAuth } from "@/features/user/action";
+import { getAuth } from "@/features";
 import { signInRoute } from "@/global/constants/routes";
+export { metadata } from "./metadata";
 
 type PageProps = {
   params: Promise<{ id: string }>;

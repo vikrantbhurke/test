@@ -9,7 +9,7 @@ type NewSkeletonProps = {
   r?: "xs" | "sm" | "md" | "lg" | "xl";
 };
 
-export default function NewSkeleton({
+export function NewSkeleton({
   a = "wave",
   v = "text",
   w = 100,

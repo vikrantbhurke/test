@@ -1,7 +1,7 @@
 "use client";
 import { Modal } from "@mantine/core";
 import { modalProps } from "@/global/constants";
-import AddCommentForm from "./add-comment-form";
+import { AddCommentForm } from "./add-comment-form";
 
 type AddCommentModalProps = {
   bookId: string;
@@ -10,7 +10,7 @@ type AddCommentModalProps = {
   auth: any;
 };
 
-export default function AddCommentModal({
+export function AddCommentModal({
   bookId,
   close,
   opened,

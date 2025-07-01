@@ -1,5 +1,5 @@
 "use client";
-import { notifications } from "@mantine/notifications";
+import { notifications as notifs } from "@mantine/notifications";
 import { useSelector } from "react-redux";
 import { RootState } from "../states/store";
 import classes from "@/global/styles/app.module.css";
@@ -41,7 +41,7 @@ export const useNotification = () => {
     if (status == "info") color = "blue";
     if (status === "default") color = "transparent";
 
-    notifications.show({
+    notifs.show({
       icon,
       color,
       title: <Title order={6}>{title}</Title>,

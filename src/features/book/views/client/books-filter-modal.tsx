@@ -12,7 +12,7 @@ type BooksFilterModalProps = {
   close: () => void;
 };
 
-export default function BooksFilterModal({
+export function BooksFilterModal({
   title,
   close,
   opened,

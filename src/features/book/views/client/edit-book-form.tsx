@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { useForm, zodResolver } from "@mantine/form";
-import { editBookById } from "@/features/book/action";
+import { editBookById } from "@/features";
 import { EditBookSchema } from "@/features/book/schema";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
 import { viewBookRoute } from "@/global/constants/routes";
@@ -17,7 +17,7 @@ type EditBookFormProps = {
   book: any;
 };
 
-export default function EditBookForm({ book }: EditBookFormProps) {
+export function EditBookForm({ book }: EditBookFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();

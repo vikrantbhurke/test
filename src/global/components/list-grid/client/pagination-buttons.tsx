@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Group, Pagination } from "@mantine/core";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
-export default function PaginationButtons({ paginationProps }: any) {
+export function PaginationButtons({ paginationProps }: any) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

@@ -1,7 +1,7 @@
 "use client";
-import ScrollButtons from "./scroll-buttons";
-import ScrollWrapper from "./scroll-wrapper";
-import ListGridInner from "./list-grid-inner";
+import { ScrollButtons } from "./scroll-buttons";
+import { ScrollWrapper } from "./scroll-wrapper";
+import { ListGridInner } from "./list-grid-inner";
 import { stillButtonProps } from "@/global/constants";
 import { Text, Stack, Button, Group } from "@mantine/core";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -23,7 +23,6 @@ type ScrollWrapperProps = {
 
 type ListGridProps = {
   className?: string;
-  layout?: "grid" | "list";
   p?: "xs" | "sm" | "md" | "lg" | "xl" | number;
   gap?: "xs" | "sm" | "md" | "lg" | "xl" | number;
   gutter?: object;
@@ -31,7 +30,9 @@ type ListGridProps = {
 
 type ListGridInnerProps = {
   content: any[];
+  ad?: boolean;
   auth?: any | null;
+  layout?: "grid" | "list";
   DataItem: React.FC<{ item: any }> | React.ComponentType<{ item: any }>;
   listGridProps?: ListGridProps;
 };
@@ -53,7 +54,7 @@ type ListGridOuterProps = {
   listGridInnerProps?: ListGridInnerProps;
 };
 
-export default function ListGridOuter({
+export function ListGridOuter({
   more = "button",
   endLabel = "Nothing more to load",
   buttonLabel = "Load More",

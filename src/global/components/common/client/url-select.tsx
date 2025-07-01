@@ -23,7 +23,7 @@ type UrlSelectProps = {
   labelstyle?: "floating" | "above";
 };
 
-export default function UrlSelect({
+export function UrlSelect({
   options,
   paramKey,
   mah = 200,
