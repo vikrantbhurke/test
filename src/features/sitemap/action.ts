@@ -4,7 +4,7 @@ import {
   BooksSitemap,
   StaticSitemap,
   BookCommentsSitemap,
-} from "@/global/sitemaps";
+} from "./sitemaps";
 import path from "path";
 import { promises as fs } from "fs";
 import { sitemapService } from "..";
@@ -13,13 +13,16 @@ export const createSitemaps = async () => {
   const appUrl = process.env.APP_URL as string;
   const sitemapUrls: string[] = [];
 
+  console.log("Creating sitemaps...");
   const staticSitemap = new StaticSitemap();
   const urls = staticSitemap.getUrls();
   const xml = await buildSitemap(urls);
   const fileName = "sitemaps/static/sitemap.xml";
   await saveSitemap(fileName, xml);
   sitemapUrls.push(`${appUrl}/${fileName}`);
+  console.log("Static sitemap created:", fileName);
 
+  console.log("Creating book sitemaps...");
   const bookSitemap = new BookSitemap();
   for (let i = 0; i < (await bookSitemap.getTotal()); i++) {
     const urls = await bookSitemap.getUrls(i);
@@ -28,7 +31,9 @@ export const createSitemaps = async () => {
     await saveSitemap(fileName, xml);
     sitemapUrls.push(`${appUrl}/${fileName}`);
   }
+  console.log("Book sitemaps created");
 
+  console.log("Creating books sitemaps...");
   const booksSitemap = new BooksSitemap();
   for (let i = 0; i < (await booksSitemap.getTotal()); i++) {
     const urls = await booksSitemap.getUrls(i);
@@ -37,7 +42,9 @@ export const createSitemaps = async () => {
     await saveSitemap(fileName, xml);
     sitemapUrls.push(`${appUrl}/${fileName}`);
   }
+  console.log("Books sitemaps created");
 
+  console.log("Creating book comments sitemaps...");
   const bookCommentsSitemap = new BookCommentsSitemap();
   for (let i = 0; i < (await bookCommentsSitemap.getTotal()); i++) {
     const urls = await bookCommentsSitemap.getUrls(i);
@@ -46,9 +53,12 @@ export const createSitemaps = async () => {
     await saveSitemap(fileName, xml);
     sitemapUrls.push(`${appUrl}/${fileName}`);
   }
+  console.log("Book comments sitemaps created");
 
+  console.log("Creating index sitemap...");
   const indexXml = await buildIndexSitemap(sitemapUrls);
   await saveSitemap("sitemap_index.xml", indexXml);
+  console.log("Index sitemap created");
 };
 
 export const buildSitemap = async (urls: any[]): Promise<string> => {
