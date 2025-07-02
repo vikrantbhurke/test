@@ -1,10 +1,11 @@
 "use server";
 import { S3Client } from "@aws-sdk/client-s3";
 
-let isConfigured = false;
+let cachedR2: S3Client | null = null;
 
 const connectCloudflare = async () => {
-  if (isConfigured) return;
+  if (cachedR2) return cachedR2;
+
   if (
     !process.env.R2_ACCESS_KEY_ID ||
     !process.env.R2_SECRET_ACCESS_KEY ||
@@ -23,7 +24,7 @@ const connectCloudflare = async () => {
   });
 
   console.log("✅ Cloudflare R2 configured");
-  isConfigured = true;
+  cachedR2 = r2;
   return r2;
 };
 
