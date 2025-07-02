@@ -1,6 +1,6 @@
 import { BookLikerDTO } from "./schema";
 import { Service } from "@/global/classes";
-import { BookService, BookLikerRepository } from "..";
+import { BookService, BookLikerRepository } from "../di";
 
 export class BookLikerService extends Service {
   bookService: BookService;

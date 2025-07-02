@@ -1,5 +1,5 @@
 import { Status } from "../user/enums";
-import { UserService } from "..";
+import { UserService } from "../di";
 import { EditUserDTO } from "../user/schema";
 
 export class PaymentService {

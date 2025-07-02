@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 import { Book } from "@/features/book/model";
 import { User } from "@/features/user/model";
+import { Sitemap } from "@/features/sitemap/model";
 import { Comment } from "@/features/comment/model";
 import { BookLiker } from "@/features/book-liker/model";
 
@@ -19,7 +20,7 @@ const connectMongoose = async () => {
   }
 
   connection = await mongoose.connect(uri);
-  [Book, User, Comment, BookLiker]; // Ensure models are registered
+  [Sitemap, Book, User, Comment, BookLiker]; // Ensure models are registered
   console.log("✅ Mongoose connected");
   return connection;
 };

@@ -1,7 +1,7 @@
 "use server";
 import { EditBookDTO, SaveBookDTO, SaveBookSchema } from "./schema";
 import { Genre } from "./enums";
-import { bookService } from "..";
+import { bookService } from "../di";
 import { GetManyDTO } from "@/global/classes";
 
 export const saveBooks = async (file: File) => {

@@ -3,7 +3,7 @@ import {
   UserRepository,
   CommentService,
   BookLikerService,
-} from "..";
+} from "../di";
 import bcrypt from "bcryptjs";
 import { Provider } from "./enums";
 import jsonwebtoken from "jsonwebtoken";

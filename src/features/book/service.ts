@@ -1,12 +1,12 @@
-import { Type } from "@/global/enums";
 import {
   UserService,
   CommentService,
   BookRepository,
   BookLikerService,
-} from "..";
-import { Clearance } from "../user/enums";
+} from "../di";
 import { Genre } from "./enums";
+import { Type } from "@/global/enums";
+import { Clearance } from "../user/enums";
 import { SaveBookDTO, EditBookDTO } from "./schema";
 import { Service, GetManyDTO } from "@/global/classes";
 

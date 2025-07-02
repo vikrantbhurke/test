@@ -1,5 +1,5 @@
 "use server";
-import { commentService } from "..";
+import { commentService } from "../di";
 import { GetManyDTO } from "@/global/classes";
 import { SaveCommentDTO, EditCommentDTO } from "./schema";
 

@@ -6,7 +6,7 @@ import {
   RequestEmailDTO,
   ResetPasswordDTO,
 } from "./schema";
-import { userService } from "..";
+import { userService } from "../di";
 import { Provider, Role } from "./enums";
 import { auth, signIn, signOut } from "@/auth";
 import { TemplateVariables } from "mailtrap";

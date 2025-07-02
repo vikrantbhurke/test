@@ -1,5 +1,5 @@
 import { Service } from "@/global/classes";
-import { SitemapRepository } from "..";
+import { SitemapRepository } from "../di";
 
 export class SitemapService extends Service {
   sitemapRepository: SitemapRepository;

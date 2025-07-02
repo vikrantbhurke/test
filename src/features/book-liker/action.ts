@@ -1,5 +1,5 @@
 "use server";
-import { bookLikerService } from "..";
+import { bookLikerService } from "../di";
 import { BookLikerDTO } from "./schema";
 
 export const saveBookLiker = async (bookLikerDTO: BookLikerDTO) => {

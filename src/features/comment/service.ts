@@ -1,4 +1,4 @@
-import { CommentRepository } from "..";
+import { CommentRepository } from "../di";
 import { SaveCommentDTO, EditCommentDTO } from "./schema";
 import { Service, GetManyDTO } from "@/global/classes";
 
