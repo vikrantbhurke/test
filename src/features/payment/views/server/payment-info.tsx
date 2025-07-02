@@ -1,7 +1,7 @@
 import { Status } from "@/features/user/enums";
 import { Payment } from "@/features/payment/enums";
 import { Group, Stack, Text, Title } from "@mantine/core";
-import { paymentService } from "@/features";
+import { paymentService } from "@/features/di";
 
 type PaymentInfoProps = {
   subscription: any;
