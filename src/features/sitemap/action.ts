@@ -83,13 +83,7 @@ export const buildIndexSitemap = async (
 };
 
 export const saveSitemap = async (fileName: string, xml: string) => {
-  let filePath;
-
-  if (fileName === "sitemap_index.xml")
-    filePath = path.join(process.cwd(), fileName);
-  else filePath = path.join(process.cwd(), "public", fileName);
-
-  // const filePath = path.join(process.cwd(), "public", fileName);
+  const filePath = path.join(process.cwd(), "public", fileName);
   const directory = path.dirname(filePath);
   await fs.mkdir(directory, { recursive: true });
   await fs.writeFile(filePath, xml, "utf8");
