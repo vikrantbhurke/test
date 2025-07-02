@@ -1,7 +1,7 @@
 "use server";
 import {
-  StaticSitemap,
   BookSitemap,
+  StaticSitemap,
   // BooksSitemap,
   // BookCommentsSitemap,
 } from "./sitemaps";
