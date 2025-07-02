@@ -33,7 +33,7 @@ export class BookCommentsSitemap {
 
     for (const book of booksPage.content) {
       const totalComments = await countComments({ bookId: book.id });
-      const totalCommentPages = Math.ceil(totalComments / Size.TwentyFour);
+      const totalCommentPages = Math.ceil(totalComments / Size.Twelve);
 
       for (let page = 1; page <= totalCommentPages; page++) {
         urls.push({

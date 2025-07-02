@@ -5,7 +5,7 @@ import { Repository } from "@/global/classes";
 export class SitemapRepository extends Repository {
   filter = {};
   type = Type.Paged;
-  size = Size.TwentyFour;
+  size = Size.Twelve;
   sort = "updatedAt";
   mode = SearchMode.Or;
   order = Order.Ascending;
