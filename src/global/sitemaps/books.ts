@@ -8,13 +8,13 @@ export class BooksSitemap {
   async getTotalBookPages() {
     if (this.totalBookPages !== null) return this.totalBookPages;
     const totalBooks = await countBooks();
-    this.totalBookPages = Math.ceil(totalBooks / Size.Large);
+    this.totalBookPages = Math.ceil(totalBooks / Size.Thirty);
     return this.totalBookPages;
   }
 
   async getTotal() {
     const totalBookPages = await this.getTotalBookPages();
-    const totalSitemaps = Math.ceil(totalBookPages / Size.Sitemap);
+    const totalSitemaps = Math.ceil(totalBookPages / Size.FiftyK);
     return totalSitemaps;
   }
 
@@ -22,8 +22,8 @@ export class BooksSitemap {
     const totalBookPages = await this.getTotalBookPages();
 
     const urls: any[] = [];
-    const startPage = id * Size.Sitemap + 1;
-    const endPage = Math.min(startPage + Size.Sitemap - 1, totalBookPages);
+    const startPage = id * Size.FiftyK + 1;
+    const endPage = Math.min(startPage + Size.FiftyK - 1, totalBookPages);
 
     for (let i = startPage; i <= endPage; i++) {
       urls.push({

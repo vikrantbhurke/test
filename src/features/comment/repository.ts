@@ -7,7 +7,7 @@ import { Sort } from "../book/enums";
 export class CommentRepository extends Repository {
   filter = {};
   type = Type.Paged;
-  size = Size.Large;
+  size = Size.TwentyFour;
   sort = Sort.Created;
   mode = SearchMode.Or;
   order = Order.Descending;

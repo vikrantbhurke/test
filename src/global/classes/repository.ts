@@ -251,7 +251,7 @@ export class Repository {
       populate = [],
       searchFields = [],
       populateSelect = [],
-      size = Size.Large,
+      size = Size.TwentyFour,
       type = Type.Paged,
       sort = Sort.Created,
       mode = SearchMode.Or,

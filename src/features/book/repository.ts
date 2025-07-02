@@ -7,7 +7,7 @@ import { EditMode, Order, SearchMode, Size, Type } from "@/global/enums";
 export class BookRepository extends Repository {
   filter = {};
   type = Type.Paged;
-  size = Size.Large;
+  size = Size.TwentyFour;
   sort = "title";
   mode = SearchMode.Or;
   order = Order.Ascending;

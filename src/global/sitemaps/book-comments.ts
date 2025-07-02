@@ -15,8 +15,8 @@ export class BookCommentsSitemap {
 
   async getUrls(id: number): Promise<MetadataRoute.Sitemap> {
     const { urls } = await this.getData();
-    const start = id * Size.Sitemap;
-    const end = Math.min(start + Size.Sitemap, urls.length);
+    const start = id * Size.FiftyK;
+    const end = Math.min(start + Size.FiftyK, urls.length);
     return urls.slice(start, end);
   }
 
@@ -33,7 +33,7 @@ export class BookCommentsSitemap {
 
     for (const book of booksPage.content) {
       const totalComments = await countComments({ bookId: book.id });
-      const totalCommentPages = Math.ceil(totalComments / Size.Large);
+      const totalCommentPages = Math.ceil(totalComments / Size.TwentyFour);
 
       for (let page = 1; page <= totalCommentPages; page++) {
         urls.push({
@@ -45,7 +45,7 @@ export class BookCommentsSitemap {
       }
     }
 
-    const totalSitemaps = Math.ceil(urls.length / Size.Sitemap);
+    const totalSitemaps = Math.ceil(urls.length / Size.FiftyK);
     this.cachedData = { urls, totalSitemaps };
     return this.cachedData;
   }

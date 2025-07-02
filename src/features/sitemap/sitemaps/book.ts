@@ -5,7 +5,7 @@ import { countBooks, getBooks } from "@/features";
 export class BookSitemap {
   async getTotal() {
     const totalBooks = await countBooks();
-    const totalSitemaps = Math.ceil(totalBooks / Size.Sitemap);
+    const totalSitemaps = Math.ceil(totalBooks / Size.FiftyK);
     return totalSitemaps;
   }
 
@@ -13,7 +13,7 @@ export class BookSitemap {
     const booksPage = await getBooks({
       page: id,
       select: "_id",
-      size: Size.Sitemap,
+      size: Size.FiftyK,
       populate: [],
     });
 
