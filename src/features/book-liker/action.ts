@@ -1,55 +1,68 @@
 "use server";
-import { bookLikerService } from "../di";
+import * as repo from "./repository";
+import * as book from "../book/action";
 import { BookLikerDTO } from "./schema";
+import * as fn from "@/global/utilities";
 
-export const saveBookLiker = async (bookLikerDTO: BookLikerDTO) => {
+export async function saveBookLiker(bookLikerDTO: BookLikerDTO) {
   try {
-    await bookLikerService.saveBookLiker(bookLikerDTO);
-    return "Book liked successfully.";
+    await fn.runAtomic(async (session) => {
+      await book.likeBook(bookLikerDTO.bookId, session);
+      await repo.saveBookLiker(bookLikerDTO, session);
+    });
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const checkBookLiker = async (bookLikerDTO: BookLikerDTO) => {
+export async function checkBookLiker(bookLikerDTO: BookLikerDTO) {
   try {
-    return await bookLikerService.checkBookLiker(bookLikerDTO);
+    return await repo.checkBookLiker(bookLikerDTO);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const checkBookLikers = async (bookLikersDTO: BookLikerDTO[]) => {
+export async function checkBookLikers(bookLikersDTO: BookLikerDTO[]) {
   try {
-    return await bookLikerService.checkBookLikers(bookLikersDTO);
+    return await repo.checkBookLikers(bookLikersDTO);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const dropBookLiker = async (bookLikerDTO: BookLikerDTO) => {
+export async function dropBookLiker(bookLikerDTO: BookLikerDTO) {
   try {
-    await bookLikerService.dropBookLiker(bookLikerDTO);
+    await fn.runAtomic(async (session) => {
+      await book.unlikeBook(bookLikerDTO.bookId, session);
+      await repo.dropBookLiker(bookLikerDTO, session);
+    });
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function dropBookLikersByLikerId(likerId: string, session?: any) {
+  try {
+    await repo.dropBookLikersByLikerId(likerId, session);
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function dropBookLikersByBookId(bookId: string, session?: any) {
+  try {
+    await repo.dropBookLikersByBookId(bookId, session);
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function dropBookLikers(session?: any) {
+  try {
+    await repo.dropBookLikers(session);
     return "Book unliked successfully.";
   } catch (error: any) {
     throw error;
   }
-};
-
-export const dropBookLikersByLikerId = async (likerId: string) => {
-  try {
-    await bookLikerService.dropBookLikersByLikerId(likerId);
-    return "All books unliked successfully.";
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const dropBookLikersByBookId = async (bookId: string) => {
-  try {
-    await bookLikerService.dropBookLikersByBookId(bookId);
-    return "All likers removed successfully.";
-  } catch (error: any) {
-    throw error;
-  }
-};
+}

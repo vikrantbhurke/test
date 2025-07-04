@@ -8,24 +8,24 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { useSelector } from "react-redux";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 // import { FaLinkedin } from "react-icons/fa";
+import { useToast } from "@/global/hooks";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IconLogin } from "@tabler/icons-react";
 import { Provider } from "@/features/user/enums";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
-import { useToast } from "@/global/hooks";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
 import { SignInUserSchema } from "@/features/user/schema";
+import { signInWithCreds, signInWithOAuth } from "@/features";
 import { FloatingInput } from "@/global/components/common/client";
 import { homeRoute, requestEmailRoute } from "@/global/constants/routes";
-import { signInWithCreds, signInWithOAuth } from "@/features/user/action";
 
 export function SignInForm() {
   const router = useRouter();
@@ -139,11 +139,11 @@ export function SignInForm() {
             c="var(--bg-one)"
             color="var(--tx-one)"
             type="submit"
-            aria-label="Sign In with Credentials"
+            aria-label="Credentials"
             disabled={isMutating && provider === Provider.credentials}
             loading={isMutating && provider === Provider.credentials}
             loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
-            Sign In with Credentials
+            Sign In
           </Button>
         </Stack>
       </form>
@@ -154,24 +154,24 @@ export function SignInForm() {
         leftSection={<FcGoogle size={20} />}
         c="var(--bg-one)"
         color="var(--tx-one)"
-        aria-label="Sign In with Google"
+        aria-label="Google"
         disabled={isMutating && provider === Provider.google}
         loading={isMutating && provider === Provider.google}
         loaderProps={{ type: "dots", color: "var(--bg-one)" }}
         onClick={() => handleSignInWithOAuth("google")}>
-        Sign In with Google
+        Google
       </Button>
 
       <Button
         leftSection={<FaGithub size={20} />}
         c="var(--bg-one)"
         color="var(--tx-one)"
-        aria-label="Sign In with Github"
+        aria-label="Github"
         disabled={isMutating && provider === Provider.github}
         loading={isMutating && provider === Provider.github}
         loaderProps={{ type: "dots", color: "var(--bg-one)" }}
         onClick={() => handleSignInWithOAuth("github")}>
-        Sign In with Github
+        Github
       </Button>
 
       {/* <Button

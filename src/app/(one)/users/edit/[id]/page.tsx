@@ -1,9 +1,9 @@
 import { Stack } from "@mantine/core";
-import { notFound, redirect } from "next/navigation";
 import { dimensions } from "@/global/constants";
 import { getAuth, getUserById } from "@/features";
-import { EditProfileForm } from "@/features/user/views/client";
+import { notFound, redirect } from "next/navigation";
 import { signInRoute } from "@/global/constants/routes";
+import { EditProfileForm } from "@/features/user/views/client";
 export { metadata } from "./metadata";
 
 type PageProps = {

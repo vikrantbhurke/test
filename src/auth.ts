@@ -5,7 +5,7 @@ import {
   getUserByEmail,
   validatePassword,
   getUserByUsername,
-} from "./features/user/action";
+} from "./features";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
@@ -27,8 +27,7 @@ export const config = {
 
         if (user.provider !== "credentials") {
           const provider =
-            user.provider.charAt(0).toUpperCase() +
-            user.provider.slice(1);
+            user.provider.charAt(0).toUpperCase() + user.provider.slice(1);
 
           const errorMessage = `Account associated with ${provider} found. Sign in with ${provider} instead.`;
           throw new Error(errorMessage);

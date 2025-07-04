@@ -1,59 +1,68 @@
 "use server";
-import { commentService } from "../di";
-import { GetManyDTO } from "@/global/classes";
-import { SaveCommentDTO, EditCommentDTO } from "./schema";
+import * as repo from "./repository";
+import { SaveCommentDTO } from "./schema";
+import { GetManyDTO } from "@/global/utilities";
 
-export const saveComment = async (saveCommentDTO: SaveCommentDTO) => {
+export async function saveComment(saveCommentDTO: SaveCommentDTO) {
   try {
-    await commentService.saveComment(saveCommentDTO);
+    await repo.saveComment(saveCommentDTO);
     return "Comment created successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const editCommentById = async (
-  id: string,
-  editCommentDTO: EditCommentDTO
-) => {
+export async function countComments(filter: any) {
   try {
-    await commentService.editCommentById(id, editCommentDTO);
-    return "Comment updated successfully.";
+    return await repo.countComments(filter);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const countComments = async (filter: any) => {
+export async function getComments(getManyDTO: GetManyDTO) {
   try {
-    return await commentService.countComments(filter);
+    return await repo.getComments(getManyDTO);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getComments = async (getManyDTO: GetManyDTO) => {
+export async function dropCommentById(id: string) {
   try {
-    return await commentService.getComments(getManyDTO);
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const dropCommentById = async (id: string) => {
-  try {
-    await commentService.dropCommentById(id);
+    await repo.dropCommentById(id);
     return "Comment deleted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const dropCommentsByBookId = async (bookId: string) => {
+export async function dropCommentsByBookId(bookId: string, session?: any) {
   try {
-    await commentService.dropCommentsByBookId(bookId);
-    return "Comments deleted successfully.";
+    await repo.dropCommentsByBookId(bookId, session);
+    return "Comment deleted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
+
+export async function dropCommentsByCommenterId(
+  commenterId: string,
+  session?: any
+) {
+  try {
+    await repo.dropCommentsByCommenterId(commenterId, session);
+    return "Comment deleted successfully.";
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function dropComments(session?: any) {
+  try {
+    await repo.dropComments(session);
+    return "Comment deleted successfully.";
+  } catch (error: any) {
+    throw error;
+  }
+}

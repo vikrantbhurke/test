@@ -1,7 +1,7 @@
 import { Status } from "@/features/user/enums";
 import { Payment } from "@/features/payment/enums";
+import * as paymentAction from "@/features";
 import { Group, Stack, Text, Title } from "@mantine/core";
-import { paymentService } from "@/features/di";
 
 type PaymentInfoProps = {
   subscription: any;
@@ -73,7 +73,7 @@ export async function PaymentInfo({ subscription, payment }: PaymentInfoProps) {
               Status:{" "}
             </Title>
 
-            <Title order={6} c={paymentService.getStatusColor(status)}>
+            <Title order={6} c={await paymentAction.getStatusColor(status)}>
               {status}
             </Title>
           </Group>
@@ -83,7 +83,7 @@ export async function PaymentInfo({ subscription, payment }: PaymentInfoProps) {
               Started On:{" "}
             </Title>
 
-            <Text fz="sm">{paymentService.formatDateTime(startTime)}</Text>
+            <Text fz="sm">{await paymentAction.formatDateTime(startTime)}</Text>
           </Group>
 
           {!isSuspended && (
@@ -93,7 +93,7 @@ export async function PaymentInfo({ subscription, payment }: PaymentInfoProps) {
               </Title>
 
               <Text fz="sm">
-                {paymentService.formatDateTime(nextBillingTime)}
+                {await paymentAction.formatDateTime(nextBillingTime)}
               </Text>
             </Group>
           )}

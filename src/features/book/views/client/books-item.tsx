@@ -17,8 +17,8 @@ import {
   bookCommentsRoute,
 } from "@/global/constants/routes";
 import Link from "next/link";
-import { DropBookButton } from "./drop-book-button";
 import { Clearance } from "@/features/user/enums";
+import { DropBookButton } from "./drop-book-button";
 import { LikeButton, LikePublicButton } from "@/features/book-liker/views";
 
 export function BooksItem({ item, auth }: any) {

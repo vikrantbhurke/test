@@ -1,11 +1,11 @@
 "use client";
+import { signOutUser } from "@/features";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLogout } from "@tabler/icons-react";
 import { Button, Group, Text } from "@mantine/core";
-import { signOutUser } from "@/features/user/action";
 import classes from "@/global/styles/app.module.css";
-import { signInRoute } from "@/global/constants/routes";
 import { stillButtonProps } from "@/global/constants";
+import { signInRoute } from "@/global/constants/routes";
 import { NewModal } from "@/global/components/common/client";
 
 export function SignOutNavbarButton() {

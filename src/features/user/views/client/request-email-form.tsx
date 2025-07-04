@@ -6,7 +6,7 @@ import { IconLogin } from "@tabler/icons-react";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { useToast } from "@/global/hooks";
-import { requestEmail } from "@/features/user/action";
+import { requestEmail } from "@/features";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
 import { RequestEmailSchema } from "@/features/user/schema";

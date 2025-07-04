@@ -1,10 +1,16 @@
 "use server";
-import { EditBookDTO, SaveBookDTO, SaveBookSchema } from "./schema";
+import * as repo from "./repository";
+import * as user from "../user/action";
+import * as comment from "../comment/action";
+import * as bookLiker from "../book-liker/action";
+import * as fn from "@/global/utilities";
 import { Genre } from "./enums";
-import { bookService } from "../di";
-import { GetManyDTO } from "@/global/classes";
+import { Type } from "@/global/enums";
+import { Clearance } from "../user/enums";
+import { GetManyDTO } from "@/global/utilities";
+import { EditBookDTO, SaveBookDTO, SaveBookSchema } from "./schema";
 
-export const saveBooks = async (file: File) => {
+export async function saveBooks(file: File) {
   const text = await file.text();
   const saveBooksDTO: SaveBookDTO[] = JSON.parse(text);
   const result = SaveBookSchema.array().safeParse(saveBooksDTO);
@@ -15,197 +21,269 @@ export const saveBooks = async (file: File) => {
   }
 
   try {
-    await bookService.saveBooks(saveBooksDTO);
+    for (const saveBookDTO of saveBooksDTO) await saveBook(saveBookDTO);
     return "Books saved successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const saveBook = async (saveBookDTO: SaveBookDTO) => {
+export async function saveBook(saveBookDTO: SaveBookDTO) {
   try {
-    await bookService.saveBook(saveBookDTO);
+    const { title } = saveBookDTO;
+    const book = await getBookByTitle(title);
+    if (book) throw new Error(`Book with title ${title} already exists.`);
+    await repo.saveBook(saveBookDTO);
     return "Book saved successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const checkBook = async (title: string) => {
+export async function checkBook(title: string) {
   try {
-    return await bookService.checkBook(title);
+    return await repo.checkBook(title);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const countBooks = async () => {
+export async function countBooks() {
   try {
-    return await bookService.countBooks();
+    return await repo.countBooks();
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const countBooksByAuthorId = async (authorId: string) => {
+export async function countBooksByAuthorId(authorId: string) {
   try {
-    return await bookService.countBooksByAuthorId(authorId);
+    return await repo.countBooksByAuthorId(authorId);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getBookById = async (id: string, auth?: any) => {
+export async function getBookById(id: string, auth?: any) {
   try {
-    return await bookService.getBookById(id, auth);
+    let book = await repo.getBookById(id);
+
+    if (auth && Clearance.LevelTwo.includes(auth.role)) {
+      const exists = await bookLiker.checkBookLiker({
+        bookId: book.id,
+        likerId: auth.id,
+      });
+
+      book = { ...book, like: exists };
+    }
+
+    if (!book) throw new Error(`Book not found.`);
+    return book;
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getBookByTitle = async (title: string) => {
+export async function getBookByTitle(title: string, session?: any) {
   try {
-    return await bookService.getBookByTitle(title);
+    return await repo.getBookByTitle(title, session);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getBookByIndex = async (index: number) => {
+export async function getBookByIndex(index: number) {
   try {
-    return await bookService.getBookByIndex(index);
+    return await repo.getBookByIndex(index);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getBooks = async (getManyDTO: GetManyDTO, auth?: any) => {
+export async function getBooks(getManyDTO: GetManyDTO, auth?: any) {
   try {
-    return await bookService.getBooks(getManyDTO, auth);
+    const booksPage = await repo.getBooks(getManyDTO);
+
+    if (!booksPage.content) return booksPage;
+
+    if (auth && Clearance.LevelTwo.includes(auth.role)) {
+      const existsArray = await bookLiker.checkBookLikers(
+        booksPage.content.map((book: any) => ({
+          bookId: book.id,
+          likerId: auth.id,
+        }))
+      );
+
+      return {
+        ...booksPage,
+        content: booksPage.content.map((book: any, index: number) => ({
+          ...book,
+          like: existsArray[index],
+        })),
+      };
+    }
+
+    return booksPage;
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const editBookById = async (id: string, editBookDTO: EditBookDTO) => {
+export async function editBookById(id: string, editBookDTO: EditBookDTO) {
   try {
-    await bookService.editBookById(id, editBookDTO);
+    await repo.editBookById(id, editBookDTO);
     return "Book edited successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const editBookByTitle = async (
-  title: string,
-  editBookDTO: EditBookDTO
-) => {
+export async function editBookByTitle(title: string, editBookDTO: EditBookDTO) {
   try {
-    await bookService.editBookByTitle(title, editBookDTO);
+    await repo.editBookByTitle(title, editBookDTO);
     return "Book edited successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const editBooksByGenre = async (
-  genre: Genre,
-  editBookDTO: EditBookDTO
-) => {
+export async function editBooksByGenre(genre: Genre, editBookDTO: EditBookDTO) {
   try {
-    await bookService.editBooksByGenre(genre, editBookDTO);
+    await repo.editBooksByGenre(genre, editBookDTO);
     return "Books edited successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const likeBook = async (id: string) => {
+export async function likeBook(id: string, session?: any) {
   try {
-    await bookService.likeBook(id);
+    await repo.likeBook(id, session);
     return "Book liked successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const unlikeBook = async (id: string) => {
+export async function unlikeBook(id: string, session?: any) {
   try {
-    await bookService.unlikeBook(id);
+    await repo.unlikeBook(id, session);
     return "Book unliked successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const addTag = async (id: string, tag: string) => {
+export async function addTag(id: string, tag: string) {
   try {
-    await bookService.addTag(id, tag);
+    await repo.addTag(id, tag);
     return "Tag added successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const removeTag = async (id: string, tag: string) => {
+export async function removeTag(id: string, tag: string) {
   try {
-    await bookService.removeTag(id, tag);
+    await repo.removeTag(id, tag);
     return "Tag removed successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const upvoteBook = async (id: string, voterId: string) => {
+export async function upvoteBook(id: string, voterId: string) {
   try {
-    await bookService.upvoteBook(id, voterId);
+    await repo.upvoteBook(id, voterId);
     return "Book upvoted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const downvoteBook = async (id: string, voterId: string) => {
+export async function downvoteBook(id: string, voterId: string) {
   try {
-    await bookService.downvoteBook(id, voterId);
+    await repo.downvoteBook(id, voterId);
     return "Book downvoted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const dropBookById = async (id: string) => {
+export async function downvoteBooksByVoterId(voterId: string, session?: any) {
   try {
-    await bookService.dropBookById(id);
+    await repo.downvoteBooksByVoterId(voterId, session);
+    return "Book downvoted successfully.";
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function dropBookById(id: string) {
+  try {
+    await fn.runAtomic(async (session) => {
+      await repo.dropBookById(id, session);
+      await comment.dropCommentsByBookId(id, session);
+      await user.unsetFavBookIdByFavBookId(id, session);
+      await bookLiker.dropBookLikersByBookId(id, session);
+    });
+
     return "Book deleted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const dropBookByTitle = async (title: string) => {
+export async function dropBookByTitle(title: string) {
   try {
-    await bookService.dropBookByTitle(title);
+    await fn.runAtomic(async (session) => {
+      const book = await getBookByTitle(title, session);
+      if (!book) return;
+      await repo.dropBookByTitle(title, session);
+      await comment.dropCommentsByBookId(book.id, session);
+      await user.unsetFavBookIdByFavBookId(book.id, session);
+      await bookLiker.dropBookLikersByBookId(book.id, session);
+    });
+
     return "Book deleted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const dropBooksByAuthorId = async (authorId: string) => {
+export async function dropBooksByAuthorId(authorId: string, session?: any) {
   try {
-    await bookService.dropBooksByAuthorId(authorId);
+    const booksPage = await getBooks(
+      { filter: { authorId }, select: "_id", populate: [], type: Type.All },
+      session
+    );
+
+    if (!booksPage.content) return;
+    await repo.dropBooksByAuthorId(authorId, session);
+
+    for (const book of booksPage.content) {
+      await comment.dropCommentsByBookId(book.id, session);
+      await user.unsetFavBookIdByFavBookId(book.id, session);
+      await bookLiker.dropBookLikersByBookId(book.id, session);
+    }
+
     return "Books deleted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const dropBooks = async () => {
+export async function dropBooks() {
   try {
-    await bookService.dropBooks();
+    await fn.runAtomic(async (session) => {
+      await repo.dropBooks(session);
+      await comment.dropComments(session);
+      await bookLiker.dropBookLikers(session);
+      await user.unsetFavBookIdFromAll(session);
+    });
+
     return "Books deleted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}

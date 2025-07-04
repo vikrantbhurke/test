@@ -1,7 +1,8 @@
 "use server";
 import axios from "axios";
+import { Status } from "../user/enums";
 
-export const getPayPalAccessToken = async () => {
+export async function getPayPalAccessToken() {
   const auth = Buffer.from(
     `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`
   ).toString("base64");
@@ -18,9 +19,9 @@ export const getPayPalAccessToken = async () => {
   );
 
   return paypalResponse.data.access_token;
-};
+}
 
-export const getHeader = async () => {
+export async function getHeader() {
   const accessToken = await getPayPalAccessToken();
 
   return {
@@ -30,9 +31,9 @@ export const getHeader = async () => {
       Accept: "application/json",
     },
   };
-};
+}
 
-export const createPayPalSubscription = async () => {
+export async function createPayPalSubscription() {
   try {
     const session = await axios.post(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions`,
@@ -61,9 +62,9 @@ export const createPayPalSubscription = async () => {
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getPayPalSubscription = async (subscriptionId: string | null) => {
+export async function getPayPalSubscription(subscriptionId: string | null) {
   try {
     if (!subscriptionId) return null;
 
@@ -76,9 +77,9 @@ export const getPayPalSubscription = async (subscriptionId: string | null) => {
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const suspendPayPalSubscription = async (subscriptionId: string) => {
+export async function suspendPayPalSubscription(subscriptionId: string) {
   try {
     await axios.post(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}/suspend`,
@@ -90,11 +91,11 @@ export const suspendPayPalSubscription = async (subscriptionId: string) => {
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const activatePayPalSubscription = async (
+export async function activatePayPalSubscription(
   subscriptionId: string | null
-) => {
+) {
   try {
     await axios.post(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}/activate`,
@@ -106,9 +107,9 @@ export const activatePayPalSubscription = async (
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const cancelPayPalSubscription = async (subscriptionId: string) => {
+export async function cancelPayPalSubscription(subscriptionId: string) {
   try {
     await axios.post(
       `${process.env.PAYPAL_API_URL}/v1/billing/subscriptions/${subscriptionId}/cancel`,
@@ -120,4 +121,50 @@ export const cancelPayPalSubscription = async (subscriptionId: string) => {
   } catch (error: any) {
     throw error;
   }
-};
+}
+
+export async function getStatusColor(status: Status) {
+  switch (status) {
+    case Status.Active:
+      return "green";
+    case Status.Inactive:
+      return "red";
+    case Status.Suspended:
+      return "yellow";
+    default:
+      return "gray";
+  }
+}
+
+export async function formatDateTime(isoString: any) {
+  const date = new Date(isoString);
+
+  // Extract date components
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const year = date.getUTCFullYear();
+
+  // Extract time components
+  // let hours = date.getUTCHours();
+  // const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  // const ampm = hours >= 12 ? "PM" : "AM";
+
+  // Convert to 12-hour format
+  // hours = hours % 12 || 12;
+
+  return `${day}/${month}/${year}`;
+}
+
+export async function getDaySuffix(day: number) {
+  if (day >= 11 && day <= 13) return "th";
+  switch (day % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+}

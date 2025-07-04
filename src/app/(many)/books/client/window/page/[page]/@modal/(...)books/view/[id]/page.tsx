@@ -1,7 +1,6 @@
 import { Stack } from "@mantine/core";
 import { notFound } from "next/navigation";
-import { getAuth } from "@/features";
-import { getBookById } from "@/features";
+import { getAuth, getBookById } from "@/features";
 import { BookItem } from "@/features/book/views/server";
 import { NextModal } from "@/global/components/common/client";
 

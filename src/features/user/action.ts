@@ -6,13 +6,21 @@ import {
   RequestEmailDTO,
   ResetPasswordDTO,
 } from "./schema";
-import { userService } from "../di";
+import bcrypt from "bcryptjs";
+import * as repo from "./repository";
+import * as book from "../book/action";
+import * as comment from "../comment/action";
+import * as bookLiker from "../book-liker/action";
+import jsonwebtoken from "jsonwebtoken";
 import { Provider, Role } from "./enums";
-import { auth, signIn, signOut } from "@/auth";
-import { TemplateVariables } from "mailtrap";
 import { Payment } from "../payment/enums";
+import { TemplateVariables } from "mailtrap";
+import { Template } from "@/global/constants";
+import { auth, signIn, signOut } from "@/auth";
+import * as fn from "@/global/utilities";
+import connectCloudinary from "@/global/configurations/cloudinary";
 
-export const getAuth = async () => {
+export async function getAuth() {
   const session = await auth();
   const id = session ? session.user.id : null;
   const subId = session ? session.user.subscriptionId : null;
@@ -22,15 +30,24 @@ export const getAuth = async () => {
   const payment = session ? (session.user.payment as Payment) : Payment.Free;
   const role = session ? (session.user.role as Role) : Role.Public;
   return { id, role, subId, payment, name, image, provider };
-};
+}
 
-export const sendEmail = async (
+export async function sendEmail(
   recipient: string,
   template: any,
   variables: TemplateVariables
-) => {
+) {
   try {
-    await userService.sendEmail(recipient, template, variables);
+    const { id, subject, filename } = template;
+
+    if (process.env.NODE_ENV === "production") {
+      const { sendEmailProd } = await import("./modules/send-email-prod");
+      await sendEmailProd(id, recipient, variables);
+    } else {
+      const { sendEmailDev } = await import("./modules/send-email-dev");
+      await sendEmailDev(filename, recipient, subject, variables);
+    }
+
     return "Email sent successfully.";
   } catch (error: any) {
     return {
@@ -39,68 +56,119 @@ export const sendEmail = async (
       issues: undefined,
     };
   }
-};
+}
 
-export const requestEmail = async (requestEmailDTO: RequestEmailDTO) => {
+export async function generateToken(payload: any) {
   try {
-    await userService.requestEmail(requestEmailDTO);
-    return "Check your email for password reset link.";
+    const secretKey = process.env.JWT_SECRET_KEY;
+    return jsonwebtoken.sign(payload, secretKey!, { expiresIn: "1d" });
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const resetPassword = async (
-  token: string,
-  resetPasswordDTO: ResetPasswordDTO
-) => {
+export async function validatePassword(
+  password: string,
+  hashedPassword: string
+) {
   try {
-    await userService.resetPassword(token, resetPasswordDTO);
-    return "Password reset successfully.";
+    return bcrypt.compareSync(password, hashedPassword);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const generateToken = async (payload: any) => {
+export async function verifyAccount(token: string) {
   try {
-    return await userService.generateToken(payload);
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const verifyAccount = async (token: string) => {
-  try {
-    await userService.verifyAccount(token);
+    if (!token) throw new Error("Invalid or expired token.");
+    // @ts-expect-error...
+    const { username } = await verifyToken(token);
+    const user = await getUserByUsername(username as any);
+    if (user.isVerified) throw new Error("Email already verified.");
+    await editUserById(user.id, { isVerified: true });
     return "Account verified successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const signUpUsers = async (signUpUsersDTO: SignUpUserDTO[]) => {
+export async function requestEmail(requestEmailDTO: RequestEmailDTO) {
   try {
-    await userService.signUpUsers(signUpUsersDTO);
-    return "Profiles created successfully.";
+    const user = await getUserByEmail(requestEmailDTO.email);
+    if (!user) throw new Error("Account with this email does not exist.");
+    const token = await generateToken({ username: user.username });
+
+    await sendEmail(requestEmailDTO.email, Template.Password, {
+      token,
+      name: user.firstname,
+      email: user.email,
+      url: process.env.APP_URL as string,
+      app: process.env.APP_NAME as string,
+    });
+
+    // return { success: true, message: "Verification email sent." };
+
+    return "Check your email for password reset link.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const signUpUser = async (
+export async function resetPassword(
+  token: string,
+  { password }: ResetPasswordDTO
+) {
+  try {
+    if (!token) throw new Error("Invalid or expired token.");
+    // @ts-expect-error...
+    const { username } = await verifyToken(token);
+    const user = await getUserByUsername(username as any);
+    if (!user) throw new Error("Account with this username does not exist.");
+    const hashedPassword = await encryptPassword(password);
+    await editUserById(user.id, { hashedPassword });
+    return "Password reset successfully.";
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function signUpUser(
   provider: Provider,
   signUpUserDTO: SignUpUserDTO
-) => {
+) {
   try {
-    await userService.signUpUser(provider, signUpUserDTO);
+    const { firstname, username, email } = signUpUserDTO;
+    const u1 = await getUserByUsername(username);
+    const u2 = await getUserByEmail(email);
+
+    if (u1)
+      throw new Error(`Account with username ${username} already exists.`);
+
+    if (u2) throw new Error(`Account with email ${email} already exists.`);
+
+    const newUser = {
+      ...signUpUserDTO,
+      provider,
+      hashedPassword: await encryptPassword(signUpUserDTO.password),
+    };
+
+    await repo.signUpUser(newUser);
+    const token = await generateToken({ username });
+
+    await sendEmail(email, Template.Welcome, {
+      token,
+      name: firstname,
+      url: process.env.APP_URL!,
+      app: process.env.APP_NAME!,
+    });
+
     return "Profile created successfully. Check your email for account verification link.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const signInWithCreds = async (signInUserDTO: SignInUserDTO) => {
+export async function signInWithCreds(signInUserDTO: SignInUserDTO) {
   try {
     await signIn("credentials", {
       ...signInUserDTO,
@@ -113,11 +181,11 @@ export const signInWithCreds = async (signInUserDTO: SignInUserDTO) => {
     if (message) throw new Error(message);
     throw error;
   }
-};
+}
 
-export const signInWithOAuth = async (
+export async function signInWithOAuth(
   provider: "google" | "github" | "apple" | "linkedin" | "twitter"
-) => {
+) {
   try {
     await signIn(provider);
   } catch (error: any) {
@@ -125,9 +193,9 @@ export const signInWithOAuth = async (
     if (message) throw new Error(message);
     throw error;
   }
-};
+}
 
-export const signOutUser = async () => {
+export async function signOutUser() {
   try {
     await signOut({ redirect: false });
     return "Logged out successfully.";
@@ -135,109 +203,134 @@ export const signOutUser = async () => {
     console.error("⛔ Sign out error:", error);
     throw new Error("⛔ Failed to log out.");
   }
-};
+}
 
-export const validatePassword = async (
-  password: string,
-  hashedPassword: string
-) => {
+export async function verifyToken(token: string) {
   try {
-    return await userService.validatePassword(password, hashedPassword);
+    return jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY!);
+  } catch (err) {
+    console.error("⛔ Token Verification Error:", err);
+    return null;
+  }
+}
+
+export async function encryptPassword(password: string) {
+  const salt = bcrypt.genSaltSync(10);
+  return bcrypt.hashSync(password, salt);
+}
+
+export async function getUserById(id: string) {
+  try {
+    return await repo.getUserById(id);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getUserById = async (id: string) => {
+export async function getUserByUsername(username: string) {
   try {
-    return await userService.getUserById(id);
+    return await repo.getUserByUsername(username);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getUserByUsername = async (username: string) => {
+export async function getUserByEmail(email: string) {
   try {
-    return await userService.getUserByUsername(username);
+    return await repo.getUserByEmail(email);
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const getUserByEmail = async (email: string) => {
+export async function editUserById(id: string, editUserDTO: EditUserDTO) {
   try {
-    return await userService.getUserByEmail(email);
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const editUserById = async (id: string, editUserDTO: EditUserDTO) => {
-  try {
-    await userService.editUserById(id, editUserDTO);
+    await repo.editUserById(id, editUserDTO);
     return "Profile updated successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const editUserByEmail = async (
-  email: string,
-  editUserDTO: EditUserDTO
-) => {
+export async function editUserByEmail(email: string, editUserDTO: EditUserDTO) {
   try {
-    await userService.editUserByEmail(email, editUserDTO);
+    await repo.editUserByEmail(email, editUserDTO);
     return "Profile updated successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const editEmailById = async (id: string, email: string) => {
-  try {
-    await userService.editEmailById(id, email);
-    return "Email updated successfully.";
-  } catch (error: any) {
-    throw error;
-  }
-};
-
-export const editAvatarById = async (
+export async function editAvatarById(
   id: string,
   secure_url: string,
   public_id: string
-) => {
+) {
   try {
-    await userService.editAvatarById(id, secure_url, public_id);
+    await repo.editAvatarById(id, secure_url, public_id);
     return "Avatar updated successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const setFavBookIdById = async (id: string, favBookId: string) => {
+export async function setFavBookIdById(id: string, favBookId: string) {
   try {
-    await userService.setFavBookIdById(id, favBookId);
+    await repo.setFavBookIdById(id, favBookId);
     return "Book set as favorite successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const unsetFavBookIdById = async (id: string) => {
+export async function unsetFavBookIdById(id: string) {
   try {
-    await userService.unsetFavBookIdById(id);
+    await repo.unsetFavBookIdById(id);
     return "Favorite book unset successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}
 
-export const dropUserById = async (id: string) => {
+export async function unsetFavBookIdByFavBookId(
+  favBookId: string,
+  session?: any
+) {
   try {
-    await userService.dropUserById(id);
+    await repo.unsetFavBookIdByFavBookId(favBookId, session);
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function unsetFavBookIdFromAll(session?: any) {
+  try {
+    await repo.unsetFavBookIdFromAll(session);
+  } catch (error: any) {
+    throw error;
+  }
+}
+
+export async function dropUserById(id: string) {
+  try {
+    const user = await getUserById(id);
+    if (!user) throw new Error("User not found.");
+
+    await fn.runAtomic(async (session) => {
+      await repo.dropUserById(id, session);
+      await book.dropBooksByAuthorId(id, session);
+      await book.downvoteBooksByVoterId(id, session);
+      await comment.dropCommentsByCommenterId(id, session);
+      await bookLiker.dropBookLikersByLikerId(id, session);
+    });
+
+    if (user?.avatar?.publicId) {
+      const cloudinary = await connectCloudinary();
+      await cloudinary.uploader.destroy(user.avatar.publicId);
+    }
+
     return "Profile deleted successfully.";
   } catch (error: any) {
     throw error;
   }
-};
+}

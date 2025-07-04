@@ -1,10 +1,10 @@
 "use client";
+import { useToast } from "@/global/hooks";
 import { useSelector } from "react-redux";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
-import { useToast } from "@/global/hooks";
-import { Button, Modal, Stack, Text } from "@mantine/core";
 import { suspendPayPalSubscription } from "@/features";
+import { Button, Modal, Stack, Text } from "@mantine/core";
 
 export function PayPalSuspendModal({ opened, close, id }: any) {
   const { showToast } = useToast();

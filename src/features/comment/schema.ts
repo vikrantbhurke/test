@@ -8,9 +8,4 @@ export const CommentSchema = z.object({
 
 export const SaveCommentSchema = CommentSchema;
 
-export const EditCommentSchema = CommentSchema.pick({
-  body: true,
-});
-
 export type SaveCommentDTO = z.infer<typeof SaveCommentSchema>;
-export type EditCommentDTO = z.infer<typeof EditCommentSchema>;

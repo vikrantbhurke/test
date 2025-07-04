@@ -1,9 +1,8 @@
 import { Stack } from "@mantine/core";
+import { notFound } from "next/navigation";
+import { getBookById, getAuth } from "@/features";
 import { BookItem } from "@/features/book/views/server";
 import { NextModal } from "@/global/components/common/client";
-import { getBookById } from "@/features";
-import { notFound } from "next/navigation";
-import { getAuth } from "@/features";
 
 type PageProps = {
   params: Promise<{ id: string }>;

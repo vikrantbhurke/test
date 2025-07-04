@@ -1,35 +1,26 @@
-import { EditMode, Order, SearchMode, Size, Type } from "@/global/enums";
 import { Sitemap } from "./model";
-import { Repository } from "@/global/classes";
+import { EditMode } from "@/global/enums";
+import * as db from "@/global/utilities";
 
-export class SitemapRepository extends Repository {
-  filter = {};
-  type = Type.Paged;
-  size = Size.Twelve;
-  sort = "updatedAt";
-  mode = SearchMode.Or;
-  order = Order.Ascending;
-  populate = [];
-  searchFields = [];
-  populateSelect = [];
-  select = "";
+const populate: string[] = [];
+const populateSelect: string[] = [];
+const select = "";
 
-  async getSitemap(conditions: any) {
-    // conditions = { type, smId }
+export async function getSitemap(conditions: any) {
+  // conditions = { type, smId }
 
-    return await this.getOne(Sitemap, {
-      conditions,
-      select: this.select,
-      populate: this.populate,
-      populateSelect: this.populateSelect,
-    });
-  }
+  return await db.getOne(Sitemap, {
+    conditions,
+    select,
+    populate,
+    populateSelect,
+  });
+}
 
-  async setSitemap(filter: any, update: any) {
-    await this.editOne(Sitemap, {
-      filter,
-      update,
-      mode: EditMode.Set,
-    });
-  }
+export async function setSitemap(filter: any, update: any) {
+  await db.editOne(Sitemap, {
+    filter,
+    update,
+    mode: EditMode.Set,
+  });
 }

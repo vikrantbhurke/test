@@ -7,23 +7,23 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import {
-  cloudinarySignatureApiRoute,
-  deleteAvatarApiRoute,
   viewUserRoute,
+  deleteAvatarApiRoute,
+  cloudinarySignatureApiRoute,
 } from "@/global/constants/routes";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { EditUserSchema } from "@/features/user/schema";
+import { useToast } from "@/global/hooks";
+import { ProfilePic } from "./profile-pic";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { CldUploadWidget } from "next-cloudinary";
-import { useToast } from "@/global/hooks";
 import { useForm, zodResolver } from "@mantine/form";
-import { editAvatarById, editUserById } from "@/features/user/action";
-import { FloatingInput } from "@/global/components/common/client";
+import { EditUserSchema } from "@/features/user/schema";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
-import { ProfilePic } from "./profile-pic";
+import { editAvatarById, editUserById } from "@/features";
+import { FloatingInput } from "@/global/components/common/client";
 
 type EditProfileFormProps = {
   user: any;

@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
-import { Gender, Role, Provider, Status } from "./enums";
 import { Payment } from "@/features/payment/enums";
+import { Gender, Role, Provider, Status } from "./enums";
 const { ObjectId } = Schema.Types;
 
 const UserSchema = new Schema(

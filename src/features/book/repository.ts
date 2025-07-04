@@ -1,239 +1,238 @@
 import { Book } from "./model";
 import { Genre } from "./enums";
 import { EditBookDTO, SaveBookDTO } from "./schema";
-import { Repository, GetManyDTO } from "@/global/classes";
+import * as db from "@/global/utilities";
+import { GetManyDTO } from "@/global/utilities";
 import { EditMode, Order, SearchMode, Size, Type } from "@/global/enums";
 
-export class BookRepository extends Repository {
-  filter = {};
-  type = Type.Paged;
-  size = Size.Twelve;
-  sort = "title";
-  mode = SearchMode.Or;
-  order = Order.Ascending;
-  populate = ["authorId"];
-  searchFields = ["title", "synopsis"];
-  populateSelect = ["firstname lastname username avatar"];
-  select = "title synopsis authorId likes votes voterIds tags genre";
+const filter = {};
+const type = Type.Paged;
+const size = Size.Twelve;
+const sort = "title";
+const mode = SearchMode.Or;
+const order = Order.Ascending;
+const populate = ["authorId"];
+const searchFields = ["title", "synopsis"];
+const populateSelect = ["firstname lastname username avatar"];
+const select = "title synopsis authorId likes votes voterIds tags genre";
 
-  async saveBooks(saveBooksDTO: SaveBookDTO[]) {
-    await this.saveMany(Book, saveBooksDTO);
+export async function saveBooks(saveBooksDTO: SaveBookDTO[]) {
+  await db.saveMany(Book, saveBooksDTO);
+}
+
+export async function saveBook(saveBookDTO: SaveBookDTO) {
+  await db.saveOne(Book, saveBookDTO);
+}
+
+export async function checkBook(title: string) {
+  return await db.checkDoc(Book, { title });
+}
+
+export async function countBooks() {
+  return await db.countDocs(Book);
+}
+
+export async function countBooksByAuthorId(authorId: string) {
+  return await db.countDocs(Book, { authorId });
+}
+
+export async function getBookById(id: string) {
+  const key = `book:${id}`;
+  const cachedBook = await db.getCache(key);
+  if (cachedBook) return JSON.parse(cachedBook);
+
+  const dbBook = await db.getOne(Book, {
+    conditions: { _id: id },
+    select,
+    populate,
+    populateSelect,
+  });
+
+  if (dbBook) await db.setCache(key, dbBook);
+  return dbBook;
+}
+
+export async function getBookByTitle(title: string, session?: any) {
+  return await db.getOne(
+    Book,
+    {
+      conditions: { title },
+      select,
+      populate,
+      populateSelect,
+    },
+    session
+  );
+}
+
+export async function getBookByIndex(index: number) {
+  return await db.getOne(Book, {
+    index,
+    select,
+    populate,
+    populateSelect,
+  });
+}
+
+export async function getBooks(getManyDTO: GetManyDTO) {
+  return await db.getMany(Book, {
+    ...getManyDTO,
+    filter: { ...filter, ...getManyDTO.filter },
+    type: getManyDTO.type || type,
+    size: getManyDTO.size || size,
+    sort: getManyDTO.sort || sort,
+    mode: getManyDTO.mode || mode,
+    order: getManyDTO.order || order,
+    select: getManyDTO.select || select,
+    populate: getManyDTO.populate || populate,
+    populateSelect: getManyDTO.populateSelect || populateSelect,
+    searchFields: getManyDTO.searchFields || searchFields,
+  });
+}
+
+export async function editBookById(id: string, editBookDTO: EditBookDTO) {
+  const { modifiedCount } = await db.editOne(Book, {
+    filter: { _id: id },
+    mode: EditMode.Set,
+    update: editBookDTO,
+  });
+
+  if (modifiedCount) await db.delCache(`book:${id}`);
+}
+
+export async function editBookByTitle(title: string, editBookDTO: EditBookDTO) {
+  const { modifiedCount } = await db.editOne(Book, {
+    filter: { title },
+    mode: EditMode.Set,
+    update: editBookDTO,
+  });
+
+  if (modifiedCount) {
+    const book = await getBookByTitle(title);
+    if (book) await db.delCache(`book:${book.id}`);
   }
+}
 
-  async saveBook(saveBookDTO: SaveBookDTO) {
-    await this.saveOne(Book, saveBookDTO);
-  }
+export async function editBooksByGenre(genre: Genre, editBookDTO: EditBookDTO) {
+  const { modifiedCount } = await db.editMany(Book, {
+    filter: { genre },
+    mode: EditMode.Set,
+    update: editBookDTO,
+  });
 
-  async checkBook(title: string) {
-    return await this.checkDoc(Book, { title });
-  }
+  if (modifiedCount) await db.delPrefixCache("book:*");
+}
 
-  async countBooks() {
-    return await this.countDocs(Book);
-  }
-
-  async countBooksByAuthorId(authorId: string) {
-    return await this.countDocs(Book, { authorId });
-  }
-
-  async getBookById(id: string) {
-    const key = `book:${id}`;
-    const cachedBook = await this.getCache(key);
-    if (cachedBook) return JSON.parse(cachedBook);
-
-    const dbBook = await this.getOne(Book, {
-      conditions: { _id: id },
-      select: this.select,
-      populate: this.populate,
-      populateSelect: this.populateSelect,
-    });
-
-    if (dbBook) await this.setCache(key, dbBook);
-    return dbBook;
-  }
-
-  async getBookByTitle(title: string, session?: any) {
-    return await this.getOne(
-      Book,
-      {
-        conditions: { title },
-        select: this.select,
-        populate: this.populate,
-        populateSelect: this.populateSelect,
-      },
-      session
-    );
-  }
-
-  async getBookByIndex(index: number) {
-    return await this.getOne(Book, {
-      index,
-      select: this.select,
-      populate: this.populate,
-      populateSelect: this.populateSelect,
-    });
-  }
-
-  async getBooks(getManyDTO: GetManyDTO) {
-    return await this.getMany(Book, {
-      ...getManyDTO,
-      type: getManyDTO.type || this.type,
-      sort: getManyDTO.sort || this.sort,
-      size: getManyDTO.size || this.size,
-      mode: getManyDTO.mode || this.mode,
-      order: getManyDTO.order || this.order,
-      filter: getManyDTO.filter || this.filter,
-      select: getManyDTO.select || this.select,
-      populate: getManyDTO.populate || this.populate,
-      searchFields: getManyDTO.searchFields || this.searchFields,
-      populateSelect: getManyDTO.populateSelect || this.populateSelect,
-    });
-  }
-
-  async editBookById(id: string, editBookDTO: EditBookDTO) {
-    const { modifiedCount } = await this.editOne(Book, {
+export async function likeBook(id: string, session?: any) {
+  const { modifiedCount } = await db.editOne(
+    Book,
+    {
       filter: { _id: id },
-      mode: EditMode.Set,
-      update: editBookDTO,
-    });
+      mode: EditMode.Inc,
+      numberField: "likes",
+    },
+    session
+  );
 
-    if (modifiedCount) await this.delCache(`book:${id}`);
-  }
+  if (modifiedCount) await db.delCache(`book:${id}`);
+}
 
-  async editBookByTitle(title: string, editBookDTO: EditBookDTO) {
-    const { modifiedCount } = await this.editOne(Book, {
-      filter: { title },
-      mode: EditMode.Set,
-      update: editBookDTO,
-    });
-
-    if (modifiedCount) {
-      const book = await this.getBookByTitle(title);
-      if (book) await this.delCache(`book:${book.id}`);
-    }
-  }
-
-  async editBooksByGenre(genre: Genre, editBookDTO: EditBookDTO) {
-    const { modifiedCount } = await this.editMany(Book, {
-      filter: { genre },
-      mode: EditMode.Set,
-      update: editBookDTO,
-    });
-
-    if (modifiedCount) await this.delPrefixCache("book:*");
-  }
-
-  async likeBook(id: string, session?: any) {
-    const { modifiedCount } = await this.editOne(
-      Book,
-      {
-        filter: { _id: id },
-        mode: EditMode.Inc,
-        numberField: "likes",
-      },
-      session
-    );
-
-    if (modifiedCount) await this.delCache(`book:${id}`);
-  }
-
-  async unlikeBook(id: string, session?: any) {
-    const { modifiedCount } = await this.editOne(
-      Book,
-      {
-        filter: { _id: id },
-        mode: EditMode.Dec,
-        numberField: "likes",
-      },
-      session
-    );
-
-    if (modifiedCount) await this.delCache(`book:${id}`);
-  }
-
-  async addTag(id: string, tag: string) {
-    const { modifiedCount } = await this.editOne(Book, {
+export async function unlikeBook(id: string, session?: any) {
+  const { modifiedCount } = await db.editOne(
+    Book,
+    {
       filter: { _id: id },
-      mode: EditMode.Push,
-      arrayField: "tags",
-      element: tag,
-    });
+      mode: EditMode.Dec,
+      numberField: "likes",
+    },
+    session
+  );
 
-    if (modifiedCount) await this.delCache(`book:${id}`);
-  }
+  if (modifiedCount) await db.delCache(`book:${id}`);
+}
 
-  async removeTag(id: string, tag: string) {
-    const { modifiedCount } = await this.editOne(Book, {
-      filter: { _id: id },
-      mode: EditMode.Pull,
-      arrayField: "tags",
-      element: tag,
-    });
+export async function addTag(id: string, tag: string) {
+  const { modifiedCount } = await db.editOne(Book, {
+    filter: { _id: id },
+    mode: EditMode.Push,
+    arrayField: "tags",
+    element: tag,
+  });
 
-    if (modifiedCount) await this.delCache(`book:${id}`);
-  }
+  if (modifiedCount) await db.delCache(`book:${id}`);
+}
 
-  async upvoteBook(id: string, voterId: string) {
-    const { modifiedCount } = await this.editOne(Book, {
-      filter: { _id: id },
-      mode: EditMode.IncPush,
-      numberField: "votes",
-      arrayField: "voterIds",
-      element: voterId,
-    });
+export async function removeTag(id: string, tag: string) {
+  const { modifiedCount } = await db.editOne(Book, {
+    filter: { _id: id },
+    mode: EditMode.Pull,
+    arrayField: "tags",
+    element: tag,
+  });
 
-    if (modifiedCount) await this.delCache(`book:${id}`);
-  }
+  if (modifiedCount) await db.delCache(`book:${id}`);
+}
 
-  async downvoteBook(id: string, voterId: string) {
-    const { modifiedCount } = await this.editOne(Book, {
-      filter: { _id: id },
+export async function upvoteBook(id: string, voterId: string) {
+  const { modifiedCount } = await db.editOne(Book, {
+    filter: { _id: id },
+    mode: EditMode.IncPush,
+    numberField: "votes",
+    arrayField: "voterIds",
+    element: voterId,
+  });
+
+  if (modifiedCount) await db.delCache(`book:${id}`);
+}
+
+export async function downvoteBook(id: string, voterId: string) {
+  const { modifiedCount } = await db.editOne(Book, {
+    filter: { _id: id },
+    mode: EditMode.DecPull,
+    numberField: "votes",
+    arrayField: "voterIds",
+    element: voterId,
+  });
+
+  if (modifiedCount) await db.delCache(`book:${id}`);
+}
+
+export async function downvoteBooksByVoterId(voterId: string, session?: any) {
+  const { modifiedCount } = await db.editMany(
+    Book,
+    {
+      filter: { voterIds: voterId },
       mode: EditMode.DecPull,
       numberField: "votes",
       arrayField: "voterIds",
       element: voterId,
-    });
+    },
+    session
+  );
 
-    if (modifiedCount) await this.delCache(`book:${id}`);
+  if (modifiedCount) await db.delPrefixCache("book:*");
+}
+
+export async function dropBookById(id: string, session?: any) {
+  const { deletedCount } = await db.dropOne(Book, { _id: id }, session);
+  if (deletedCount) await db.delCache(`book:${id}`);
+}
+
+export async function dropBookByTitle(title: string, session?: any) {
+  const { deletedCount } = await db.dropOne(Book, { title }, session);
+
+  if (deletedCount) {
+    const book = await getBookByTitle(title, session);
+    if (book) await db.delCache(`book:${book.id}`);
   }
+}
 
-  async downvoteBooksByVoterId(voterId: string, session?: any) {
-    const { modifiedCount } = await this.editMany(
-      Book,
-      {
-        filter: { voterIds: voterId },
-        mode: EditMode.DecPull,
-        numberField: "votes",
-        arrayField: "voterIds",
-        element: voterId,
-      },
-      session
-    );
+export async function dropBooksByAuthorId(authorId: string, session?: any) {
+  const { deletedCount } = await db.dropMany(Book, { authorId }, session);
+  if (deletedCount) await db.delPrefixCache("book:*");
+}
 
-    if (modifiedCount) await this.delPrefixCache("book:*");
-  }
-
-  async dropBookById(id: string, session?: any) {
-    const { deletedCount } = await this.dropOne(Book, { _id: id }, session);
-    if (deletedCount) await this.delCache(`book:${id}`);
-  }
-
-  async dropBookByTitle(title: string, session?: any) {
-    const { deletedCount } = await this.dropOne(Book, { title }, session);
-
-    if (deletedCount) {
-      const book = await this.getBookByTitle(title, session);
-      if (book) await this.delCache(`book:${book.id}`);
-    }
-  }
-
-  async dropBooksByAuthorId(authorId: string, session?: any) {
-    const { deletedCount } = await this.dropMany(Book, { authorId }, session);
-    if (deletedCount) await this.delPrefixCache("book:*");
-  }
-
-  async dropBooks(session?: any) {
-    const { deletedCount } = await this.dropMany(Book, session);
-    if (deletedCount) await this.delPrefixCache("book:*");
-  }
+export async function dropBooks(session?: any) {
+  const { deletedCount } = await db.dropMany(Book, session);
+  if (deletedCount) await db.delPrefixCache("book:*");
 }

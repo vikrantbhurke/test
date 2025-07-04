@@ -1,5 +1,5 @@
 "use client";
-import { dropUserById } from "@/features/user/action";
+import { dropUserById } from "@/features";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { Button, Group, Text } from "@mantine/core";

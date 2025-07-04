@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { dropCommentById } from "@/features";
+import { useDisclosure } from "@mantine/hooks";
 import { NewModal } from "@/global/components/common/client";
 
 type DropCommentButtonProps = {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getUserById } from "@/features/user/action";
+import { getUserById } from "@/features";
 
 type generateMetadataParams = {
   params: Promise<{ id: string }>;

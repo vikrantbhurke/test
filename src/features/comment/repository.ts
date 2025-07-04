@@ -1,66 +1,60 @@
-import { EditMode, Order, SearchMode, Size, Type } from "@/global/enums";
 import { Comment } from "./model";
-import { SaveCommentDTO, EditCommentDTO } from "./schema";
-import { Repository, GetManyDTO } from "@/global/classes";
 import { Sort } from "../book/enums";
+import { SaveCommentDTO } from "./schema";
+import * as db from "@/global/utilities";
+import { GetManyDTO } from "@/global/utilities";
+import { Order, SearchMode, Size, Type } from "@/global/enums";
 
-export class CommentRepository extends Repository {
-  filter = {};
-  type = Type.Paged;
-  size = Size.Twelve;
-  sort = Sort.Created;
-  mode = SearchMode.Or;
-  order = Order.Descending;
-  searchFields = ["body"];
-  select = "body bookId commenterId";
-  populate = ["bookId", "commenterId"];
-  populateSelect = ["title", "username"];
+const filter = {};
+const type = Type.Paged;
+const size = Size.Twelve;
+const sort = Sort.Created;
+const mode = SearchMode.Or;
+const order = Order.Descending;
+const searchFields = ["body"];
+const select = "body bookId commenterId";
+const populate = ["bookId", "commenterId"];
+const populateSelect = ["title", "username"];
 
-  async saveComment(saveCommentDTO: SaveCommentDTO) {
-    await this.saveOne(Comment, saveCommentDTO);
-  }
+export async function saveComment(saveCommentDTO: SaveCommentDTO) {
+  await db.saveOne(Comment, saveCommentDTO);
+}
 
-  async editCommentById(id: string, editCommentDTO: EditCommentDTO) {
-    await this.editOne(Comment, {
-      filter: { _id: id },
-      update: editCommentDTO,
-      mode: EditMode.Set,
-    });
-  }
+export async function countComments(filter: any) {
+  return await db.countDocs(Comment, filter);
+}
 
-  async countComments(filter: any) {
-    return await this.countDocs(Comment, filter);
-  }
+export async function getComments(getManyDTO: GetManyDTO) {
+  return await db.getMany(Comment, {
+    ...getManyDTO,
+    filter: { ...filter, ...getManyDTO.filter },
+    type: getManyDTO.type || type,
+    size: getManyDTO.size || size,
+    sort: getManyDTO.sort || sort,
+    mode: getManyDTO.mode || mode,
+    order: getManyDTO.order || order,
+    select: getManyDTO.select || select,
+    populate: getManyDTO.populate || populate,
+    searchFields: getManyDTO.searchFields || searchFields,
+    populateSelect: getManyDTO.populateSelect || populateSelect,
+  });
+}
 
-  async getComments(getManyDTO: GetManyDTO) {
-    return await this.getMany(Comment, {
-      ...getManyDTO,
-      type: getManyDTO.type || this.type,
-      sort: getManyDTO.sort || this.sort,
-      size: getManyDTO.size || this.size,
-      mode: getManyDTO.mode || this.mode,
-      order: getManyDTO.order || this.order,
-      filter: getManyDTO.filter || this.filter,
-      select: getManyDTO.select || this.select,
-      populate: getManyDTO.populate || this.populate,
-      searchFields: getManyDTO.searchFields || this.searchFields,
-      populateSelect: getManyDTO.populateSelect || this.populateSelect,
-    });
-  }
+export async function dropCommentById(id: string) {
+  await db.dropOne(Comment, { _id: id });
+}
 
-  async dropCommentById(id: string) {
-    await this.dropOne(Comment, { _id: id });
-  }
+export async function dropCommentsByBookId(bookId: string, session?: any) {
+  await db.dropMany(Comment, { bookId }, session);
+}
 
-  async dropCommentsByBookId(bookId: string, session?: any) {
-    await this.dropMany(Comment, { bookId }, session);
-  }
+export async function dropCommentsByCommenterId(
+  commenterId: string,
+  session?: any
+) {
+  await db.dropMany(Comment, { commenterId }, session);
+}
 
-  async dropCommentsByCommenterId(commenterId: string, session?: any) {
-    await this.dropMany(Comment, { commenterId }, session);
-  }
-
-  async dropComments(session?: any) {
-    await this.dropMany(Comment, undefined, session);
-  }
+export async function dropComments(session?: any) {
+  await db.dropMany(Comment, undefined, session);
 }

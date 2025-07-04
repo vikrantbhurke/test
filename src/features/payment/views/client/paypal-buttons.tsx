@@ -14,8 +14,8 @@ import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { Payment } from "@/features/payment/enums";
 import { homeRoute } from "@/global/constants/routes";
-import { PayPalSuspendModal } from "./paypal-suspend-modal";
 import { PayPalCancelModal } from "./paypal-cancel-modal";
+import { PayPalSuspendModal } from "./paypal-suspend-modal";
 
 type PayPalButtonsProps = {
   subscription: any;

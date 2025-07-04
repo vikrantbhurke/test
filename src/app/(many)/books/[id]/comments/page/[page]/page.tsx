@@ -1,16 +1,14 @@
 import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
 import { Paper, Stack } from "@mantine/core";
-export { generateMetadata } from "./metadata";
 import { dimensions } from "@/global/constants";
-import { getAuth } from "@/features";
-import { getBookById } from "@/features";
 import { BookItem } from "@/features/book/views/server";
-import { getComments } from "@/features";
 import { listGridDefaults } from "@/global/constants/server";
+import { getAuth, getBookById, getComments } from "@/features";
 import { AddCommentButton } from "@/features/comment/views/client";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { CommentsItem, CommentsDetails } from "@/features/comment/views/server";
+export { generateMetadata } from "./metadata";
 
 type PageProps = {
   params: Promise<{ id: string; page: string }>;

@@ -1,5 +1,5 @@
 "use client";
-import { signOutUser } from "@/features/user/action";
+import { signOutUser } from "@/features";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLogout } from "@tabler/icons-react";
 import { Button, Stack, Text } from "@mantine/core";

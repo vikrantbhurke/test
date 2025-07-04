@@ -1,33 +1,31 @@
 import { BookLiker } from "./model";
 import { BookLikerDTO } from "./schema";
-import { Repository } from "@/global/classes";
+import * as db from "@/global/utilities";
 
-export class BookLikerRepository extends Repository {
-  async saveBookLiker(bookLikerDTO: BookLikerDTO, session?: any) {
-    await this.saveOne(BookLiker, bookLikerDTO, session);
-  }
+export async function saveBookLiker(bookLikerDTO: BookLikerDTO, session?: any) {
+  await db.saveOne(BookLiker, bookLikerDTO, session);
+}
 
-  async checkBookLiker(bookLikerDTO: BookLikerDTO) {
-    return await this.checkDoc(BookLiker, bookLikerDTO);
-  }
+export async function checkBookLiker(bookLikerDTO: BookLikerDTO) {
+  return await db.checkDoc(BookLiker, bookLikerDTO);
+}
 
-  async checkBookLikers(bookLikersDTO: BookLikerDTO[]) {
-    return await this.checkDocs(BookLiker, bookLikersDTO);
-  }
+export async function checkBookLikers(bookLikersDTO: BookLikerDTO[]) {
+  return await db.checkDocs(BookLiker, bookLikersDTO);
+}
 
-  async dropBookLiker(bookLikerDTO: BookLikerDTO, session?: any) {
-    await this.dropOne(BookLiker, bookLikerDTO, session);
-  }
+export async function dropBookLiker(bookLikerDTO: BookLikerDTO, session?: any) {
+  await db.dropOne(BookLiker, bookLikerDTO, session);
+}
 
-  async dropBookLikersByLikerId(likerId: string, session?: any) {
-    await this.dropMany(BookLiker, { likerId }, session);
-  }
+export async function dropBookLikersByLikerId(likerId: string, session?: any) {
+  await db.dropMany(BookLiker, { likerId }, session);
+}
 
-  async dropBookLikersByBookId(bookId: string, session?: any) {
-    await this.dropMany(BookLiker, { bookId }, session);
-  }
+export async function dropBookLikersByBookId(bookId: string, session?: any) {
+  await db.dropMany(BookLiker, { bookId }, session);
+}
 
-  async dropBookLikers(session?: any) {
-    await this.dropMany(BookLiker, session);
-  }
+export async function dropBookLikers(session?: any) {
+  await db.dropMany(BookLiker, session);
 }

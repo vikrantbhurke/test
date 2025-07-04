@@ -1,6 +1,6 @@
 import { Size } from "@/global/enums";
-import type { MetadataRoute } from "next";
 import { countBooks } from "@/features";
+import type { MetadataRoute } from "next";
 
 export class BooksSitemap {
   totalBookPages: number | null = null;

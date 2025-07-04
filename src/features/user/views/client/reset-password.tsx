@@ -7,7 +7,7 @@ import { IconLogin } from "@tabler/icons-react";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { useToast } from "@/global/hooks";
-import { resetPassword } from "@/features/user/action";
+import { resetPassword } from "@/features";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { signInRoute } from "@/global/constants/routes";
 import { lightBgOneDarkBgTwo } from "@/global/constants";

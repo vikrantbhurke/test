@@ -33,14 +33,7 @@ export function LikeButton({ bookId, likerId, likes, like }: LikeButtonProps) {
     setStateLikes((prev: any) => prev + 1);
 
     try {
-      const message = await saveBookLiker({
-        bookId,
-        likerId,
-      });
-
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+      await saveBookLiker({ bookId, likerId });
     } catch (error: any) {
       setStateLike(prevStateLike);
       setStateLikes(prevLikes);
@@ -61,14 +54,7 @@ export function LikeButton({ bookId, likerId, likes, like }: LikeButtonProps) {
     setStateLikes((prev: any) => prev - 1);
 
     try {
-      const message = await dropBookLiker({
-        bookId,
-        likerId,
-      });
-
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+      await dropBookLiker({ bookId, likerId });
     } catch (error: any) {
       setStateLike(prevStateLike);
       setStateLikes(prevLikes);

@@ -1,5 +1,5 @@
-import { Size, Type } from "@/global/enums";
 import type { MetadataRoute } from "next";
+import { Size, Type } from "@/global/enums";
 import { countComments, getBooks } from "@/features";
 
 export class BookCommentsSitemap {

@@ -2,10 +2,9 @@ import { notFound } from "next/navigation";
 import { Paper, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { UserItem } from "@/features/user/views/server";
-import { getAuth, getUserById } from "@/features";
 import { PaymentInfo } from "@/features/payment/views/server";
 import { PayPalButtons } from "@/features/payment/views/client";
-import { getPayPalSubscription } from "@/features";
+import { getAuth, getUserById, getPayPalSubscription } from "@/features";
 export { generateMetadata } from "./metadata";
 
 type PageProps = {

@@ -2,11 +2,11 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/global/hooks";
+import { verifyAccount } from "@/features";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
-import { useToast } from "@/global/hooks";
 import { Loader, Stack, Text } from "@mantine/core";
-import { verifyAccount } from "@/features/user/action";
 import { signInRoute } from "@/global/constants/routes";
 
 type VerifyAccountProps = {

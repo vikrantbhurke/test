@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-// import { fetchSitemapIndex } from "@/features";
 
 // This API Route is need if you are using Cloudflare R2 to serve your sitemaps.
 // If you are saving your sitemaps to /public/sitemaps, you can remove this API route.
@@ -10,7 +9,6 @@ export async function GET() {
     const response = await fetch(r2Url);
     if (!response.ok) throw new Error("Failed to fetch sitemap index");
     const xml = await response.text();
-    // const xml = await fetchSitemapIndex();
     return new NextResponse(xml, {
       headers: { "Content-Type": "application/xml" },
     });

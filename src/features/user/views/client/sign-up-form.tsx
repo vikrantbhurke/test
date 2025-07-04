@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
-import { signUpUser } from "@/features/user/action";
+import { signUpUser } from "@/features";
 import { useToast } from "@/global/hooks";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { signInRoute } from "@/global/constants/routes";

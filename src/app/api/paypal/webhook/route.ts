@@ -1,4 +1,4 @@
-import { editUserByEmail } from "@/features/user/action";
+import { editUserByEmail } from "@/features";
 import { Role, Status } from "@/features/user/enums";
 import { Payment } from "@/features/payment/enums";
 import { NextRequest, NextResponse } from "next/server";

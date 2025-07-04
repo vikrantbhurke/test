@@ -45,9 +45,13 @@ export function NewModal({
       if (isMutating) return;
       setIsMutating(true);
       const message = await action();
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+
+      if (message) {
+        const alert = { message, status: "success" as const };
+        if (isMobile) showToast(alert);
+        else showNotification(alert);
+      }
+
       if (routeType === "push" && route) router.push(route);
       if (routeType === "replace" && route) router.replace(route);
       if (routeType === "back") router.back();

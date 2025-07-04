@@ -1,14 +1,13 @@
+import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
 import { Paper, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
-import { getBooks } from "@/features";
 import { UserItem } from "@/features/user/views/server";
+import { getAuth, getUserById, getBooks } from "@/features";
 import { listGridDefaults } from "@/global/constants/server";
-import { getAuth, getUserById } from "@/features";
 import { CollapsibleHeader } from "@/global/components/layouts";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { BooksItem, BooksDetails } from "@/features/book/views/server";
-import { Order } from "@/global/enums";
 export { generateMetadata } from "./metadata";
 
 export type PageProps = {

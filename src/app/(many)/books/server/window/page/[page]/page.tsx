@@ -1,13 +1,12 @@
 import { Stack } from "@mantine/core";
 import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
-export { generateMetadata } from "./metadata";
+import { getAuth, getBooks } from "@/features";
 import { dimensions } from "@/global/constants";
-import { getAuth } from "@/features";
-import { getBooks } from "@/features";
 import { listGridDefaults } from "@/global/constants/server";
 import { ListGridOuter } from "@/global/components/list-grid/server";
 import { BooksItem, BooksDetails } from "@/features/book/views/server";
+export { generateMetadata } from "./metadata";
 
 type PageProps = {
   params: Promise<{ page: string }>;
