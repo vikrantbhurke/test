@@ -2,10 +2,10 @@
 import path from "path";
 import * as repo from "./repository";
 import { promises as fs } from "fs";
-import * as bookSitemap from "./sitemaps/book-act";
-import * as booksSitemap from "./sitemaps/books-act";
-import * as staticSitemap from "./sitemaps/static-act";
-import * as bookCommentsSitemap from "./sitemaps/book-comments-act";
+import * as bookSitemap from "./sitemaps/book";
+import * as booksSitemap from "./sitemaps/books";
+import * as staticSitemap from "./sitemaps/static";
+import * as bookCommentsSitemap from "./sitemaps/book-comments";
 import connectCloudflare from "@/global/configurations/cloudflare";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 

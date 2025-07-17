@@ -17,7 +17,7 @@ import { Payment } from "../payment/enums";
 import { TemplateVariables } from "mailtrap";
 import { Template } from "@/global/constants";
 import { auth, signIn, signOut } from "@/auth";
-import * as fn from "@/global/utilities";
+import * as fun from "@/global/utilities";
 import connectCloudinary from "@/global/configurations/cloudinary";
 
 export async function getAuth() {
@@ -316,7 +316,7 @@ export async function dropUserById(id: string) {
     const user = await getUserById(id);
     if (!user) throw new Error("User not found.");
 
-    await fn.runAtomic(async (session) => {
+    await fun.runAtomic(async (session) => {
       await repo.dropUserById(id, session);
       await book.dropBooksByAuthorId(id, session);
       await book.downvoteBooksByVoterId(id, session);

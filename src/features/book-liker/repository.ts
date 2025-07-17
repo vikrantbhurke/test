@@ -27,5 +27,5 @@ export async function dropBookLikersByBookId(bookId: string, session?: any) {
 }
 
 export async function dropBookLikers(session?: any) {
-  await db.dropMany(BookLiker, session);
+  await db.dropMany(BookLiker, {}, session);
 }

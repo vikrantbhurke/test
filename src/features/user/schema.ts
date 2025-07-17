@@ -63,8 +63,6 @@ export const UserSchema = z.object({
     }),
 
   email: z
-    .string()
-    .max(30, { message: "Email must be at most 30 characters." })
     .email({
       message: "Invalid email address.",
     })
@@ -73,7 +71,7 @@ export const UserSchema = z.object({
   hashedPassword: z.string().trim(),
   avatar: z
     .object({
-      secureUrl: z.string().url().nullable(),
+      secureUrl: z.url().nullable(),
       publicId: z.string().nullable(),
     })
     .optional(),
@@ -83,13 +81,13 @@ export const UserSchema = z.object({
     .refine((value) => isMongoId(value))
     .nullable(),
 
-  gender: z.nativeEnum(Gender, {
+  gender: z.enum(Gender, {
     message: "Gender is required.",
   }),
-  role: z.nativeEnum(Role).default(Role.Private),
-  provider: z.nativeEnum(Provider).default(Provider.credentials),
-  payment: z.nativeEnum(Payment).default(Payment.Free),
-  status: z.nativeEnum(Status).default(Status.Inactive),
+  role: z.enum(Role).default(Role.Private),
+  provider: z.enum(Provider).default(Provider.credentials),
+  payment: z.enum(Payment).default(Payment.Free),
+  status: z.enum(Status).default(Status.Inactive),
   isVerified: z.boolean().default(false),
 });
 

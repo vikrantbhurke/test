@@ -2,7 +2,7 @@ import { ClientSession, InsertManyOptions, Model } from "mongoose";
 import { Order, Type, SearchMode, EditMode, Size } from "../enums";
 import connectMongoose from "@/global/configurations/mongoose";
 import connectRedis from "@/global/configurations/redis";
-import { Sort } from "@/features/book/enums";
+import { Sort } from "@/global/enums";
 
 type EditDTO = {
   filter?: object;
@@ -146,7 +146,7 @@ export const countDocs = async (
 
 export const dropMany = async (
   Model: Model<any>,
-  conditions: object | undefined = {},
+  conditions: object = {},
   session?: ClientSession
 ) => {
   await connectMongoose();

@@ -1,5 +1,5 @@
 import { Comment } from "./model";
-import { Sort } from "../book/enums";
+import { Sort } from "@/global/enums";
 import { SaveCommentDTO } from "./schema";
 import * as db from "@/global/utilities";
 import { GetManyDTO } from "@/global/utilities";
@@ -56,5 +56,5 @@ export async function dropCommentsByCommenterId(
 }
 
 export async function dropComments(session?: any) {
-  await db.dropMany(Comment, undefined, session);
+  await db.dropMany(Comment, {}, session);
 }

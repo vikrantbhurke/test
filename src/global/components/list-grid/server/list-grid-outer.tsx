@@ -33,7 +33,7 @@ type ListGridProps = {
   className?: string;
   p?: "xs" | "sm" | "md" | "lg" | "xl" | number;
   gap?: "xs" | "sm" | "md" | "lg" | "xl" | number;
-  gutter?: object;
+  gutter?: object | number;
 };
 
 type ListGridInnerProps = {

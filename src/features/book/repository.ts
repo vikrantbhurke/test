@@ -1,8 +1,8 @@
 import { Book } from "./model";
 import { Genre } from "./enums";
-import { EditBookDTO, SaveBookDTO } from "./schema";
 import * as db from "@/global/utilities";
 import { GetManyDTO } from "@/global/utilities";
+import { EditBookDTO, SaveBookDTO } from "./schema";
 import { EditMode, Order, SearchMode, Size, Type } from "@/global/enums";
 
 const filter = {};
@@ -233,6 +233,6 @@ export async function dropBooksByAuthorId(authorId: string, session?: any) {
 }
 
 export async function dropBooks(session?: any) {
-  const { deletedCount } = await db.dropMany(Book, session);
+  const { deletedCount } = await db.dropMany(Book, {}, session);
   if (deletedCount) await db.delPrefixCache("book:*");
 }

@@ -1,52 +1,51 @@
-import type { MetadataRoute } from "next";
 import { Size, Type } from "@/global/enums";
-import { countComments, getBooks } from "@/features";
+import { MetadataRoute } from "next";
+import * as comment from "../../comment/action";
+import * as book from "../../book/action";
 
-export class BookCommentsSitemap {
-  cachedData: {
-    urls: any[];
-    totalSitemaps: number;
-  } | null = null;
+let cachedData: {
+  urls: any[];
+  totalSitemaps: number;
+} | null = null;
 
-  async getTotal() {
-    const { totalSitemaps } = await this.getData();
-    return totalSitemaps;
-  }
+export async function getTotal() {
+  const { totalSitemaps } = await getData();
+  return totalSitemaps;
+}
 
-  async getUrls(id: number): Promise<MetadataRoute.Sitemap> {
-    const { urls } = await this.getData();
-    const start = id * Size.FiftyK;
-    const end = Math.min(start + Size.FiftyK, urls.length);
-    return urls.slice(start, end);
-  }
+export async function getUrls(id: number): Promise<MetadataRoute.Sitemap> {
+  const { urls } = await getData();
+  const start = id * Size.FiftyK;
+  const end = Math.min(start + Size.FiftyK, urls.length);
+  return urls.slice(start, end);
+}
 
-  async getData() {
-    if (this.cachedData) return this.cachedData;
+export async function getData() {
+  if (cachedData) return cachedData;
 
-    const booksPage = await getBooks({
-      select: "_id",
-      populate: [],
-      type: Type.All,
-    });
+  const booksPage = await book.getBooks({
+    select: "_id",
+    populate: [],
+    type: Type.All,
+  });
 
-    const urls: any = [];
+  const urls: any = [];
 
-    for (const book of booksPage.content) {
-      const totalComments = await countComments({ bookId: book.id });
-      const totalCommentPages = Math.ceil(totalComments / Size.Thirty);
+  for (const book of booksPage.content) {
+    const totalComments = await comment.countComments({ bookId: book.id });
+    const totalCommentPages = Math.ceil(totalComments / Size.Thirty);
 
-      for (let page = 1; page <= totalCommentPages; page++) {
-        urls.push({
-          url: `${process.env.APP_URL}/books/${book.id}/comments/page/${page}`,
-          lastModified: new Date().toISOString(),
-          changeFrequency: "monthly",
-          priority: 0.5,
-        });
-      }
+    for (let page = 1; page <= totalCommentPages; page++) {
+      urls.push({
+        url: `${process.env.APP_URL}/books/${book.id}/comments/page/${page}`,
+        lastModified: new Date().toISOString(),
+        changeFrequency: "monthly",
+        priority: 0.5,
+      });
     }
-
-    const totalSitemaps = Math.ceil(urls.length / Size.FiftyK);
-    this.cachedData = { urls, totalSitemaps };
-    return this.cachedData;
   }
+
+  const totalSitemaps = Math.ceil(urls.length / Size.FiftyK);
+  cachedData = { urls, totalSitemaps };
+  return cachedData;
 }

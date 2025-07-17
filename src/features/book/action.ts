@@ -3,7 +3,7 @@ import * as repo from "./repository";
 import * as user from "../user/action";
 import * as comment from "../comment/action";
 import * as bookLiker from "../book-liker/action";
-import * as fn from "@/global/utilities";
+import * as fun from "@/global/utilities";
 import { Genre } from "./enums";
 import { Type } from "@/global/enums";
 import { Clearance } from "../user/enums";
@@ -221,7 +221,7 @@ export async function downvoteBooksByVoterId(voterId: string, session?: any) {
 
 export async function dropBookById(id: string) {
   try {
-    await fn.runAtomic(async (session) => {
+    await fun.runAtomic(async (session) => {
       await repo.dropBookById(id, session);
       await comment.dropCommentsByBookId(id, session);
       await user.unsetFavBookIdByFavBookId(id, session);
@@ -236,7 +236,7 @@ export async function dropBookById(id: string) {
 
 export async function dropBookByTitle(title: string) {
   try {
-    await fn.runAtomic(async (session) => {
+    await fun.runAtomic(async (session) => {
       const book = await getBookByTitle(title, session);
       if (!book) return;
       await repo.dropBookByTitle(title, session);
@@ -275,7 +275,7 @@ export async function dropBooksByAuthorId(authorId: string, session?: any) {
 
 export async function dropBooks() {
   try {
-    await fn.runAtomic(async (session) => {
+    await fun.runAtomic(async (session) => {
       await repo.dropBooks(session);
       await comment.dropComments(session);
       await bookLiker.dropBookLikers(session);

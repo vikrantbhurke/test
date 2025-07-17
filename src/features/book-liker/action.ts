@@ -2,11 +2,11 @@
 import * as repo from "./repository";
 import * as book from "../book/action";
 import { BookLikerDTO } from "./schema";
-import * as fn from "@/global/utilities";
+import * as fun from "@/global/utilities";
 
 export async function saveBookLiker(bookLikerDTO: BookLikerDTO) {
   try {
-    await fn.runAtomic(async (session) => {
+    await fun.runAtomic(async (session) => {
       await book.likeBook(bookLikerDTO.bookId, session);
       await repo.saveBookLiker(bookLikerDTO, session);
     });
@@ -33,7 +33,7 @@ export async function checkBookLikers(bookLikersDTO: BookLikerDTO[]) {
 
 export async function dropBookLiker(bookLikerDTO: BookLikerDTO) {
   try {
-    await fn.runAtomic(async (session) => {
+    await fun.runAtomic(async (session) => {
       await book.unlikeBook(bookLikerDTO.bookId, session);
       await repo.dropBookLiker(bookLikerDTO, session);
     });

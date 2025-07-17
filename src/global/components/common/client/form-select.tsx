@@ -81,7 +81,8 @@ export function FormSelect({
         </InputBase>
       </Combobox.Target>
 
-      <Combobox.Dropdown>
+      <Combobox.Dropdown
+        styles={{ dropdown: { backgroundColor: "var(--bg-one)" } }}>
         {scrollable ? (
           <ScrollArea.Autosize mah={mah}>
             <Combobox.Options>{optionElements}</Combobox.Options>
