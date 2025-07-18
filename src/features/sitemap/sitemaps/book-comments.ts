@@ -8,19 +8,21 @@ let cachedData: {
   totalSitemaps: number;
 } | null = null;
 
-export async function getTotal() {
-  const { totalSitemaps } = await getData();
+export async function getTotalBookComments() {
+  const { totalSitemaps } = await getBookCommentsData();
   return totalSitemaps;
 }
 
-export async function getUrls(id: number): Promise<MetadataRoute.Sitemap> {
-  const { urls } = await getData();
+export async function getBookCommentsUrls(
+  id: number
+): Promise<MetadataRoute.Sitemap> {
+  const { urls } = await getBookCommentsData();
   const start = id * Size.FiftyK;
   const end = Math.min(start + Size.FiftyK, urls.length);
   return urls.slice(start, end);
 }
 
-export async function getData() {
+export async function getBookCommentsData() {
   if (cachedData) return cachedData;
 
   const booksPage = await book.getBooks({

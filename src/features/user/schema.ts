@@ -6,6 +6,12 @@ import isStrongPassword from "validator/lib/isStrongPassword";
 import { Gender, Role, Provider, Status } from "./enums";
 import { Payment } from "@/features/payment/enums";
 
+const genderEnum = Object.values(Gender) as [string, ...string[]];
+const roleEnum = Object.values(Role) as [string, ...string[]];
+const providerEnum = Object.values(Provider) as [string, ...string[]];
+const paymentEnum = Object.values(Payment) as [string, ...string[]];
+const statusEnum = Object.values(Status) as [string, ...string[]];
+
 const reservedUsernames = ["admin", "support", "api", "root", "login"];
 
 export const UserSchema = z.object({
@@ -63,6 +69,7 @@ export const UserSchema = z.object({
     }),
 
   email: z
+    .string()
     .email({
       message: "Invalid email address.",
     })
@@ -71,7 +78,7 @@ export const UserSchema = z.object({
   hashedPassword: z.string().trim(),
   avatar: z
     .object({
-      secureUrl: z.url().nullable(),
+      secureUrl: z.string().url().nullable(),
       publicId: z.string().nullable(),
     })
     .optional(),
@@ -81,13 +88,31 @@ export const UserSchema = z.object({
     .refine((value) => isMongoId(value))
     .nullable(),
 
-  gender: z.enum(Gender, {
-    message: "Gender is required.",
-  }),
-  role: z.enum(Role).default(Role.Private),
-  provider: z.enum(Provider).default(Provider.credentials),
-  payment: z.enum(Payment).default(Payment.Free),
-  status: z.enum(Status).default(Status.Inactive),
+  gender: z
+    .enum(genderEnum, {
+      message: "Gender is required.",
+    })
+    .default(Gender.Male),
+  role: z
+    .enum(roleEnum, {
+      message: "Role is required.",
+    })
+    .default(Role.Private),
+  provider: z
+    .enum(providerEnum, {
+      message: "Provider is required.",
+    })
+    .default(Provider.credentials),
+  payment: z
+    .enum(paymentEnum, {
+      message: "Payment method is required.",
+    })
+    .default(Payment.Free),
+  status: z
+    .enum(statusEnum, {
+      message: "Status is required.",
+    })
+    .default(Status.Inactive),
   isVerified: z.boolean().default(false),
 });
 

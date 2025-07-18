@@ -20,8 +20,8 @@ export async function createSitemaps() {
   // await saveSitemap(fileName, xml);
   sitemapUrls.push(`${smurl}/${fileName}`);
 
-  for (let i = 0; i < (await bookSitemap.getTotal()); i++) {
-    const urls = await bookSitemap.getUrls(i);
+  for (let i = 0; i < (await bookSitemap.getTotalBook()); i++) {
+    const urls = await bookSitemap.getBookUrls(i);
     const xml = await buildSitemap(urls);
     const fileName = `sitemaps/book/book-${i}.xml`;
     await uploadSitemap(fileName, xml);
@@ -29,8 +29,8 @@ export async function createSitemaps() {
     sitemapUrls.push(`${smurl}/${fileName}`);
   }
 
-  for (let i = 0; i < (await booksSitemap.getTotal()); i++) {
-    const urls = await booksSitemap.getUrls(i);
+  for (let i = 0; i < (await booksSitemap.getTotalBooks()); i++) {
+    const urls = await booksSitemap.getBooksUrls(i);
     const xml = await buildSitemap(urls);
     const fileName = `sitemaps/books/books-${i}.xml`;
     await uploadSitemap(fileName, xml);
@@ -38,8 +38,8 @@ export async function createSitemaps() {
     sitemapUrls.push(`${smurl}/${fileName}`);
   }
 
-  for (let i = 0; i < (await bookCommentsSitemap.getTotal()); i++) {
-    const urls = await bookCommentsSitemap.getUrls(i);
+  for (let i = 0; i < (await bookCommentsSitemap.getTotalBookComments()); i++) {
+    const urls = await bookCommentsSitemap.getBookCommentsUrls(i);
     const xml = await buildSitemap(urls);
     const fileName = `sitemaps/book-comments/book-comments-${i}.xml`;
     await uploadSitemap(fileName, xml);
