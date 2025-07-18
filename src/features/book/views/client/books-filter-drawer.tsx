@@ -1,7 +1,8 @@
 "use client";
 import { Suspense } from "react";
 import { Order } from "@/global/enums";
-import { Genre, Sort } from "@/features/book/enums";
+import { Genre } from "@/features/book/enums";
+import { Sort } from "@/global/enums";
 import { Drawer, Stack, Text } from "@mantine/core";
 import { drawerProps } from "@/global/constants";
 import { UrlSelect } from "@/global/components/common/client";

@@ -2,7 +2,8 @@
 import { Suspense } from "react";
 import { Order } from "@/global/enums";
 import { modalProps } from "@/global/constants";
-import { Genre, Sort } from "@/features/book/enums";
+import { Genre } from "@/features/book/enums";
+import { Sort } from "@/global/enums";
 import { Modal, Stack, Text } from "@mantine/core";
 import { UrlSelect } from "@/global/components/common/client";
 
