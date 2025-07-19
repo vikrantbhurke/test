@@ -77,7 +77,7 @@ export async function getBookByIndex(index: number) {
 export async function getBooks(getManyDTO: GetManyDTO) {
   return await db.getMany(Book, {
     ...getManyDTO,
-    filter: { ...filter, ...getManyDTO.filter },
+    filter: getManyDTO.filter || filter,
     type: getManyDTO.type || type,
     size: getManyDTO.size || size,
     sort: getManyDTO.sort || sort,

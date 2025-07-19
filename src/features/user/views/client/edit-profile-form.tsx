@@ -157,8 +157,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
               uploadPreset={undefined}
               onSuccess={handleUpload}
               options={{
-                folder: "testapp/avatars",
-                publicId: "vikrantbhurke",
+                folder: process.env.NEXT_PUBLIC_CLOUDINARY_AVATAR_FOLDER!,
+                publicId: user.username,
               }}>
               {({ open, isLoading }) => {
                 return (

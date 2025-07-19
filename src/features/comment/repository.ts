@@ -27,7 +27,7 @@ export async function countComments(filter: any) {
 export async function getComments(getManyDTO: GetManyDTO) {
   return await db.getMany(Comment, {
     ...getManyDTO,
-    filter: { ...filter, ...getManyDTO.filter },
+    filter: getManyDTO.filter || filter,
     type: getManyDTO.type || type,
     size: getManyDTO.size || size,
     sort: getManyDTO.sort || sort,
