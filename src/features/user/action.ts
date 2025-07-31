@@ -11,13 +11,13 @@ import * as repo from "./repository";
 import * as book from "../book/action";
 import * as comment from "../comment/action";
 import * as bookLiker from "../book-liker/action";
+import * as fun from "@/global/utilities";
 import jsonwebtoken from "jsonwebtoken";
 import { Provider, Role } from "./enums";
 import { Payment } from "../payment/enums";
 import { TemplateVariables } from "mailtrap";
 import { Template } from "@/global/constants";
 import { auth, signIn, signOut } from "@/auth";
-import * as fun from "@/global/utilities";
 import connectCloudinary from "@/global/configurations/cloudinary";
 
 export async function getAuth() {
@@ -105,8 +105,6 @@ export async function requestEmail(requestEmailDTO: RequestEmailDTO) {
       url: process.env.APP_URL as string,
       app: process.env.APP_NAME as string,
     });
-
-    // return { success: true, message: "Verification email sent." };
 
     return "Check your email for password reset link.";
   } catch (error: any) {

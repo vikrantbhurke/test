@@ -59,7 +59,7 @@ export function SignUpForm() {
     try {
       if (isMutating) return;
       setIsMutating(true);
-      const message = await signUpUser(Provider.credentials, values);
+      const message = await signUpUser(Provider.Credentials, values);
       const alert = { message, status: "success" as const };
       if (isMobile) showToast(alert);
       else showNotification(alert);

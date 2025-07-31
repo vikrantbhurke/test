@@ -63,7 +63,7 @@ export function SignInForm() {
     try {
       if (isMutating) return;
       setIsMutating(true);
-      setProvider(Provider.credentials);
+      setProvider(Provider.Credentials);
       const message = await signInWithCreds(values);
       const alert = { message, status: "success" as const };
       if (isMobile) showToast(alert);
@@ -140,8 +140,8 @@ export function SignInForm() {
             color="var(--tx-one)"
             type="submit"
             aria-label="Credentials"
-            disabled={isMutating && provider === Provider.credentials}
-            loading={isMutating && provider === Provider.credentials}
+            disabled={isMutating && provider === Provider.Credentials}
+            loading={isMutating && provider === Provider.Credentials}
             loaderProps={{ type: "dots", color: "var(--bg-one)" }}>
             Sign In
           </Button>
@@ -155,8 +155,8 @@ export function SignInForm() {
         c="var(--bg-one)"
         color="var(--tx-one)"
         aria-label="Google"
-        disabled={isMutating && provider === Provider.google}
-        loading={isMutating && provider === Provider.google}
+        disabled={isMutating && provider === Provider.Google}
+        loading={isMutating && provider === Provider.Google}
         loaderProps={{ type: "dots", color: "var(--bg-one)" }}
         onClick={() => handleSignInWithOAuth("google")}>
         Google
@@ -167,8 +167,8 @@ export function SignInForm() {
         c="var(--bg-one)"
         color="var(--tx-one)"
         aria-label="Github"
-        disabled={isMutating && provider === Provider.github}
-        loading={isMutating && provider === Provider.github}
+        disabled={isMutating && provider === Provider.Github}
+        loading={isMutating && provider === Provider.Github}
         loaderProps={{ type: "dots", color: "var(--bg-one)" }}
         onClick={() => handleSignInWithOAuth("github")}>
         Github

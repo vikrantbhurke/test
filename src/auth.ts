@@ -9,7 +9,6 @@ import {
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
-// import LinkedIn from "next-auth/providers/linkedin";
 import Credentials from "next-auth/providers/credentials";
 import { Gender, Provider } from "./features/user/enums";
 import { Template } from "./global/constants";
@@ -18,7 +17,6 @@ export const config = {
   providers: [
     GitHub,
     Google,
-    // LinkedIn,
     Credentials({
       authorize: async (credentials) => {
         if (!credentials) return null;
@@ -69,20 +67,20 @@ export const config = {
 
       if (!dbUser) {
         let provider;
-        if (account.provider === "google") provider = Provider.google;
-        else if (account.provider === "apple") provider = Provider.apple;
-        else if (account.provider === "github") provider = Provider.github;
-        else if (account.provider === "linkedin") provider = Provider.linkedin;
-        else if (account.provider === "twitter") provider = Provider.twitter;
-        else if (account.provider === "x") provider = Provider.x;
-        else provider = Provider.credentials;
+        if (account.provider === "google") provider = Provider.Google;
+        else if (account.provider === "apple") provider = Provider.Apple;
+        else if (account.provider === "github") provider = Provider.Github;
+        else if (account.provider === "linkedin") provider = Provider.Linkedin;
+        else if (account.provider === "twitter") provider = Provider.Twitter;
+        else if (account.provider === "x") provider = Provider.X;
+        else provider = Provider.Credentials;
 
         await signUpUser(provider, {
           firstname: user.name.split(" ")[0] || "",
           lastname: user.name.split(" ")[1] || "",
           username: user.email.split("@")[0],
           email: user.email,
-          gender: Gender.Other,
+          gender: Gender.Trans,
           password: "Passw0rd!",
           confirmPassword: "Passw0rd!",
           avatar: {

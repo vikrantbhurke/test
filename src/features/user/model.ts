@@ -17,7 +17,7 @@ const UserSchema = new Schema(
     provider: {
       type: String,
       enum: Object.values(Provider),
-      default: Provider.credentials,
+      default: Provider.Credentials,
     },
     payment: {
       type: String,

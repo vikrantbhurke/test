@@ -102,7 +102,7 @@ export const UserSchema = z.object({
     .enum(providerEnum, {
       message: "Provider is required.",
     })
-    .default(Provider.credentials),
+    .default(Provider.Credentials),
   payment: z
     .enum(paymentEnum, {
       message: "Payment method is required.",
