@@ -17,12 +17,21 @@ export async function saveBooks(file: File) {
 
   if (!result.success) {
     console.log("⛔ Validation Result:", result);
-    return "Invalid data format. Please ensure the file contains an array of books in the correct format.";
+
+    return {
+      status: "error",
+      message:
+        "Invalid data format. Please ensure the file contains an array of books in the correct format.",
+    };
   }
 
   try {
     for (const saveBookDTO of saveBooksDTO) await saveBook(saveBookDTO);
-    return "Books saved successfully.";
+
+    return {
+      status: "success",
+      message: "Books saved successfully.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -32,9 +41,19 @@ export async function saveBook(saveBookDTO: SaveBookDTO) {
   try {
     const { title } = saveBookDTO;
     const book = await getBookByTitle(title);
-    if (book) throw new Error(`Book with title ${title} already exists.`);
+
+    if (book)
+      return {
+        status: "error",
+        message: `Book with title "${title}" already exists.`,
+      };
+
     await repo.saveBook(saveBookDTO);
-    return "Book saved successfully.";
+
+    return {
+      status: "success",
+      message: "Book saved successfully.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -132,7 +151,11 @@ export async function getBooks(getManyDTO: GetManyDTO, auth?: any) {
 export async function editBookById(id: string, editBookDTO: EditBookDTO) {
   try {
     await repo.editBookById(id, editBookDTO);
-    return "Book edited successfully.";
+
+    return {
+      status: "success",
+      message: "Book edited successfully.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -141,7 +164,7 @@ export async function editBookById(id: string, editBookDTO: EditBookDTO) {
 export async function editBookByTitle(title: string, editBookDTO: EditBookDTO) {
   try {
     await repo.editBookByTitle(title, editBookDTO);
-    return "Book edited successfully.";
+    return { status: "success", message: "Book edited successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -150,7 +173,7 @@ export async function editBookByTitle(title: string, editBookDTO: EditBookDTO) {
 export async function editBooksByGenre(genre: Genre, editBookDTO: EditBookDTO) {
   try {
     await repo.editBooksByGenre(genre, editBookDTO);
-    return "Books edited successfully.";
+    return { status: "success", message: "Books edited successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -159,7 +182,7 @@ export async function editBooksByGenre(genre: Genre, editBookDTO: EditBookDTO) {
 export async function likeBook(id: string, session?: any) {
   try {
     await repo.likeBook(id, session);
-    return "Book liked successfully.";
+    return { status: "success", message: "Book liked successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -168,7 +191,7 @@ export async function likeBook(id: string, session?: any) {
 export async function unlikeBook(id: string, session?: any) {
   try {
     await repo.unlikeBook(id, session);
-    return "Book unliked successfully.";
+    return { status: "success", message: "Book unliked successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -177,7 +200,7 @@ export async function unlikeBook(id: string, session?: any) {
 export async function addTag(id: string, tag: string) {
   try {
     await repo.addTag(id, tag);
-    return "Tag added successfully.";
+    return { status: "success", message: "Tag added successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -186,7 +209,7 @@ export async function addTag(id: string, tag: string) {
 export async function removeTag(id: string, tag: string) {
   try {
     await repo.removeTag(id, tag);
-    return "Tag removed successfully.";
+    return { status: "success", message: "Tag removed successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -195,7 +218,7 @@ export async function removeTag(id: string, tag: string) {
 export async function upvoteBook(id: string, voterId: string) {
   try {
     await repo.upvoteBook(id, voterId);
-    return "Book upvoted successfully.";
+    return { status: "success", message: "Book upvoted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -204,7 +227,7 @@ export async function upvoteBook(id: string, voterId: string) {
 export async function downvoteBook(id: string, voterId: string) {
   try {
     await repo.downvoteBook(id, voterId);
-    return "Book downvoted successfully.";
+    return { status: "success", message: "Book downvoted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -213,7 +236,7 @@ export async function downvoteBook(id: string, voterId: string) {
 export async function downvoteBooksByVoterId(voterId: string, session?: any) {
   try {
     await repo.downvoteBooksByVoterId(voterId, session);
-    return "Book downvoted successfully.";
+    return { status: "success", message: "Books downvoted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -228,7 +251,7 @@ export async function dropBookById(id: string) {
       await bookLiker.dropBookLikersByBookId(id, session);
     });
 
-    return "Book deleted successfully.";
+    return { status: "success", message: "Book deleted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -245,7 +268,7 @@ export async function dropBookByTitle(title: string) {
       await bookLiker.dropBookLikersByBookId(book.id, session);
     });
 
-    return "Book deleted successfully.";
+    return { status: "success", message: "Book deleted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -267,7 +290,7 @@ export async function dropBooksByAuthorId(authorId: string, session?: any) {
       await bookLiker.dropBookLikersByBookId(book.id, session);
     }
 
-    return "Books deleted successfully.";
+    return { status: "success", message: "Books deleted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -282,7 +305,7 @@ export async function dropBooks() {
       await user.unsetFavBookIdFromAll(session);
     });
 
-    return "Books deleted successfully.";
+    return { status: "success", message: "Books deleted successfully." };
   } catch (error: any) {
     throw error;
   }

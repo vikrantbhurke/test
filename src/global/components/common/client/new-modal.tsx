@@ -41,29 +41,17 @@ export function NewModal({
   const { isMobile } = useSelector((state: RootState) => state.global);
 
   const handleClick = async () => {
-    try {
-      if (isMutating) return;
-      setIsMutating(true);
-      const message = await action();
-
-      if (message) {
-        const alert = { message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
-
-      if (routeType === "push" && route) router.push(route);
-      if (routeType === "replace" && route) router.replace(route);
-      if (routeType === "back") router.back();
-      if (routeType === "refresh") router.refresh();
-      close();
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } finally {
-      setIsMutating(false);
-    }
+    if (isMutating) return;
+    setIsMutating(true);
+    const response = await action();
+    if (isMobile) showToast(response);
+    else showNotification(response);
+    if (routeType === "push" && route) router.push(route);
+    if (routeType === "replace" && route) router.replace(route);
+    if (routeType === "back") router.back();
+    if (routeType === "refresh") router.refresh();
+    close();
+    setIsMutating(false);
   };
 
   const { loaderProps, ...rest } = buttonProps || {};

@@ -12,23 +12,16 @@ export function PayPalSuspendModal({ opened, close, id }: any) {
   const { isMobile } = useSelector((state: RootState) => state.global);
 
   const handleSuspend = async () => {
-    try {
-      const message = await suspendPayPalSubscription(id);
+    const response = await suspendPayPalSubscription(id);
 
-      const alert = {
-        message,
-        status: "success" as const,
-        autoClose: 10000,
-      };
+    const alert = {
+      ...response,
+      autoClose: 10000,
+    };
 
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-      close();
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    }
+    if (isMobile) showToast(alert);
+    else showNotification(alert);
+    close();
   };
 
   return (

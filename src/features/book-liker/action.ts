@@ -61,7 +61,7 @@ export async function dropBookLikersByBookId(bookId: string, session?: any) {
 export async function dropBookLikers(session?: any) {
   try {
     await repo.dropBookLikers(session);
-    return "Book unliked successfully.";
+    return { status: "success", message: "Book unliked successfully." };
   } catch (error: any) {
     throw error;
   }

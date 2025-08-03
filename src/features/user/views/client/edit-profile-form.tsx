@@ -54,16 +54,13 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     setStateUser((prev: any) => ({ ...prev, ...values }));
 
     try {
-      const message = await editUserById(user.id, values);
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+      const response = await editUserById(user.id, values);
+      if (isMobile) showToast(response);
+      else showNotification(response);
       router.push(viewUserRoute(user.id));
     } catch (error: any) {
       setStateUser(previousBook);
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+      throw error;
     } finally {
       setIsMutating(false);
     }
@@ -72,35 +69,27 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const handleUpload = async (result: any) => {
     const info = result?.info;
 
-    try {
-      if (
-        typeof info === "object" &&
-        info !== null &&
-        "secure_url" in info &&
-        "public_id" in info
-      ) {
-        const message = await editAvatarById(
-          user.id,
-          info.secure_url,
-          info.public_id
-        );
+    if (
+      typeof info === "object" &&
+      info !== null &&
+      "secure_url" in info &&
+      "public_id" in info
+    ) {
+      const response = await editAvatarById(
+        user.id,
+        info.secure_url,
+        info.public_id
+      );
 
-        const alert = { message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
+      if (isMobile) showToast(response);
+      else showNotification(response);
 
-        setStateUser((prev: any) => ({
-          ...prev,
-          avatar: { secureUrl: info.secure_url, publicId: info.public_id },
-        }));
+      setStateUser((prev: any) => ({
+        ...prev,
+        avatar: { secureUrl: info.secure_url, publicId: info.public_id },
+      }));
 
-        router.refresh();
-      }
-    } catch (error: any) {
-      const message = error.message || "Failed to upload image.";
-      const alert = { message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+      router.refresh();
     }
   };
 

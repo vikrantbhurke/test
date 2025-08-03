@@ -56,21 +56,13 @@ export function SignUpForm() {
   });
 
   const handleSignUpUser = async (values: any) => {
-    try {
-      if (isMutating) return;
-      setIsMutating(true);
-      const message = await signUpUser(Provider.Credentials, values);
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-      router.push(signInRoute);
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } finally {
-      setIsMutating(false);
-    }
+    if (isMutating) return;
+    setIsMutating(true);
+    const response = await signUpUser(Provider.Credentials, values);
+    if (isMobile) showToast(response);
+    else showNotification(response);
+    router.push(signInRoute);
+    setIsMutating(false);
   };
 
   const genderMap = new Map(Object.entries(Gender).map((g) => [g[1], g[0]]));

@@ -39,22 +39,14 @@ export function AddCommentForm({ bookId, close, auth }: AddCommentFormProps) {
   });
 
   const handleSaveComment = async (values: any) => {
-    try {
-      if (isMutating) return;
-      setIsMutating(true);
-      const message = await saveComment(values);
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-      close();
-      router.refresh();
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } finally {
-      setIsMutating(false);
-    }
+    if (isMutating) return;
+    setIsMutating(true);
+    const response = await saveComment(values);
+    if (isMobile) showToast(response);
+    else showNotification(response);
+    close();
+    router.refresh();
+    setIsMutating(false);
   };
 
   return (

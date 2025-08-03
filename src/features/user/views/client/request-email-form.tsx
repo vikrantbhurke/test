@@ -30,20 +30,12 @@ export function RequestEmailForm() {
   });
 
   const handleRequestEmail = async (values: any) => {
-    try {
-      if (isMutating) return;
-      setIsMutating(true);
-      const message = await requestEmail(values);
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } finally {
-      setIsMutating(false);
-    }
+    if (isMutating) return;
+    setIsMutating(true);
+    const response = await requestEmail(values);
+    if (isMobile) showToast(response);
+    else showNotification(response);
+    setIsMutating(false);
   };
 
   return (

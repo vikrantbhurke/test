@@ -45,36 +45,26 @@ export function SaveBookForm({ auth }: any) {
   });
 
   const handleSaveBooks = async () => {
-    try {
-      if (isMutating || !file) return;
-      setIsMutating(true);
-      const message = await saveBooks(file);
-      showNotification({ message, status: "success" });
-      router.push(booksServerWindowRoute);
-    } catch (error: any) {
-      showNotification({ message: error.message, status: "error" });
-    } finally {
-      setIsMutating(false);
-    }
+    if (isMutating || !file) return;
+    setIsMutating(true);
+    const response = await saveBooks(file);
+    showNotification(response);
+    router.push(booksServerWindowRoute);
+    setIsMutating(false);
   };
 
   const handleSaveBook = async (values: any) => {
-    try {
-      if (isMutating) return;
-      setIsMutating(true);
+    if (isMutating) return;
+    setIsMutating(true);
 
-      const message = await saveBook({
-        ...values,
-        authorId: auth.id,
-      });
+    const response = await saveBook({
+      ...values,
+      authorId: auth.id,
+    });
 
-      showNotification({ message, status: "success" });
-      router.push(booksServerWindowRoute);
-    } catch (error: any) {
-      showNotification({ message: error.message, status: "error" });
-    } finally {
-      setIsMutating(false);
-    }
+    showNotification(response);
+    router.push(booksServerWindowRoute);
+    setIsMutating(false);
   };
 
   const genreMap = new Map(

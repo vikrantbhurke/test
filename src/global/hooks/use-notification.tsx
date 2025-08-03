@@ -19,7 +19,7 @@ type ShowNotificationArgs = {
     | "top-center";
   autoClose?: number;
   withCloseButton?: boolean;
-  status: "success" | "warning" | "error" | "info" | "default";
+  status: string; // "success" | "warning" | "error" | "info" | "default";
 };
 
 export const useNotification = () => {

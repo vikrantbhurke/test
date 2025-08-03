@@ -6,7 +6,7 @@ import { dimensions } from "@/global/constants";
 type ToastProps = {
   title?: string;
   message?: string;
-  status: "success" | "warning" | "error" | "info";
+  status: string; // "success" | "warning" | "error" | "info";
   autoClose?: number;
   position?: "top" | "bottom";
 };

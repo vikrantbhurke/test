@@ -76,22 +76,15 @@ export function PayPalButtons({ subscription, payment }: PayPalButtonsProps) {
   };
 
   const handleActivate = async () => {
-    try {
-      const message = await activatePayPalSubscription(subscription.id);
+    const response = await activatePayPalSubscription(subscription.id);
 
-      const alert = {
-        message,
-        status: "success" as const,
-        autoClose: 10000,
-      };
+    const alert = {
+      ...response,
+      autoClose: 10000,
+    };
 
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    }
+    if (isMobile) showToast(alert);
+    else showNotification(alert);
   };
 
   let status: Status = Status.Inactive;

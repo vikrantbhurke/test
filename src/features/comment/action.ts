@@ -6,7 +6,7 @@ import { GetManyDTO } from "@/global/utilities";
 export async function saveComment(saveCommentDTO: SaveCommentDTO) {
   try {
     await repo.saveComment(saveCommentDTO);
-    return "Comment created successfully.";
+    return { status: "success", message: "Comment created successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -31,7 +31,7 @@ export async function getComments(getManyDTO: GetManyDTO) {
 export async function dropCommentById(id: string) {
   try {
     await repo.dropCommentById(id);
-    return "Comment deleted successfully.";
+    return { status: "success", message: "Comment deleted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -40,7 +40,7 @@ export async function dropCommentById(id: string) {
 export async function dropCommentsByBookId(bookId: string, session?: any) {
   try {
     await repo.dropCommentsByBookId(bookId, session);
-    return "Comment deleted successfully.";
+    return { status: "success", message: "Comment deleted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -52,7 +52,7 @@ export async function dropCommentsByCommenterId(
 ) {
   try {
     await repo.dropCommentsByCommenterId(commenterId, session);
-    return "Comment deleted successfully.";
+    return { status: "success", message: "Comment deleted successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -61,7 +61,7 @@ export async function dropCommentsByCommenterId(
 export async function dropComments(session?: any) {
   try {
     await repo.dropComments(session);
-    return "Comment deleted successfully.";
+    return { status: "success", message: "Comments deleted successfully." };
   } catch (error: any) {
     throw error;
   }

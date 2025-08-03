@@ -86,7 +86,7 @@ export async function verifyAccount(token: string) {
     const user = await getUserByUsername(username as any);
     if (user.isVerified) throw new Error("Email already verified.");
     await editUserById(user.id, { isVerified: true });
-    return "Account verified successfully.";
+    return { status: "success", message: "Account verified successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -95,7 +95,12 @@ export async function verifyAccount(token: string) {
 export async function requestEmail(requestEmailDTO: RequestEmailDTO) {
   try {
     const user = await getUserByEmail(requestEmailDTO.email);
-    if (!user) throw new Error("Account with this email does not exist.");
+    if (!user)
+      return {
+        status: "error",
+        message: "Account with this email does not exist.",
+      };
+
     const token = await generateToken({ username: user.username });
 
     await sendEmail(requestEmailDTO.email, Template.Password, {
@@ -106,7 +111,10 @@ export async function requestEmail(requestEmailDTO: RequestEmailDTO) {
       app: process.env.APP_NAME as string,
     });
 
-    return "Check your email for password reset link.";
+    return {
+      status: "success",
+      message: "Check your email for password reset link.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -117,14 +125,25 @@ export async function resetPassword(
   { password }: ResetPasswordDTO
 ) {
   try {
-    if (!token) throw new Error("Invalid or expired token.");
+    if (!token)
+      return {
+        status: "error",
+        message: "Invalid or expired token.",
+      };
+
     // @ts-expect-error...
     const { username } = await verifyToken(token);
     const user = await getUserByUsername(username as any);
-    if (!user) throw new Error("Account with this username does not exist.");
+
+    if (!user)
+      return {
+        status: "error",
+        message: "Account with this username does not exist.",
+      };
+
     const hashedPassword = await encryptPassword(password);
     await editUserById(user.id, { hashedPassword });
-    return "Password reset successfully.";
+    return { status: "success", message: "Password reset successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -140,9 +159,16 @@ export async function signUpUser(
     const u2 = await getUserByEmail(email);
 
     if (u1)
-      throw new Error(`Account with username ${username} already exists.`);
+      return {
+        status: "error",
+        message: `Account with username ${username} already exists.`,
+      };
 
-    if (u2) throw new Error(`Account with email ${email} already exists.`);
+    if (u2)
+      return {
+        status: "error",
+        message: `Account with email ${email} already exists.`,
+      };
 
     const newUser = {
       ...signUpUserDTO,
@@ -160,7 +186,11 @@ export async function signUpUser(
       app: process.env.APP_NAME!,
     });
 
-    return "Profile created successfully. Check your email for account verification link.";
+    return {
+      status: "success",
+      message:
+        "Profile created successfully. Check your email for account verification link.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -173,7 +203,7 @@ export async function signInWithCreds(signInUserDTO: SignInUserDTO) {
       redirect: false,
     });
 
-    return "Welcome back!";
+    return { status: "success", message: "Welcome back!" };
   } catch (error: any) {
     const message = error?.cause?.err?.message || null;
     if (message) throw new Error(message);
@@ -196,10 +226,14 @@ export async function signInWithOAuth(
 export async function signOutUser() {
   try {
     await signOut({ redirect: false });
-    return "Logged out successfully.";
+    return { status: "success", message: "Logged out successfully." };
   } catch (error: any) {
     console.error("⛔ Sign out error:", error);
-    throw new Error("⛔ Failed to log out.");
+
+    return {
+      status: "error",
+      message: "⛔ Failed to log out. Please try again.",
+    };
   }
 }
 
@@ -244,7 +278,7 @@ export async function getUserByEmail(email: string) {
 export async function editUserById(id: string, editUserDTO: EditUserDTO) {
   try {
     await repo.editUserById(id, editUserDTO);
-    return "Profile updated successfully.";
+    return { status: "success", message: "Profile updated successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -253,7 +287,7 @@ export async function editUserById(id: string, editUserDTO: EditUserDTO) {
 export async function editUserByEmail(email: string, editUserDTO: EditUserDTO) {
   try {
     await repo.editUserByEmail(email, editUserDTO);
-    return "Profile updated successfully.";
+    return { status: "success", message: "Profile updated successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -266,7 +300,7 @@ export async function editAvatarById(
 ) {
   try {
     await repo.editAvatarById(id, secure_url, public_id);
-    return "Avatar updated successfully.";
+    return { status: "success", message: "Avatar updated successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -275,7 +309,7 @@ export async function editAvatarById(
 export async function setFavBookIdById(id: string, favBookId: string) {
   try {
     await repo.setFavBookIdById(id, favBookId);
-    return "Book set as favorite successfully.";
+    return { status: "success", message: "Book set as favorite successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -284,7 +318,7 @@ export async function setFavBookIdById(id: string, favBookId: string) {
 export async function unsetFavBookIdById(id: string) {
   try {
     await repo.unsetFavBookIdById(id);
-    return "Favorite book unset successfully.";
+    return { status: "success", message: "Favorite book unset successfully." };
   } catch (error: any) {
     throw error;
   }
@@ -312,7 +346,12 @@ export async function unsetFavBookIdFromAll(session?: any) {
 export async function dropUserById(id: string) {
   try {
     const user = await getUserById(id);
-    if (!user) throw new Error("User not found.");
+
+    if (!user)
+      return {
+        status: "error",
+        message: "User not found.",
+      };
 
     await fun.runAtomic(async (session) => {
       await repo.dropUserById(id, session);
@@ -327,7 +366,7 @@ export async function dropUserById(id: string) {
       await cloudinary.uploader.destroy(user.avatar.publicId);
     }
 
-    return "Profile deleted successfully.";
+    return { status: "success", message: "Profile deleted successfully." };
   } catch (error: any) {
     throw error;
   }

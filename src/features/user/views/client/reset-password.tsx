@@ -38,21 +38,13 @@ export function ResetPassword({ token }: ResetPasswordProps) {
   });
 
   const handleResetPassword = async (values: any) => {
-    try {
-      if (isMutating) return;
-      setIsMutating(true);
-      const message = await resetPassword(token, values);
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-      router.push(signInRoute);
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } finally {
-      setIsMutating(false);
-    }
+    if (isMutating) return;
+    setIsMutating(true);
+    const response = await resetPassword(token, values);
+    if (isMobile) showToast(response);
+    else showNotification(response);
+    router.push(signInRoute);
+    setIsMutating(false);
   };
 
   return (

@@ -23,18 +23,11 @@ export function VerifyAccount({ token }: VerifyAccountProps) {
   useEffect(() => {
     const handleVerify = async () => {
       if (isVerified) return;
-      try {
-        const message = await verifyAccount(token);
-        const alert = { message, status: "success" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-        router.push(signInRoute);
-        setIsVerified(true);
-      } catch (error: any) {
-        const alert = { message: error.message, status: "error" as const };
-        if (isMobile) showToast(alert);
-        else showNotification(alert);
-      }
+      const response = await verifyAccount(token);
+      if (isMobile) showToast(response);
+      else showNotification(response);
+      router.push(signInRoute);
+      setIsVerified(true);
     };
 
     handleVerify();

@@ -87,7 +87,11 @@ export async function suspendPayPalSubscription(subscriptionId: string) {
       await getHeader()
     );
 
-    return "Subscription suspended successfully. It may take few seconds to suspend your subscription.";
+    return {
+      status: "success",
+      message:
+        "Subscription suspended successfully. It may take few seconds to suspend your subscription.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -103,7 +107,11 @@ export async function activatePayPalSubscription(
       await getHeader()
     );
 
-    return "Subscription activated successfully. It may take few seconds to activate your subscription.";
+    return {
+      status: "success",
+      message:
+        "Subscription activated successfully. It may take few seconds to activate your subscription.",
+    };
   } catch (error: any) {
     throw error;
   }
@@ -117,7 +125,11 @@ export async function cancelPayPalSubscription(subscriptionId: string) {
       await getHeader()
     );
 
-    return "Subscription canceled successfully. It may take few seconds to cancel your subscription.";
+    return {
+      status: "success",
+      message:
+        "Subscription canceled successfully. It may take few seconds to cancel your subscription.",
+    };
   } catch (error: any) {
     throw error;
   }

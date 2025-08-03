@@ -42,16 +42,13 @@ export function EditBookForm({ book }: EditBookFormProps) {
     setStateBook((prevBook: any) => ({ ...prevBook, ...values }));
 
     try {
-      const message = await editBookById(book.id, values);
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+      const response = await editBookById(book.id, values);
+      if (isMobile) showToast(response);
+      else showNotification(response);
       router.push(viewBookRoute(book.id));
     } catch (error: any) {
       setStateBook(previousBook);
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
+      throw error;
     } finally {
       setIsMutating(false);
     }

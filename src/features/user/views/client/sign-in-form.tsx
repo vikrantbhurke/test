@@ -60,24 +60,16 @@ export function SignInForm() {
   });
 
   const handleSignInWithCreds = async (values: any) => {
-    try {
-      if (isMutating) return;
-      setIsMutating(true);
-      setProvider(Provider.Credentials);
-      const message = await signInWithCreds(values);
-      const alert = { message, status: "success" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-      router.replace(homeRoute);
-      router.refresh();
-    } catch (error: any) {
-      const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
-      else showNotification(alert);
-    } finally {
-      setIsMutating(false);
-      setProvider(null);
-    }
+    if (isMutating) return;
+    setIsMutating(true);
+    setProvider(Provider.Credentials);
+    const response = await signInWithCreds(values);
+    if (isMobile) showToast(response);
+    else showNotification(response);
+    router.replace(homeRoute);
+    router.refresh();
+    setIsMutating(false);
+    setProvider(null);
   };
 
   const handleSignInWithOAuth = async (
