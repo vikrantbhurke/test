@@ -16,6 +16,12 @@ import { colorsTheme } from "./colors.theme";
 import classes from "@/global/styles/app.module.css";
 // import { inter } from "./fonts.style";
 
+const input = {
+  height: 50,
+  borderRadius: 10,
+  backgroundColor: "var(--bg-one)",
+};
+
 export const coreTheme = createTheme({
   // shadows: {
   //   sm: "0 1px 2px rgba(0, 0, 0, 0.1)",
@@ -53,14 +59,16 @@ export const coreTheme = createTheme({
 
     Textarea: Textarea.extend({
       defaultProps: {
-        fz: "sm",
+        styles: {
+          input,
+        },
       },
     }),
 
     InputBase: InputBase.extend({
       defaultProps: {
         styles: {
-          input: { backgroundColor: "var(--bg-one)" },
+          input,
         },
       },
     }),
@@ -68,7 +76,7 @@ export const coreTheme = createTheme({
     TextInput: TextInput.extend({
       defaultProps: {
         styles: {
-          input: { backgroundColor: "var(--bg-one)" },
+          input,
         },
       },
     }),
@@ -76,7 +84,7 @@ export const coreTheme = createTheme({
     PasswordInput: PasswordInput.extend({
       defaultProps: {
         styles: {
-          input: { backgroundColor: "var(--bg-one)" },
+          input,
         },
       },
     }),

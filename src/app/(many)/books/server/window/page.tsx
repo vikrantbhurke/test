@@ -9,15 +9,13 @@ import { BooksItem, BooksDetails } from "@/features/book/views/server";
 export { generateMetadata } from "./metadata";
 
 type PageProps = {
-  params: Promise<{ page: string }>;
   searchParams: Promise<{ [key: string]: string }>;
 };
 
-export default async function Page({ params, searchParams }: PageProps) {
+export default async function Page({ searchParams }: PageProps) {
   const { id, role } = await getAuth();
-  const { page } = await params;
-  const { sort, order, genre } = await searchParams;
-  const dbPage = Number(page) - 1;
+  const { sort, order, genre, page } = await searchParams;
+  const dbPage = page ? Number(page) - 1 : 0;
   const auth = { id, role };
 
   const getBooksDTO = {
@@ -47,10 +45,7 @@ export default async function Page({ params, searchParams }: PageProps) {
           value: booksPage.page + 1,
           total: booksPage.totalPages,
         }}
-        scrollButtonsProps={{
-          ...scrollButtonsProps,
-          scrollbar: "container",
-        }}
+        scrollButtonsProps={scrollButtonsProps}
         scrollWrapperProps={scrollWrapperProps}
         listGridInnerProps={{
           ...listGridInnerProps,

@@ -157,7 +157,7 @@ export function ListGridOuter({
   }, [loadNew, firstRender, jsonDataArgs]);
 
   const listGridEnd = !isLastPage || (
-    <Text ta="center" p="sm" {...endProps}>
+    <Text ta="center" p="sm" {...endProps} style={{ opacity: 0.3 }}>
       {endLabel}
     </Text>
   );

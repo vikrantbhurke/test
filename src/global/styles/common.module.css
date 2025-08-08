@@ -10,7 +10,7 @@
 .label {
   z-index: 1;
   position: absolute;
-  top: 6px;
+  top: 14px;
   left: 12px;
   padding: 0 4px;
   background-color: var(--bg-one);

@@ -1,23 +1,21 @@
 import { Stack } from "@mantine/core";
-import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
-import { getAuth, getBooks } from "@/features";
+import { Order } from "@/global/enums";
 import { dimensions } from "@/global/constants";
+import { getAuth, getBooks } from "@/features";
 import { listGridDefaults } from "@/global/constants/client";
 import { ListGridOuter } from "@/global/components/list-grid/client";
 import { BooksItem, BooksDetails } from "@/features/book/views/client";
 export { generateMetadata } from "./metadata";
 
 type PageProps = {
-  params: Promise<{ page: string }>;
   searchParams: Promise<{ [key: string]: string }>;
 };
 
-export default async function Page({ params, searchParams }: PageProps) {
+export default async function Page({ searchParams }: PageProps) {
   const { id, role } = await getAuth();
-  const { page } = await params;
-  const { sort, order, genre } = await searchParams;
-  const dbPage = Number(page) - 1;
+  const { sort, order, genre, page } = await searchParams;
+  const dbPage = page ? Number(page) - 1 : 0;
   const auth = { id, role };
 
   const getBooksDTO = {
@@ -51,7 +49,10 @@ export default async function Page({ params, searchParams }: PageProps) {
           search: booksPage.search,
         }}
         buttonProps={buttonProps}
-        scrollButtonsProps={scrollButtonsProps}
+        scrollButtonsProps={{
+          ...scrollButtonsProps,
+          scrollbar: "container" as const,
+        }}
         scrollWrapperProps={scrollWrapperProps}
         listGridInnerProps={{
           ...listGridInnerProps,

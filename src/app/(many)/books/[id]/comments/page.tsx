@@ -11,15 +11,15 @@ import { CommentsItem, CommentsDetails } from "@/features/comment/views/server";
 export { generateMetadata } from "./metadata";
 
 type PageProps = {
-  params: Promise<{ id: string; page: string }>;
+  params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string }>;
 };
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { id: uid, role } = await getAuth();
-  const { id, page } = await params;
-  const { sort, order } = await searchParams;
-  const dbPage = Number(page) - 1;
+  const { id } = await params;
+  const { sort, order, page } = await searchParams;
+  const dbPage = page ? Number(page) - 1 : 0;
   const auth = { id: uid, role };
 
   const getCommentsDTO = {
