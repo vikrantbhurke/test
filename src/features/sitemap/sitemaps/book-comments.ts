@@ -1,53 +1,37 @@
-import { Size, Type } from "@/global/enums";
 import { MetadataRoute } from "next";
-import * as comment from "../../comment/action";
+import { Size } from "@/global/enums";
 import * as book from "../../book/action";
-
-let cachedData: {
-  urls: any[];
-  totalSitemaps: number;
-} | null = null;
+import * as comment from "../../comment/action";
 
 export async function getTotalBookComments() {
-  const { totalSitemaps } = await getBookCommentsData();
+  const totalBooks = await book.countBooks();
+  const totalSitemaps = Math.ceil(totalBooks / Size.FiftyK);
   return totalSitemaps;
 }
 
 export async function getBookCommentsUrls(
   id: number
 ): Promise<MetadataRoute.Sitemap> {
-  const { urls } = await getBookCommentsData();
-  const start = id * Size.FiftyK;
-  const end = Math.min(start + Size.FiftyK, urls.length);
-  return urls.slice(start, end);
-}
-
-export async function getBookCommentsData() {
-  if (cachedData) return cachedData;
-
   const booksPage = await book.getBooks({
+    page: id,
     select: "_id",
+    size: Size.FiftyK,
     populate: [],
-    type: Type.All,
   });
 
-  const urls: any = [];
+  const booksWithComments = await Promise.all(
+    booksPage.content.map(async (book: any) => {
+      const totalComments = await comment.countComments({ bookId: book.id });
+      return totalComments > 0 ? book : null;
+    })
+  );
 
-  for (const book of booksPage.content) {
-    const totalComments = await comment.countComments({ bookId: book.id });
-    const totalCommentPages = Math.ceil(totalComments / Size.Thirty);
-
-    for (let page = 1; page <= totalCommentPages; page++) {
-      urls.push({
-        url: `${process.env.APP_URL}/books/${book.id}/comments/page/${page}`,
-        lastModified: new Date().toISOString(),
-        changeFrequency: "monthly",
-        priority: 0.5,
-      });
-    }
-  }
-
-  const totalSitemaps = Math.ceil(urls.length / Size.FiftyK);
-  cachedData = { urls, totalSitemaps };
-  return cachedData;
+  return booksWithComments
+    .filter((book) => book !== null)
+    .map((book: any) => ({
+      url: `${process.env.APP_URL}/books/${book.id}/comments`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    }));
 }

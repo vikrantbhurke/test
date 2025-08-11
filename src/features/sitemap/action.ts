@@ -3,14 +3,13 @@ import path from "path";
 import * as repo from "./repository";
 import { promises as fs } from "fs";
 import * as bookSitemap from "./sitemaps/book";
-import * as booksSitemap from "./sitemaps/books";
 import * as staticSitemap from "./sitemaps/static";
 import * as bookCommentsSitemap from "./sitemaps/book-comments";
 import connectCloudflare from "@/global/configurations/cloudflare";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 export async function createSitemaps() {
-  const smurl = process.env.R2_PUBLIC_URL!; // process.env.APP_URL as string; Use R2_PUBLIC_URL for Cloudflare R2 and APP_URL for local persistence
+  const smurl = process.env.R2_PUBLIC_URL!; // Use R2_PUBLIC_URL for Cloudflare R2 and APP_URL for local persistence
   const sitemapUrls: string[] = [];
 
   const urls = staticSitemap.getUrls();
@@ -24,15 +23,6 @@ export async function createSitemaps() {
     const urls = await bookSitemap.getBookUrls(i);
     const xml = await buildSitemap(urls);
     const fileName = `sitemaps/book/book-${i}.xml`;
-    await uploadSitemap(fileName, xml);
-    // await saveSitemap(fileName, xml);
-    sitemapUrls.push(`${smurl}/${fileName}`);
-  }
-
-  for (let i = 0; i < (await booksSitemap.getTotalBooks()); i++) {
-    const urls = await booksSitemap.getBooksUrls(i);
-    const xml = await buildSitemap(urls);
-    const fileName = `sitemaps/books/books-${i}.xml`;
     await uploadSitemap(fileName, xml);
     // await saveSitemap(fileName, xml);
     sitemapUrls.push(`${smurl}/${fileName}`);
