@@ -16,6 +16,7 @@ import { Payment } from "@/features/payment/enums";
 import { homeRoute } from "@/global/constants/routes";
 import { PayPalCancelModal } from "./paypal-cancel-modal";
 import { PayPalSuspendModal } from "./paypal-suspend-modal";
+import { Screen } from "@/global/enums";
 
 type PayPalButtonsProps = {
   subscription: any;
@@ -26,7 +27,7 @@ export function PayPalButtons({ subscription, payment }: PayPalButtonsProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const { showNotification } = useNotification();
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const [suspendOpened, { open: suspendOpen, close: suspendClose }] =
     useDisclosure();
@@ -50,14 +51,15 @@ export function PayPalButtons({ subscription, payment }: PayPalButtonsProps) {
             autoClose: 10000,
           };
 
-          if (isMobile) showToast(alert);
+          if (screen === Screen.Mobile || screen === Screen.Tablet)
+            showToast(alert);
           else showNotification(alert);
         }, 2000);
       }
     };
 
     handleSuccess();
-  }, [isMobile, router, showToast, showNotification]);
+  }, [screen, router, showToast, showNotification]);
 
   const handleCreate = async () => {
     try {
@@ -70,7 +72,8 @@ export function PayPalButtons({ subscription, payment }: PayPalButtonsProps) {
         autoClose: 10000,
       };
 
-      if (isMobile) showToast(alert);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(alert);
       else showNotification(alert);
     }
   };
@@ -83,7 +86,7 @@ export function PayPalButtons({ subscription, payment }: PayPalButtonsProps) {
       autoClose: 10000,
     };
 
-    if (isMobile) showToast(alert);
+    if (screen === Screen.Mobile || screen === Screen.Tablet) showToast(alert);
     else showNotification(alert);
   };
 

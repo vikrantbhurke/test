@@ -1,6 +1,6 @@
 import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
-import { Paper, Stack } from "@mantine/core";
+import { Box, Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { UserItem } from "@/features/user/views/server";
 import { getAuth, getUserById, getBooks } from "@/features";
@@ -44,18 +44,26 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <Stack h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
-      <Stack p="xs">
+      <Stack>
         <CollapsibleHeader
           Component={
-            <Paper radius={0} p="xl">
+            <Box
+              p="xl"
+              component="div"
+              bg="var(--bg-one)"
+              style={{ borderBottom: "1px solid var(--mantine-border)" }}>
               <UserItem user={user} auth={{ id: uid }} />
-            </Paper>
+            </Box>
           }
         />
 
-        <Paper radius="md" p="xl">
+        <Box
+          p="xl"
+          component="div"
+          bg="var(--bg-one)"
+          style={{ borderBottom: "1px solid var(--mantine-border)" }}>
           <UserItem user={user} auth={{ id: uid }} />
-        </Paper>
+        </Box>
       </Stack>
 
       <ListGridOuter

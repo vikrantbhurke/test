@@ -8,6 +8,7 @@ import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { Loader, Stack, Text } from "@mantine/core";
 import { signInRoute } from "@/global/constants/routes";
+import { Screen } from "@/global/enums";
 
 type VerifyAccountProps = {
   token: string;
@@ -18,20 +19,21 @@ export function VerifyAccount({ token }: VerifyAccountProps) {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const [isVerified, setIsVerified] = useState(false);
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   useEffect(() => {
     const handleVerify = async () => {
       if (isVerified) return;
       const response = await verifyAccount(token);
-      if (isMobile) showToast(response);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(response);
       else showNotification(response);
       router.push(signInRoute);
       setIsVerified(true);
     };
 
     handleVerify();
-  }, [isVerified, token, isMobile, router, showNotification, showToast]);
+  }, [isVerified, token, screen, router, showNotification, showToast]);
 
   return (
     <Stack gap="md" align="center">

@@ -1,6 +1,6 @@
 import { ResetPassword } from "@/features/user/views/client";
 import { dimensions } from "@/global/constants";
-import { Loader, Paper, Stack } from "@mantine/core";
+import { Loader, Stack } from "@mantine/core";
 export { metadata } from "./metadata";
 
 type PageProps = {
@@ -14,9 +14,7 @@ export default async function Page({ searchParams }: PageProps) {
     <Stack h="100vh" justify="center" align="center">
       <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
         {sp.token ? (
-          <Paper p="xl">
-            <ResetPassword token={sp.token} />
-          </Paper>
+          <ResetPassword token={sp.token} />
         ) : (
           <Loader size="xl" color="var(--tx-one)" />
         )}

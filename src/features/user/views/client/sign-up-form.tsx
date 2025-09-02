@@ -24,6 +24,7 @@ import { SignUpUserSchema } from "@/features/user/schema";
 import { Gender, Provider } from "@/features/user/enums";
 import { FloatingInput, FormSelect } from "@/global/components/common/client";
 import { IconCircleCheckFilled, IconCircleXFilled } from "@tabler/icons-react";
+import { Screen } from "@/global/enums";
 
 export function SignUpForm() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export function SignUpForm() {
   const { showNotification } = useNotification();
   const { colorScheme } = useMantineColorScheme();
   const [isMutating, setIsMutating] = useState(false);
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
   const [active, setActive] = useState(0);
 
   const nextStep = () =>
@@ -59,7 +60,8 @@ export function SignUpForm() {
     if (isMutating) return;
     setIsMutating(true);
     const response = await signUpUser(Provider.Credentials, values);
-    if (isMobile) showToast(response);
+    if (screen === Screen.Mobile || screen === Screen.Tablet)
+      showToast(response);
     else showNotification(response);
     router.push(signInRoute);
     setIsMutating(false);

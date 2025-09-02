@@ -30,6 +30,7 @@ export const cssVariables = () => {
       "--tx-five": darkFive,
       "--bg-five": lightFive,
       "--border": lightBorder,
+      "--mantine-border": "#D1D5DB",
     },
     dark: {
       "--tx-one": lightOne,
@@ -43,6 +44,7 @@ export const cssVariables = () => {
       "--tx-five": lightFive,
       "--bg-five": darkFive,
       "--border": darkBorder,
+      "--mantine-border": "#3F3F46",
     },
   };
 };

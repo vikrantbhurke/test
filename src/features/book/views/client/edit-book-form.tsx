@@ -11,7 +11,8 @@ import { EditBookSchema } from "@/features/book/schema";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
 import { viewBookRoute } from "@/global/constants/routes";
 import { FloatingInput } from "@/global/components/common/client";
-import { Button, Paper, Stack, useMantineColorScheme } from "@mantine/core";
+import { Button, Stack, useMantineColorScheme } from "@mantine/core";
+import { Screen } from "@/global/enums";
 
 type EditBookFormProps = {
   book: any;
@@ -24,7 +25,7 @@ export function EditBookForm({ book }: EditBookFormProps) {
   const [stateBook, setStateBook] = useState(book);
   const [isMutating, setIsMutating] = useState(false);
   const { colorScheme } = useMantineColorScheme();
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
     mode: "controlled",
@@ -43,7 +44,8 @@ export function EditBookForm({ book }: EditBookFormProps) {
 
     try {
       const response = await editBookById(book.id, values);
-      if (isMobile) showToast(response);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(response);
       else showNotification(response);
       router.push(viewBookRoute(book.id));
     } catch (error: any) {
@@ -56,7 +58,6 @@ export function EditBookForm({ book }: EditBookFormProps) {
 
   return (
     <form onSubmit={form.onSubmit(handleEditBook)}>
-      <Paper p="xl">
         <Stack gap="md">
           <FloatingInput
             styles={lightBgOneDarkBgTwo(colorScheme)}
@@ -78,7 +79,6 @@ export function EditBookForm({ book }: EditBookFormProps) {
             {isMutating ? "Updating..." : "Update"}
           </Button>
         </Stack>
-      </Paper>
     </form>
   );
 }

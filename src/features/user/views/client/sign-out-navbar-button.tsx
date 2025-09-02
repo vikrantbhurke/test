@@ -31,7 +31,7 @@ export function SignOutNavbarButton() {
 
       <Button
         p={4}
-        h={40}
+        h={50}
         onClick={open}
         visibleFrom="md"
         aria-label="Sign Out"
@@ -40,24 +40,10 @@ export function SignOutNavbarButton() {
         onMouseDown={stillButtonProps.onMouseDown}
         className={`${classes.themeOneWithHover}`}>
         <Group align="center" justify="center" gap="xs">
-          <IconLogout size={16} />
-          <Text size="sm">Sign Out</Text>
-        </Group>
-      </Button>
-
-      <Button
-        p={4}
-        h={60}
-        onClick={open}
-        hiddenFrom="md"
-        aria-label="Sign Out"
-        style={stillButtonProps.style}
-        onFocus={stillButtonProps.onFocus}
-        onMouseDown={stillButtonProps.onMouseDown}
-        className={`${classes.themeOneWithHover}`}>
-        <Group align="center" justify="center" gap="xs">
-          <IconLogout size={16} />
-          <Text size="sm">Sign Out</Text>
+          <IconLogout size={20} />
+          <Text fz="lg" fw="bold">
+            Sign Out
+          </Text>
         </Group>
       </Button>
     </>

@@ -1,8 +1,8 @@
 export const dimensions = {
   footerHeight: 60,
   headerHeight: 60,
-  navbarWidth: 300,
-  asideWidth: 300,
+  navbarWidth: 600,
+  asideWidth: 600,
   detailsHeight: 60,
   mawXs: 400,
   mawSm: 700,

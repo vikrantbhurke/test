@@ -34,9 +34,9 @@ export const listGridDefaults = {
   },
   listGridInnerProps: {
     ad: false,
-    layout: "grid" as const,
+    layout: "list" as const,
     listGridProps: {
-      p: "xs" as const,
+      p: 0 as const,
       gap: "xs" as const,
       gutter: { base: "xs", sm: "sm" } as const,
     },

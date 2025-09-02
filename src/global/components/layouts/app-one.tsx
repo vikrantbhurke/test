@@ -11,8 +11,6 @@ import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "@/global/styles/app.module.css";
 import { appShellProps } from "@/global/constants";
-import { useSelector } from "react-redux";
-import { RootState } from "@/global/states/store";
 
 type AppOneProps = {
   auth: any;
@@ -23,7 +21,6 @@ export function AppOne({ children, auth }: AppOneProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();
-  const { isMobile } = useSelector((state: RootState) => state.global);
   useEffect(() => close(), [pathname, close]);
 
   return (
@@ -34,7 +31,7 @@ export function AppOne({ children, auth }: AppOneProps) {
       header={appShellProps.header}
       navbar={appShellProps.navbar(opened)}
       h="100vh">
-      <AppShell.Header className={`${!isMobile && classes.blurBg}`}>
+      <AppShell.Header className={`${classes.blurBg}`}>
         <Header
           opened={opened}
           toggle={toggle}

@@ -45,7 +45,7 @@ export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
       <Group>
         <SearchInput placeholder="Search..." />
 
-        {!isInstalled && installPrompt && (
+        {/* {!isInstalled && installPrompt && (
           <>
             <Button
               visibleFrom="md"
@@ -63,7 +63,7 @@ export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
               <IconDownload size={16} />
             </ActionIcon>
           </>
-        )}
+        )} */}
 
         <SearchIcon />
 
@@ -72,7 +72,7 @@ export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
         <BurgerButton opened={opened} toggle={toggle} />
 
         <Group visibleFrom="md">
-          <Button
+          {/* <Button
             size="input-sm"
             href={homeRoute}
             component={Link}
@@ -84,7 +84,7 @@ export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
               pathname === homeRoute && classes.themeThree
             }`}>
             <Text size="sm">Home</Text>
-          </Button>
+          </Button> */}
 
           <AvatarNew auth={auth} />
         </Group>

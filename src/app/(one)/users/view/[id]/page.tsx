@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Paper, Stack } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { UserItem } from "@/features/user/views/server";
 import { PaymentInfo } from "@/features/payment/views/server";
@@ -22,14 +22,16 @@ export default async function Page({ params }: PageProps) {
   if (subId) subscription = await getPayPalSubscription(subId);
 
   return (
-    <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
-      <Paper radius="md" p="xl">
-        <Stack gap="xl">
-          <UserItem user={user} auth={{ id: uid }} />
-          <PaymentInfo subscription={subscription} payment={payment} />
-          <PayPalButtons subscription={subscription} payment={payment} />
-        </Stack>
-      </Paper>
+    <Stack
+      p="xs"
+      gap="xl"
+      h="100%"
+      w="100%"
+      justify="center"
+      maw={dimensions.mawXs}>
+      <UserItem user={user} auth={{ id: uid }} />
+      <PaymentInfo subscription={subscription} payment={payment} />
+      <PayPalButtons subscription={subscription} payment={payment} />
     </Stack>
   );
 }

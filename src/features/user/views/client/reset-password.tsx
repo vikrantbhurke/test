@@ -14,6 +14,7 @@ import { lightBgOneDarkBgTwo } from "@/global/constants";
 import { ResetPasswordSchema } from "@/features/user/schema";
 import { FloatingInput } from "@/global/components/common/client";
 import { Button, Stack, Text, useMantineColorScheme } from "@mantine/core";
+import { Screen } from "@/global/enums";
 
 type ResetPasswordProps = {
   token: string;
@@ -25,7 +26,7 @@ export function ResetPassword({ token }: ResetPasswordProps) {
   const { showNotification } = useNotification();
   const { colorScheme } = useMantineColorScheme();
   const [isMutating, setIsMutating] = useState(false);
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
     mode: "controlled",
@@ -41,7 +42,8 @@ export function ResetPassword({ token }: ResetPasswordProps) {
     if (isMutating) return;
     setIsMutating(true);
     const response = await resetPassword(token, values);
-    if (isMobile) showToast(response);
+    if (screen === Screen.Mobile || screen === Screen.Tablet)
+      showToast(response);
     else showNotification(response);
     router.push(signInRoute);
     setIsMutating(false);

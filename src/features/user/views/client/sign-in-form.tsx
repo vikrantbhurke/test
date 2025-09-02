@@ -26,6 +26,7 @@ import { SignInUserSchema } from "@/features/user/schema";
 import { signInWithCreds, signInWithOAuth } from "@/features";
 import { FloatingInput } from "@/global/components/common/client";
 import { homeRoute, requestEmailRoute } from "@/global/constants/routes";
+import { Screen } from "@/global/enums";
 
 export function SignInForm() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export function SignInForm() {
   const { showNotification } = useNotification();
   const { colorScheme } = useMantineColorScheme();
   const [isMutating, setIsMutating] = useState(false);
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
   const [provider, setProvider] = useState<Provider | null>(null);
 
   useEffect(() => {
@@ -44,10 +45,11 @@ export function SignInForm() {
         message: "Sign in with your original sign in method.",
         status: "error" as const,
       };
-      if (isMobile) showToast(alert);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(alert);
       else showNotification(alert);
     }
-  }, [isMobile, showNotification, showToast]);
+  }, [screen, showNotification, showToast]);
 
   const form = useForm({
     mode: "controlled",
@@ -64,7 +66,8 @@ export function SignInForm() {
     setIsMutating(true);
     setProvider(Provider.Credentials);
     const response = await signInWithCreds(values);
-    if (isMobile) showToast(response);
+    if (screen === Screen.Mobile || screen === Screen.Tablet)
+      showToast(response);
     else showNotification(response);
     router.replace(homeRoute);
     router.refresh();
@@ -82,7 +85,8 @@ export function SignInForm() {
       await signInWithOAuth(provider);
     } catch (error: any) {
       const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(alert);
       else showNotification(alert);
     } finally {
       setIsMutating(false);

@@ -7,6 +7,7 @@ import { useToast } from "@/global/hooks";
 import { useNotification } from "@/global/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/global/states/store";
+import { Screen } from "@/global/enums";
 
 type NewModalProps = {
   action: any;
@@ -38,13 +39,14 @@ export function NewModal({
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const [isMutating, setIsMutating] = useState(false);
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const handleClick = async () => {
     if (isMutating) return;
     setIsMutating(true);
     const response = await action();
-    if (isMobile) showToast(response);
+    if (screen === Screen.Mobile || screen === Screen.Tablet)
+      showToast(response);
     else showNotification(response);
     if (routeType === "push" && route) router.push(route);
     if (routeType === "replace" && route) router.replace(route);

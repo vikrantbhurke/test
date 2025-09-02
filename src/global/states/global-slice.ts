@@ -1,18 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { Screen } from "../enums";
 
 export interface GlobalState {
   page: number;
   content: any[];
   isSearching: boolean;
-  isMobile: boolean;
+  screen: Screen;
 }
 
 const initialState: GlobalState = {
   page: 0,
   content: [],
   isSearching: false,
-  isMobile: false,
+  screen: Screen.Mobile,
 };
 
 export const globalSlice = createSlice({
@@ -28,13 +29,13 @@ export const globalSlice = createSlice({
     toggleSearch: (state) => {
       state.isSearching = !state.isSearching;
     },
-    setIsMobile: (state, action: PayloadAction<boolean>) => {
-      state.isMobile = action.payload;
+    setScreen: (state, action: PayloadAction<Screen>) => {
+      state.screen = action.payload;
     },
   },
 });
 
-export const { setPage, setContent, toggleSearch, setIsMobile } =
+export const { setPage, setContent, toggleSearch, setScreen } =
   globalSlice.actions;
 
 export default globalSlice.reducer;

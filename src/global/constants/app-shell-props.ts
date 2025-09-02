@@ -7,12 +7,12 @@ export const appShellProps = {
   },
   aside: {
     width: dimensions.asideWidth,
-    breakpoint: "md",
+    breakpoint: "sm",
     collapsed: { mobile: true },
   },
   navbar: (opened: boolean) => ({
     width: dimensions.navbarWidth,
-    breakpoint: "md",
+    breakpoint: "sm",
     collapsed: { mobile: !opened },
   }),
 };

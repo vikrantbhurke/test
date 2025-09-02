@@ -1,7 +1,7 @@
 import {
   Text,
-  Paper,
   Anchor,
+  Button,
   Textarea,
   InputBase,
   TextInput,
@@ -10,7 +10,6 @@ import {
   createTheme,
   PasswordInput,
   mergeThemeOverrides,
-  Button,
 } from "@mantine/core";
 import { colorsTheme } from "./colors.theme";
 import classes from "@/global/styles/app.module.css";
@@ -33,13 +32,13 @@ export const coreTheme = createTheme({
   // activeClassName: "",
   // defaultGradient: {},
   breakpoints: {
-    xxs: "20em",
-    xs: "30em",
-    sm: "48em",
-    md: "64em",
-    lg: "74em",
-    xl: "90em",
-    xxl: "120em",
+    xxs: "20em", // 360px
+    xs: "30em", // 480px
+    sm: "48em", // 768px
+    md: "64em", // 1024px
+    lg: "74em", // 1184px
+    xl: "90em", // 1440px
+    xxl: "120em", // 1920px
   },
   autoContrast: true,
   defaultRadius: "md",
@@ -101,13 +100,6 @@ export const coreTheme = createTheme({
         size: "md",
         variant: "light",
         c: "var(--tx-one)",
-      },
-    }),
-
-    Paper: Paper.extend({
-      defaultProps: {
-        shadow: "none",
-        className: classes.shadow,
       },
     }),
 

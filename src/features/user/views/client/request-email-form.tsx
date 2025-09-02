@@ -12,13 +12,14 @@ import { lightBgOneDarkBgTwo } from "@/global/constants";
 import { RequestEmailSchema } from "@/features/user/schema";
 import { FloatingInput } from "@/global/components/common/client";
 import { Button, Stack, Text, useMantineColorScheme } from "@mantine/core";
+import { Screen } from "@/global/enums";
 
 export function RequestEmailForm() {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
   const { colorScheme } = useMantineColorScheme();
   const [isMutating, setIsMutating] = useState(false);
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
     mode: "controlled",
@@ -33,7 +34,8 @@ export function RequestEmailForm() {
     if (isMutating) return;
     setIsMutating(true);
     const response = await requestEmail(values);
-    if (isMobile) showToast(response);
+    if (screen === Screen.Mobile || screen === Screen.Tablet)
+      showToast(response);
     else showNotification(response);
     setIsMutating(false);
   };

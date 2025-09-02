@@ -1,7 +1,6 @@
 "use client";
 import {
   Text,
-  Paper,
   Stack,
   Button,
   FileButton,
@@ -75,80 +74,75 @@ export function SaveBookForm({ auth }: any) {
 
   return (
     <>
-      <Paper p="xl">
+      <Stack gap="md">
         <Stack gap="md">
-          <Stack gap="md">
-            {file && (
-              <Text size="sm" ta="center" mt="sm">
-                Picked file: {file.name}
-              </Text>
+          {file && (
+            <Text size="sm" ta="center" mt="sm">
+              Picked file: {file.name}
+            </Text>
+          )}
+
+          <FileButton
+            resetRef={resetRef}
+            onChange={setFile}
+            accept="application/json"
+            aria-label="Upload JSON File">
+            {(props) => (
+              <Button {...props} aria-label="Upload JSON File">
+                Upload JSON
+              </Button>
             )}
+          </FileButton>
 
-            <FileButton
-              resetRef={resetRef}
-              onChange={setFile}
-              accept="application/json"
-              aria-label="Upload JSON File">
-              {(props) => (
-                <Button {...props} aria-label="Upload JSON File">
-                  Upload JSON
-                </Button>
-              )}
-            </FileButton>
+          <Button
+            onClick={handleSaveBooks}
+            disabled={isMutating}
+            aria-label="Save Book">
+            {isMutating ? "Saving..." : "Save"}
+          </Button>
 
-            <Button
-              onClick={handleSaveBooks}
-              disabled={isMutating}
-              aria-label="Save Book">
+          <Button
+            disabled={!file}
+            color="yellow"
+            onClick={clearFile}
+            aria-label="Reset File">
+            Reset
+          </Button>
+        </Stack>
+
+        <form onSubmit={form.onSubmit(handleSaveBook)}>
+          <Stack gap="md">
+            <FloatingInput
+              styles={lightBgOneDarkBgTwo(colorScheme)}
+              name="title"
+              label="Title"
+              key={form.key("title")}
+              {...form.getInputProps("title")}
+            />
+
+            <FloatingInput
+              styles={lightBgOneDarkBgTwo(colorScheme)}
+              name="synopsis"
+              label="Synopsis"
+              key={form.key("synopsis")}
+              {...form.getInputProps("synopsis")}
+            />
+
+            <FormSelect
+              styles={lightBgOneDarkBgTwo(colorScheme)}
+              value="Fantasy"
+              name="genre"
+              label="Genre"
+              options={genreMap}
+              {...form.getInputProps("genre")}
+            />
+
+            <Button type="submit" disabled={isMutating} aria-label="Save Book">
               {isMutating ? "Saving..." : "Save"}
             </Button>
-
-            <Button
-              disabled={!file}
-              color="yellow"
-              onClick={clearFile}
-              aria-label="Reset File">
-              Reset
-            </Button>
           </Stack>
-
-          <form onSubmit={form.onSubmit(handleSaveBook)}>
-            <Stack gap="md">
-              <FloatingInput
-                styles={lightBgOneDarkBgTwo(colorScheme)}
-                name="title"
-                label="Title"
-                key={form.key("title")}
-                {...form.getInputProps("title")}
-              />
-
-              <FloatingInput
-                styles={lightBgOneDarkBgTwo(colorScheme)}
-                name="synopsis"
-                label="Synopsis"
-                key={form.key("synopsis")}
-                {...form.getInputProps("synopsis")}
-              />
-
-              <FormSelect
-                styles={lightBgOneDarkBgTwo(colorScheme)}
-                value="Fantasy"
-                name="genre"
-                label="Genre"
-                options={genreMap}
-                {...form.getInputProps("genre")}
-              />
-
-              <Button
-                type="submit"
-                disabled={isMutating}
-                aria-label="Save Book">
-                {isMutating ? "Saving..." : "Save"}
-              </Button>
-            </Stack>
-          </form>
-        </Stack>
-      </Paper>
+        </form>
+      </Stack>
     </>
   );
 }

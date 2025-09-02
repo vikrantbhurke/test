@@ -5,6 +5,7 @@ import { RootState } from "../states/store";
 import classes from "@/global/styles/app.module.css";
 import { ReactNode } from "react";
 import { Text, Title } from "@mantine/core";
+import { Screen } from "../enums";
 
 type ShowNotificationArgs = {
   icon?: ReactNode;
@@ -23,7 +24,7 @@ type ShowNotificationArgs = {
 };
 
 export const useNotification = () => {
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const showNotification = ({
     icon,
@@ -53,7 +54,7 @@ export const useNotification = () => {
       },
       position: position
         ? position
-        : isMobile
+        : screen === Screen.Mobile || screen === Screen.Tablet
         ? "bottom-center"
         : "bottom-right",
     });

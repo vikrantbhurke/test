@@ -1,6 +1,6 @@
 import { Order } from "@/global/enums";
 import { notFound } from "next/navigation";
-import { Paper, Stack } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { BookItem } from "@/features/book/views/server";
 import { listGridDefaults } from "@/global/constants/server";
@@ -43,14 +43,9 @@ export default async function Page({ params, searchParams }: PageProps) {
   } = listGridDefaults;
 
   return (
-    <Stack h="100%" w="100%" justify="center" maw={dimensions.mawSm}>
-      <Stack p="xs">
-        <Paper radius="md" p="xl">
-          <BookItem book={book} auth={auth} />
-        </Paper>
-
-        <AddCommentButton bookId={book.id} auth={auth} />
-      </Stack>
+    <Stack p="lg" h="100%" w="100%" justify="center" maw={dimensions.mawLg}>
+      <BookItem book={book} auth={auth} />
+      <AddCommentButton bookId={book.id} auth={auth} />
 
       {commentsPage.content.length !== 0 && (
         <ListGridOuter

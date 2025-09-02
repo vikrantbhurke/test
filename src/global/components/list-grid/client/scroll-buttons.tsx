@@ -6,6 +6,7 @@ import { useIsFirstRender, useMounted, useWindowScroll } from "@mantine/hooks";
 import { RootState } from "@/global/states/store";
 import { useSelector } from "react-redux";
 import { dimensions } from "@/global/constants";
+import { Screen } from "@/global/enums";
 
 // Currently ScrollButtons are not visible for ListGridFinite (Container) since useRef can't be used in RSC
 // ScrollButtons are visible in ListGridFinite (Window) & ListGridInfinite (Window & Container)
@@ -18,7 +19,7 @@ export function ScrollButtons({ scrollButtonsProps }: any) {
 
   const mounted = useMounted();
   const [scroll, scrollTo] = useWindowScroll();
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
 
   const scrollToBottom = () => {
@@ -52,13 +53,19 @@ export function ScrollButtons({ scrollButtonsProps }: any) {
   const { footerHeight } = dimensions;
 
   const adjacent = {
-    right: isMobile ? inner : outer,
-    bottom: isMobile ? footerHeight + outer : inner,
+    right: screen === Screen.Mobile || screen === Screen.Tablet ? inner : outer,
+    bottom:
+      screen === Screen.Mobile || screen === Screen.Tablet
+        ? footerHeight + outer
+        : inner,
   };
 
   const corner = {
     right: inner,
-    bottom: isMobile ? footerHeight + inner : inner,
+    bottom:
+      screen === Screen.Mobile || screen === Screen.Tablet
+        ? footerHeight + inner
+        : inner,
   };
 
   const topMounted =

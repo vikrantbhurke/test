@@ -11,6 +11,7 @@ import { RootState } from "@/global/states/store";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { SaveCommentSchema } from "@/features/comment/schema";
 import { FloatingInput } from "@/global/components/common/client";
+import { Screen } from "@/global/enums";
 
 type AddCommentFormProps = {
   bookId: string;
@@ -25,7 +26,7 @@ export function AddCommentForm({ bookId, close, auth }: AddCommentFormProps) {
   const [isMutating, setIsMutating] = useState(false);
   const { showToast } = useToast();
   const { showNotification } = useNotification();
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
     mode: "controlled",
@@ -42,7 +43,8 @@ export function AddCommentForm({ bookId, close, auth }: AddCommentFormProps) {
     if (isMutating) return;
     setIsMutating(true);
     const response = await saveComment(values);
-    if (isMobile) showToast(response);
+    if (screen === Screen.Mobile || screen === Screen.Tablet)
+      showToast(response);
     else showNotification(response);
     close();
     router.refresh();

@@ -1,10 +1,10 @@
 "use client";
 import { NProgress } from "./nprogress";
 import { Provider } from "react-redux";
-import { ToastProvider } from "./toast-provider";
 import { store } from "@/global/states/store";
 import { theme } from "@/global/styles/theme";
 import { MantineProvider } from "@mantine/core";
+import { ToastProvider } from "./toast-provider";
 import { Notifications } from "@mantine/notifications";
 import { resolveCssVariables } from "@/global/styles/css.variables";
 import { RegisterServiceWorker } from "@/global/components/common/client";

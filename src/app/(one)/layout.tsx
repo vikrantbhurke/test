@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { getAuth } from "@/features";
 import { Stack } from "@mantine/core";
-import { AppOne } from "@/global/components/layouts";
+import { App } from "@/global/components/layouts";
 import { IconAppsFilled } from "@tabler/icons-react";
 import classes from "@/global/styles/app.module.css";
 
@@ -23,7 +23,7 @@ export default async function Layout({ children }: LayoutProps) {
           />
         </Stack>
       }>
-      <AppOne auth={{ id, role, name, image }}>{children}</AppOne>
+      <App auth={{ id, role, name, image }}>{children}</App>
     </Suspense>
   );
 }

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Paper, Stack } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import { dimensions } from "@/global/constants";
 import { getBookById, getAuth } from "@/features";
 import { BookItem } from "@/features/book/views/server";
@@ -18,9 +18,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
-      <Paper p="xl">
-        <BookItem book={book} auth={auth} />
-      </Paper>
+      <BookItem book={book} auth={auth} />
     </Stack>
   );
 }

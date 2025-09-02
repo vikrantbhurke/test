@@ -1,7 +1,6 @@
 "use client";
 import {
   Group,
-  Paper,
   Stack,
   Button,
   useMantineColorScheme,
@@ -24,6 +23,7 @@ import { EditUserSchema } from "@/features/user/schema";
 import { lightBgOneDarkBgTwo } from "@/global/constants";
 import { editAvatarById, editUserById } from "@/features";
 import { FloatingInput } from "@/global/components/common/client";
+import { Screen } from "@/global/enums";
 
 type EditProfileFormProps = {
   user: any;
@@ -35,8 +35,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   const { showNotification } = useNotification();
   const [stateUser, setStateUser] = useState(user);
   const [isMutating, setIsMutating] = useState(false);
-  const { isMobile } = useSelector((state: RootState) => state.global);
   const { colorScheme } = useMantineColorScheme();
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const form = useForm({
     mode: "controlled",
@@ -55,7 +55,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
 
     try {
       const response = await editUserById(user.id, values);
-      if (isMobile) showToast(response);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(response);
       else showNotification(response);
       router.push(viewUserRoute(user.id));
     } catch (error: any) {
@@ -81,7 +82,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         info.public_id
       );
 
-      if (isMobile) showToast(response);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(response);
       else showNotification(response);
 
       setStateUser((prev: any) => ({
@@ -106,7 +108,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       if (!apiResponse.ok) {
         const message = "Failed to delete image.";
         const alert = { message, status: "error" as const };
-        if (isMobile) showToast(alert);
+        if (screen === Screen.Mobile || screen === Screen.Tablet)
+          showToast(alert);
         else showNotification(alert);
         return;
       }
@@ -114,7 +117,8 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
       await editAvatarById(user.id, "", "");
 
       const alert = { message: "Avatar deleted.", status: "success" as const };
-      if (isMobile) showToast(alert);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(alert);
       else showNotification(alert);
 
       setStateUser((prev: any) => ({
@@ -129,13 +133,13 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
     } catch (error: any) {
       const message = error.message || "Failed to delete image.";
       const alert = { message, status: "error" as const };
-      if (isMobile) showToast(alert);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(alert);
       else showNotification(alert);
     }
   };
 
   return (
-    <Paper p="xl">
       <Stack gap="md">
         <ProfilePic user={user} />
 
@@ -198,6 +202,5 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           </Stack>
         </form>
       </Stack>
-    </Paper>
   );
 }

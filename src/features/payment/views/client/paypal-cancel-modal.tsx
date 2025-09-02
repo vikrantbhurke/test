@@ -5,11 +5,12 @@ import { useNotification } from "@/global/hooks";
 import { RootState } from "@/global/states/store";
 import { cancelPayPalSubscription } from "@/features";
 import { Button, Modal, Stack, Text } from "@mantine/core";
+import { Screen } from "@/global/enums";
 
 export function PayPalCancelModal({ opened, close, id }: any) {
   const { showToast } = useToast();
   const { showNotification } = useNotification();
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const handleCancel = async () => {
     const response = await cancelPayPalSubscription(id);
@@ -19,7 +20,7 @@ export function PayPalCancelModal({ opened, close, id }: any) {
       autoClose: 10000,
     };
 
-    if (isMobile) showToast(alert);
+    if (screen === Screen.Mobile || screen === Screen.Tablet) showToast(alert);
     else showNotification(alert);
     close();
   };

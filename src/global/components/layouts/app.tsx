@@ -9,15 +9,15 @@ import { AppShell } from "@mantine/core";
 import { useViewInfo } from "@/global/hooks";
 import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
-import { appShellProps } from "@/global/constants";
 import classes from "@/global/styles/app.module.css";
+import { appShellProps } from "@/global/constants";
 
-type AppManyProps = {
+type AppProps = {
   auth: any;
   children: React.ReactNode;
 };
 
-export function AppMany({ children, auth }: AppManyProps) {
+export function App({ children, auth }: AppProps) {
   useViewInfo();
   const pathname = usePathname();
   const [opened, { toggle, close }] = useDisclosure();
@@ -25,11 +25,12 @@ export function AppMany({ children, auth }: AppManyProps) {
 
   return (
     <AppShell
-      withBorder={false}
+      withBorder
       aside={appShellProps.aside}
       footer={appShellProps.footer}
       header={appShellProps.header}
-      navbar={appShellProps.navbar(opened)}>
+      navbar={appShellProps.navbar(opened)}
+      layout="alt">
       <AppShell.Header className={`${classes.blurBg}`}>
         <Header
           opened={opened}
@@ -39,7 +40,11 @@ export function AppMany({ children, auth }: AppManyProps) {
         />
       </AppShell.Header>
 
-      <AppShell.Navbar>
+      <AppShell.Navbar visibleFrom="sm">
+        <Navbar pathname={pathname} auth={{ id: auth.id, role: auth.role }} />
+      </AppShell.Navbar>
+
+      <AppShell.Navbar maw={300} hiddenFrom="sm">
         <Navbar pathname={pathname} auth={{ id: auth.id, role: auth.role }} />
       </AppShell.Navbar>
 

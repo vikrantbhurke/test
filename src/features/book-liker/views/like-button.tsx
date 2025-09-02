@@ -8,6 +8,7 @@ import { stillButtonProps } from "@/global/constants";
 import { ActionIcon, Group, Text } from "@mantine/core";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { dropBookLiker, saveBookLiker } from "@/features";
+import { Screen } from "@/global/enums";
 
 type LikeButtonProps = {
   bookId: string;
@@ -22,7 +23,7 @@ export function LikeButton({ bookId, likerId, likes, like }: LikeButtonProps) {
   const [isMutating, setIsMutating] = useState(false);
   const [stateLikes, setStateLikes] = useState(likes);
   const [stateLike, setStateLike] = useState(like);
-  const { isMobile } = useSelector((state: RootState) => state.global);
+  const { screen } = useSelector((state: RootState) => state.global);
 
   const handleLike = async () => {
     if (isMutating) return;
@@ -38,7 +39,8 @@ export function LikeButton({ bookId, likerId, likes, like }: LikeButtonProps) {
       setStateLike(prevStateLike);
       setStateLikes(prevLikes);
       const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(alert);
       else showNotification(alert);
     } finally {
       setIsMutating(false);
@@ -59,7 +61,8 @@ export function LikeButton({ bookId, likerId, likes, like }: LikeButtonProps) {
       setStateLike(prevStateLike);
       setStateLikes(prevLikes);
       const alert = { message: error.message, status: "error" as const };
-      if (isMobile) showToast(alert);
+      if (screen === Screen.Mobile || screen === Screen.Tablet)
+        showToast(alert);
       else showNotification(alert);
     } finally {
       setIsMutating(false);
