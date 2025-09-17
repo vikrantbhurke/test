@@ -9,8 +9,8 @@ import { AppShell } from "@mantine/core";
 import { useViewInfo } from "@/global/hooks";
 import { usePathname } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
-import classes from "@/global/styles/app.module.css";
 import { appShellProps } from "@/global/constants";
+import classes from "@/global/styles/app.module.css";
 
 type AppProps = {
   auth: any;
@@ -32,12 +32,7 @@ export function App({ children, auth }: AppProps) {
       navbar={appShellProps.navbar(opened)}
       layout="alt">
       <AppShell.Header className={`${classes.blurBg}`}>
-        <Header
-          opened={opened}
-          toggle={toggle}
-          pathname={pathname}
-          auth={auth}
-        />
+        <Header opened={opened} toggle={toggle} auth={auth} />
       </AppShell.Header>
 
       <AppShell.Navbar visibleFrom="sm">

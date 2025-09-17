@@ -12,7 +12,6 @@ import {
   mergeThemeOverrides,
 } from "@mantine/core";
 import { colorsTheme } from "./colors.theme";
-import classes from "@/global/styles/app.module.css";
 // import { inter } from "./fonts.style";
 
 const input = {

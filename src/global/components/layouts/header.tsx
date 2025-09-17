@@ -7,21 +7,19 @@ import {
 } from "../common/client";
 import Link from "next/link";
 import { useInstallApp } from "@/global/hooks";
-import classes from "@/global/styles/app.module.css";
 import { homeRoute } from "@/global/constants/routes";
 import { stillButtonProps } from "@/global/constants";
 import { AvatarNew } from "@/features/user/views/client";
 import { IconAppsFilled, IconDownload } from "@tabler/icons-react";
-import { ActionIcon, Button, Group, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Group, Title } from "@mantine/core";
 
 type HeaderProps = {
   auth?: any;
   opened: boolean;
   toggle: () => void;
-  pathname: string;
 };
 
-export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
+export function Header({ auth, opened, toggle }: HeaderProps) {
   const { installPrompt, isInstalled, handleInstallClick } = useInstallApp();
 
   return (
@@ -45,7 +43,7 @@ export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
       <Group>
         <SearchInput placeholder="Search..." />
 
-        {/* {!isInstalled && installPrompt && (
+        {!isInstalled && installPrompt && (
           <>
             <Button
               visibleFrom="md"
@@ -63,7 +61,7 @@ export function Header({ auth, opened, toggle, pathname }: HeaderProps) {
               <IconDownload size={16} />
             </ActionIcon>
           </>
-        )} */}
+        )}
 
         <SearchIcon />
 

@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <Stack gap="lg" h="100vh" justify="center">
       <Stack gap="xs" align="center">
-        <Title order={6}>User Not Found.</Title>
+        <Title order={6}>Page Not Found.</Title>
         <Text>Please try refreshing the page.</Text>
       </Stack>
       <Button component={Link} href={homeRoute} aria-label="Try Again">

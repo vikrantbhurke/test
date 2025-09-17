@@ -32,12 +32,7 @@ export function AppOne({ children, auth }: AppOneProps) {
       navbar={appShellProps.navbar(opened)}
       h="100vh">
       <AppShell.Header className={`${classes.blurBg}`}>
-        <Header
-          opened={opened}
-          toggle={toggle}
-          pathname={pathname}
-          auth={auth}
-        />
+        <Header opened={opened} toggle={toggle} auth={auth} />
       </AppShell.Header>
 
       <AppShell.Navbar>

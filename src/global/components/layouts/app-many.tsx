@@ -31,12 +31,7 @@ export function AppMany({ children, auth }: AppManyProps) {
       header={appShellProps.header}
       navbar={appShellProps.navbar(opened)}>
       <AppShell.Header className={`${classes.blurBg}`}>
-        <Header
-          opened={opened}
-          toggle={toggle}
-          pathname={pathname}
-          auth={auth}
-        />
+        <Header opened={opened} toggle={toggle} auth={auth} />
       </AppShell.Header>
 
       <AppShell.Navbar>
