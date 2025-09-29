@@ -1,39 +1,28 @@
-import { Suspense } from "react";
-import { getAuth } from "@/features";
-import { Stack } from "@mantine/core";
-import classes from "@/global/styles/app.module.css";
-import { IconAppsFilled } from "@tabler/icons-react";
-import { App, Header, HomeHeader } from "@/global/components/layouts";
+import { dimensions } from "@/global/constants";
+import { signInRoute, signUpRoute } from "@/global/constants/routes";
+import { Anchor, Group, Stack } from "@mantine/core";
+import Link from "next/link";
 
 type LayoutProps = {
   children: React.ReactNode;
-  auth: React.ReactNode;
 };
 
-export default async function Layout({ children, auth }: LayoutProps) {
-  const nextAuth = await getAuth();
-
+export default function Layout({ children }: LayoutProps) {
   return (
-    <Suspense
-      fallback={
-        <Stack h="100vh" justify="center" align="center">
-          <IconAppsFilled
-            size={60}
-            color="var(--tx-one)"
-            className={classes.smoothPulse}
-          />
-        </Stack>
-      }>
-      <App auth={nextAuth}>
-        <>
-          <Header auth={nextAuth}>
-            <HomeHeader auth={nextAuth} />
-          </Header>
-
+    <Stack h="100vh" justify="center" align="center">
+      <Stack p="xs" h="100%" w="100%" justify="center" maw={dimensions.mawXs}>
+        <Stack gap="xl">
+          <Group justify="space-evenly" w="100%">
+            <Anchor component={Link} href={signInRoute}>
+              Sign In
+            </Anchor>
+            <Anchor component={Link} href={signUpRoute}>
+              Sign Up
+            </Anchor>
+          </Group>
           {children}
-          {auth}
-        </>
-      </App>
-    </Suspense>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
