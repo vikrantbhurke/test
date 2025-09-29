@@ -21,7 +21,7 @@ type FooterProps = {
 
 export function Footer({ pathname, auth }: FooterProps) {
   return (
-    <Group grow h="100%" gap={4} p={4}>
+    <Group grow h="100%" w="100%" gap={4} p={4}>
       <Button
         p={4}
         h="100%"

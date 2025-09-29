@@ -15,6 +15,7 @@ export const searchInputProps = {
       borderTop: 0,
       borderRight: 0,
       borderLeft: 0,
+      borderBottom: "1px solid var(--tx-one)",
       backgroundColor: "var(--bg-one)",
     },
   },

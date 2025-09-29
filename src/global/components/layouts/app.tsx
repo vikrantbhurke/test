@@ -1,16 +1,10 @@
 "use client";
 import { Main } from "./main";
-import { Aside } from "./aside";
-import { Navbar } from "./navbar";
-import { Header } from "./header";
 import { Footer } from "./footer";
-import { useEffect } from "react";
-import { AppShell } from "@mantine/core";
 import { useViewInfo } from "@/global/hooks";
 import { usePathname } from "next/navigation";
-import { useDisclosure } from "@mantine/hooks";
-import { appShellProps } from "@/global/constants";
-import classes from "@/global/styles/app.module.css";
+import { Space, Stack } from "@mantine/core";
+import { useViewportSize } from "@mantine/hooks";
 
 type AppProps = {
   auth: any;
@@ -19,41 +13,52 @@ type AppProps = {
 
 export function App({ children, auth }: AppProps) {
   useViewInfo();
+  const { width } = useViewportSize();
   const pathname = usePathname();
-  const [opened, { toggle, close }] = useDisclosure();
-  useEffect(() => close(), [pathname, close]);
+
+  const border = "1px solid var(--tx-one)";
+
+  const borderStyles =
+    width <= 576
+      ? {}
+      : {
+          borderLeft: border,
+          borderRight: border,
+        };
 
   return (
-    <AppShell
-      withBorder
-      aside={appShellProps.aside}
-      footer={appShellProps.footer}
-      header={appShellProps.header}
-      navbar={appShellProps.navbar(opened)}
-      layout="alt">
-      <AppShell.Header className={`${classes.blurBg}`}>
-        <Header opened={opened} toggle={toggle} auth={auth} />
-      </AppShell.Header>
+    <Stack gap={0} align="center">
+      <Stack
+        gap={0}
+        w="100%"
+        maw={576}
+        mih="100vh"
+        align="center"
+        style={borderStyles}>
+        <Space h={60} w="100%" maw={576} />
 
-      <AppShell.Navbar visibleFrom="sm">
-        <Navbar pathname={pathname} auth={{ id: auth.id, role: auth.role }} />
-      </AppShell.Navbar>
-
-      <AppShell.Navbar maw={300} hiddenFrom="sm">
-        <Navbar pathname={pathname} auth={{ id: auth.id, role: auth.role }} />
-      </AppShell.Navbar>
-
-      <AppShell.Aside>
-        <Aside />
-      </AppShell.Aside>
-
-      <AppShell.Main>
         <Main>{children}</Main>
-      </AppShell.Main>
 
-      <AppShell.Footer>
-        <Footer pathname={pathname} auth={{ role: auth.role }} />
-      </AppShell.Footer>
-    </AppShell>
+        <Space h={60} w="100%" maw={576} hiddenFrom="sm" />
+
+        <Stack
+          h={60}
+          w="100%"
+          maw={576}
+          align="center"
+          justify="center"
+          bg="var(--bg-one)"
+          hiddenFrom="sm"
+          style={{
+            bottom: 0,
+            zIndex: 100,
+            position: "fixed",
+            ...borderStyles,
+            borderTop: border,
+          }}>
+          <Footer pathname={pathname} auth={auth} />
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }

@@ -11,7 +11,8 @@ export async function BooksDetails({ dataPage }: any) {
       p="xs"
       h={dimensions.detailsHeight}
       justify="space-between"
-      align="center">
+      align="center"
+      style={{ borderBottom: "1px solid var(--tx-one)" }}>
       <Group>
         <Text>
           Page: {uiPage}/{totalPages}

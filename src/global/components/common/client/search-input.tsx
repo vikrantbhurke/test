@@ -1,14 +1,14 @@
 "use client";
+import { useRef } from "react";
 import { IconX } from "@tabler/icons-react";
-import { useClickOutside } from "@mantine/hooks";
 import { RootState } from "@/global/states/store";
+import { searchInputProps } from "@/global/constants";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useSelector, useDispatch } from "react-redux";
 import { ActionIcon, Box, TextInput } from "@mantine/core";
 import { toggleSearch } from "@/global/states/global-slice";
+import { useClickOutside } from "@mantine/hooks";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { searchInputProps } from "@/global/constants";
-import { useRef } from "react";
 
 type SearchInputProps = {
   placeholder: string;
@@ -45,7 +45,7 @@ export function SearchInput({ placeholder }: SearchInputProps) {
 
   return (
     <>
-      <Box component="div" visibleFrom="md">
+      <Box component="div" visibleFrom="xl">
         <TextInput
           ref={desktopRef}
           onChange={handleSearch}
@@ -68,9 +68,10 @@ export function SearchInput({ placeholder }: SearchInputProps) {
           ref={ref}
           h="100%"
           w="100vw"
+          maw={574}
           component="div"
-          hiddenFrom="md"
-          style={searchInputProps.style}>
+          hiddenFrom="xl"
+          style={{ ...searchInputProps.style }}>
           <TextInput
             w="100%"
             ref={mobileRef}

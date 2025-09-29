@@ -1,92 +1,67 @@
 "use client";
-import {
-  SearchIcon,
-  ThemeButton,
-  SearchInput,
-  BurgerButton,
-} from "../common/client";
-import Link from "next/link";
-import { useInstallApp } from "@/global/hooks";
-import { homeRoute } from "@/global/constants/routes";
-import { stillButtonProps } from "@/global/constants";
-import { AvatarNew } from "@/features/user/views/client";
-import { IconAppsFilled, IconDownload } from "@tabler/icons-react";
-import { ActionIcon, Button, Group, Title } from "@mantine/core";
+import { Aside } from "./aside";
+import { Navbar } from "./navbar";
+import { Stack } from "@mantine/core";
+import { AppName } from "../common/client";
+import { useViewInfo } from "@/global/hooks";
+import { usePathname } from "next/navigation";
 
-type HeaderProps = {
-  auth?: any;
-  opened: boolean;
-  toggle: () => void;
+type AppProps = {
+  auth: any;
+  children: React.ReactNode;
 };
 
-export function Header({ auth, opened, toggle }: HeaderProps) {
-  const { installPrompt, isInstalled, handleInstallClick } = useInstallApp();
+export function Header({ auth, children }: AppProps) {
+  useViewInfo();
+  const pathname = usePathname();
+  const border = "1px solid var(--tx-one)";
 
   return (
-    <Group justify="space-between" h="100%" px="md" align="center">
-      <Group gap="xs">
-        <Button
-          p={0}
-          c="var(--tx-one)"
-          bg="transparent"
-          aria-label="Test App"
-          leftSection={<IconAppsFilled size={32} color="var(--tx-one)" />}
-          href={homeRoute}
-          component={Link}
-          style={stillButtonProps.style}
-          onFocus={stillButtonProps.onFocus}
-          onMouseDown={stillButtonProps.onMouseDown}>
-          <Title order={5}>Test App</Title>
-        </Button>
-      </Group>
+    <Stack
+      h={60}
+      w="100%"
+      maw={574}
+      align="center"
+      bg="var(--bg-one)"
+      justify="center"
+      style={{
+        top: 0,
+        zIndex: 100,
+        position: "fixed",
+        borderBottom: border,
+      }}>
+      {children}
 
-      <Group>
-        <SearchInput placeholder="Search..." />
+      <Stack
+        w={220}
+        h="100vh"
+        align="right"
+        visibleFrom="xl"
+        style={{
+          top: 0,
+          left: -220,
+          position: "absolute",
+        }}>
+        <Stack visibleFrom="xl" p="sm" align="flex-start">
+          <AppName />
+        </Stack>
 
-        {!isInstalled && installPrompt && (
-          <>
-            <Button
-              visibleFrom="md"
-              onClick={handleInstallClick}
-              leftSection={<IconDownload size={16} />}
-              aria-label="Install App">
-              Install App
-            </Button>
+        <Navbar pathname={pathname} auth={auth} />
+      </Stack>
 
-            <ActionIcon
-              hiddenFrom="md"
-              onClick={handleInstallClick}
-              title="Install App"
-              aria-label="Install App">
-              <IconDownload size={16} />
-            </ActionIcon>
-          </>
-        )}
-
-        <SearchIcon />
-
-        <ThemeButton />
-
-        <BurgerButton opened={opened} toggle={toggle} />
-
-        <Group visibleFrom="md">
-          {/* <Button
-            size="input-sm"
-            href={homeRoute}
-            component={Link}
-            aria-label="Home"
-            style={stillButtonProps.style}
-            onFocus={stillButtonProps.onFocus}
-            onMouseDown={stillButtonProps.onMouseDown}
-            className={`${classes.themeOneWithHover} ${
-              pathname === homeRoute && classes.themeThree
-            }`}>
-            <Text size="sm">Home</Text>
-          </Button> */}
-
-          <AvatarNew auth={auth} />
-        </Group>
-      </Group>
-    </Group>
+      <Stack
+        w={400}
+        h="100vh"
+        align="center"
+        justify="center"
+        visibleFrom="xl"
+        style={{
+          top: 0,
+          right: -400,
+          position: "absolute",
+        }}>
+        <Aside />
+      </Stack>
+    </Stack>
   );
 }

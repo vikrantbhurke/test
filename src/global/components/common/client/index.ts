@@ -1,3 +1,4 @@
+export * from "./app-name";
 export * from "./new-modal";
 export * from "./nprogress";
 export * from "./providers";
@@ -10,5 +11,6 @@ export * from "./theme-button";
 export * from "./search-button";
 export * from "./burger-button";
 export * from "./floating-input";
-export * from "./register-service-worker";
 export * from "./toast-provider";
+export * from "./install-app-button";
+export * from "./register-service-worker";

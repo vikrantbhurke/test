@@ -12,7 +12,7 @@ export function SearchIcon() {
     <ActionIcon
       size="md"
       onClick={handleToggleSearch}
-      hiddenFrom="md"
+      hiddenFrom="xl"
       aria-label="Toggle Search">
       <IconSearch size={16} />
     </ActionIcon>

@@ -29,6 +29,7 @@ import classes from "@/global/styles/app.module.css";
 import { stillButtonProps } from "@/global/constants";
 import { Button, Group, Stack, Text } from "@mantine/core";
 import { Clearance } from "@/features/user/enums/clearance";
+import { useInstallApp } from "@/global/hooks";
 
 type NavbarProps = {
   auth: any;
@@ -36,6 +37,8 @@ type NavbarProps = {
 };
 
 export function Navbar({ pathname, auth }: NavbarProps) {
+  const { installPrompt, isInstalled, handleInstallClick } = useInstallApp();
+
   const NavbarButton = ({ href, className, Icon, label }: any) => {
     return (
       <Button
@@ -60,6 +63,26 @@ export function Navbar({ pathname, auth }: NavbarProps) {
 
   const nav = (
     <>
+      {!isInstalled && installPrompt && (
+        <Button
+          p={4}
+          h={50}
+          visibleFrom="sm"
+          onClick={handleInstallClick}
+          aria-label="Install App"
+          style={stillButtonProps.style}
+          onFocus={stillButtonProps.onFocus}
+          onMouseDown={stillButtonProps.onMouseDown}
+          className={`${classes.themeOneWithHover}`}>
+          <Group align="center" justify="center" gap="xs" p="sm">
+            <Text fz={24}>📱</Text>
+            <Text fz="lg" fw="bold">
+              Install App
+            </Text>
+          </Group>
+        </Button>
+      )}
+
       <NavbarButton
         href={homeRoute}
         className={pathname === homeRoute && classes.themeThree}
@@ -134,13 +157,11 @@ export function Navbar({ pathname, auth }: NavbarProps) {
 
   return (
     <>
-      <Stack visibleFrom="sm" align="flex-end" p="sm">
-        <Stack visibleFrom="sm" px="xs" align="flex-start">
-          {nav}
-        </Stack>
+      <Stack visibleFrom="xl" p="sm" align="flex-start">
+        {nav}
       </Stack>
 
-      <Stack hiddenFrom="sm" p="sm">
+      <Stack hiddenFrom="xl" p="sm">
         {nav}
       </Stack>
     </>

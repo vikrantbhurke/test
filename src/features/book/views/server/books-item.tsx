@@ -27,10 +27,7 @@ export async function BooksItem({ item, auth }: any) {
   const image = authorId.avatar.secureUrl || undefined;
 
   return (
-    <Stack
-      gap="sm"
-      p="xl"
-      style={{ borderBottom: "1px solid var(--mantine-border)" }}>
+    <Stack gap="sm" p="xl" style={{ borderBottom: "1px solid var(--tx-one)" }}>
       <Anchor component={Link} href={viewBookRoute(id)}>
         <Title order={6}>{title}</Title>
       </Anchor>

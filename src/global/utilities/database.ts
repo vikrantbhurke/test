@@ -1,7 +1,7 @@
 import { ClientSession, InsertManyOptions, Model } from "mongoose";
 import { Order, Type, SearchMode, EditMode, Size } from "../enums";
 import connectMongoose from "@/global/configurations/mongoose";
-import connectRedis from "@/global/configurations/redis";
+// import connectRedis from "@/global/configurations/redis";
 import { Sort } from "@/global/enums";
 
 type EditDTO = {
@@ -66,31 +66,31 @@ export const convertId = (current: any): any => {
   return current;
 };
 
-export const getCache = async (key: string) => {
-  const redis = await connectRedis();
-  return await redis.get(key);
-};
+// export const getCache = async (key: string) => {
+//   const redis = await connectRedis();
+//   return await redis.get(key);
+// };
 
-export const setCache = async (
-  key: string,
-  data: any,
-  ex: any = "EX",
-  ttl: number = 86400
-) => {
-  const redis = await connectRedis();
-  await redis.set(key, JSON.stringify(data), ex, ttl);
-};
+// export const setCache = async (
+//   key: string,
+//   data: any,
+//   ex: any = "EX",
+//   ttl: number = 86400
+// ) => {
+//   const redis = await connectRedis();
+//   await redis.set(key, JSON.stringify(data), ex, ttl);
+// };
 
-export const delCache = async (key: string) => {
-  const redis = await connectRedis();
-  await redis.del(key);
-};
+// export const delCache = async (key: string) => {
+//   const redis = await connectRedis();
+//   await redis.del(key);
+// };
 
-export const delPrefixCache = async (key: string) => {
-  const redis = await connectRedis();
-  const keys = await redis.keys(key);
-  keys.forEach(async (key) => await redis.del(key));
-};
+// export const delPrefixCache = async (key: string) => {
+//   const redis = await connectRedis();
+//   const keys = await redis.keys(key);
+//   keys.forEach(async (key) => await redis.del(key));
+// };
 
 export const checkDoc = async (
   Model: Model<any>,

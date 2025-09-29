@@ -9,7 +9,7 @@ export function ThemeButton() {
     <>
       <ActionIcon
         onClick={toggleColorScheme}
-        visibleFrom="md"
+        visibleFrom="sm"
         size="input-sm"
         aria-label="Toggle Theme">
         <IconBulb size={16} />
@@ -17,7 +17,7 @@ export function ThemeButton() {
 
       <ActionIcon
         onClick={toggleColorScheme}
-        hiddenFrom="md"
+        hiddenFrom="sm"
         size="md"
         aria-label="Toggle Theme">
         <IconBulb size={16} />
